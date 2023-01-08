@@ -7,6 +7,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Models\Profile;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -39,8 +40,13 @@ class RegisterController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public $serviceUser;
+    public $message;
+
+    public function __construct(UserService $serviceUser, $message = [])
     {
+        $this->serviceUser = $serviceUser;
+        $this->message = $message;
         $this->middleware('guest');
     }
 
@@ -67,19 +73,14 @@ class RegisterController extends Controller
      */
     public function create(RegisterRequest $req)
     {
-        $create_profile = new Profile();
-        $create_profile->fill($req->all());
-        $create_profile->avatar = ' ';
-        $create_profile->save();
+        try {
+            $this->serviceUser->insertUser($req);
+            $this->message = ['success' => 'Đăng ký người dùng thành công!'];
+        } catch (\Exception $err) {
+                report($err->getMessage());
+                $this->message = ['error' => 'Error: ' . $err->getMessage()];
+        }
+        return redirect()->route('login')->with($this->message);
 
-        $create_account = new User();
-        $create_account->fill($req->all());
-        $create_account->password = Hash::make($req->password);
-        $create_account->is_active = 1;
-        $create_account->profile_id = $create_profile->id;
-        $create_account->remember_token = ' ';
-        $create_account->save();
-
-        return  redirect()->route('login')->with('message', 'Success');
     }
 }

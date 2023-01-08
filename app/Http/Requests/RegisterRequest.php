@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Contracts\Validation\Validator;
 
 class RegisterRequest extends FormRequest
 {
@@ -32,4 +34,46 @@ class RegisterRequest extends FormRequest
                 'email'=>['required', 'email', 'regex:/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}/', 'unique:profiles'],
         ];
     }
+
+
+
+    // public function failedValidation(Validator $validator)
+
+    // {
+
+    //     throw new HttpResponseException(response()->json([
+
+    //         'success'   => false,
+
+    //         'message'   => 'Xác thực lỗi!',
+
+    //         'data'      => $validator->errors()
+
+    //     ], 400));
+
+    // }
+
+    public function messages()
+    {
+       return [
+        'username.required'=> 'Vui lòng nhập tên đăng nhập',
+        'username.unique'=> 'Tên đăng nhập đã tồn tại',
+        'username.min'=> 'Tên đăng nhập tối thiểu :min ký tự',
+        'password.required'=> 'Vui lòng nhập mật khẩu',
+        'password.min'=> 'Mật khẩu tối thiểu :min ký tự',
+        'password.regex'=> 'Mật khẩu :regex',
+        'confirm.required'=> 'Vui lòng xác nhận mật khẩu',
+        'confirm.same'=> 'Xác nhận mật khẩu không chính xác',
+        'full_name.required'=> 'Vui lòng nhập họ và tên',
+        'phone.required'=> 'Vui lòng nhập số điện thoại',
+        'phone.min'=> 'Số điện thoại tối thiểu :min số',
+        'phone.max'=> 'Số điện thoại tối đa :max số',
+        'phone.regex'=> 'Số điện thoại không đúng định dạng',
+        'email.required'=> 'Vui lòng nhập email',
+        'email.email'=> 'Email không đúng định dạng',
+        'email.regex'=> 'Email không đúng định dạng',
+        'email.unique'=> 'Email này đã tồn tại',
+       ];
+    }
+
 }

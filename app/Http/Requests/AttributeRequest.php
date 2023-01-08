@@ -24,14 +24,14 @@ class AttributeRequest extends FormRequest
     public function rules()
     {
         return [
-            'attr_name'=>['required']
+            'parent_attr_name'=>['required'],
         ];
     }
 
     public function messages()
     {
         return [
-            'attr_name.required'=>'Vui lòng nhập tên thuộc tính'
+            'parent_attr_name.required'=>'Vui lòng nhập tên thuộc tính'
         ];
     }
 }

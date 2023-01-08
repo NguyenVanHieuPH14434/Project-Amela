@@ -107,7 +107,6 @@
 
 
                     <button class="btn btn-primary">Lưu thay đổi</button>
-                    <button class="btn btn-danger" type="reset">Nhập lại</button>
                     <a href="{{ route('roles.index') }}" class="btn btn-info">Quay lại</a>
 
                 </form>

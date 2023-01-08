@@ -5,6 +5,15 @@ namespace App\Services;
 use App\Models\Permission;
 
 class PermissionService {
+
+    public function getAllPermission () {
+        return Permission::where('parent_id', 0)->get();
+    }
+
+    public function getPaginatePermission ($paginate = 10) {
+        return  Permission::where('parent_id', 0)->paginate($paginate);
+    }
+
      public function insertPermission ($pmsName, $pmsKey=' ', $parentId=0) {
             $action = new Permission();
             $action->pms_name = $pmsName;

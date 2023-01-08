@@ -7,6 +7,11 @@
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+          <!--Bootstrap Tags Input [ OPTIONAL ]-->
+    {{-- <link href="{{ asset('plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.css') }}" rel="stylesheet"> --}}
+    <link href="{{ asset('plugins/bootstrap-tagsinput/bootstrap-tagsinput.css') }}" rel="stylesheet">
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
     <!-- Ionicons -->
@@ -35,5 +40,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.0/css/fontawesome.min.css" integrity="sha512-aP4LyQwPu7DAUAgYHVE2zZ0ZG02lDMcWtIsMG1H6VhvPICHEgy2RqF0igO8kCz+EuHmoxLekNvddm3g5VuPNfQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     {{-- style input file --}}
-    <link rel="stylesheet" href="{{asset('css/styleInputFile.css')}}">
+    {{-- <link rel="stylesheet" href="{{asset('css/styleInputFile.css')}}"> --}}
+
+    <!--Select2 [ OPTIONAL ]-->
+    <link href="{{ asset('plugins/select2/css/select2.min.css') }}" rel="stylesheet">
+
+
+
 </head>

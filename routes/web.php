@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BackEnd\AdminController;
 use App\Http\Controllers\BackEnd\AttributeController;
 use App\Http\Controllers\BackEnd\CategoryController;
 use App\Http\Controllers\BackEnd\PermissionController;
+use App\Http\Controllers\BackEnd\ProductController;
 use App\Http\Controllers\BackEnd\RoleController;
 use App\Http\Controllers\BackEnd\UserController;
 use App\Http\Controllers\Client\ClientController;
@@ -23,7 +25,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
+    // return view('welcome');
 });
 
 Auth::routes();
@@ -40,6 +43,7 @@ Route::middleware('auth')->prefix('/admin')->group(function(){
         Route::get('/edit/{id}', [PermissionController::class, 'edit'])->name('edit');
         Route::put('/update/{id}', [PermissionController::class, 'update'])->name('update');
         Route::delete('/destroy/{id}', [PermissionController::class, 'destroy'])->name('destroy');
+        Route::get('/search', [PermissionController::class, 'search'])->name('search');
     });
 
     // roles
@@ -50,6 +54,7 @@ Route::middleware('auth')->prefix('/admin')->group(function(){
         Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('edit');
         Route::put('/update/{id}', [RoleController::class, 'update'])->name('update');
         Route::delete('/destroy/{id}', [RoleController::class, 'destroy'])->name('destroy');
+        Route::get('/search', [RoleController::class, 'search'])->name('search');
     });
 
     // categories
@@ -60,6 +65,7 @@ Route::middleware('auth')->prefix('/admin')->group(function(){
         Route::get('/edit/{id}', [CategoryController::class, 'edit'])->name('edit');
         Route::put('/update/{id}', [CategoryController::class, 'update'])->name('update');
         Route::delete('/destroy/{id}', [CategoryController::class, 'destroy'])->name('destroy');
+        Route::get('/search', [CategoryController::class, 'search'])->name('search');
     });
 
     // attributes
@@ -70,6 +76,32 @@ Route::middleware('auth')->prefix('/admin')->group(function(){
         Route::get('/edit/{id}', [AttributeController::class, 'edit'])->name('edit');
         Route::put('/update/{id}', [AttributeController::class, 'update'])->name('update');
         Route::delete('/destroy/{id}', [AttributeController::class, 'destroy'])->name('destroy');
+        Route::get('/search', [AttributeController::class, 'search'])->name('search');
+    });
+
+    // users
+    Route::prefix('/users')->name('users.')->group(function(){
+        Route::get('/', [UserController::class, 'index'])->name('index');
+        Route::get('/create', [UserController::class, 'create'])->name('create');
+        Route::post('/store', [UserController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [UserController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [UserController::class, 'update'])->name('update');
+        Route::delete('/destroy/{id}', [UserController::class, 'destroy'])->name('destroy');
+        Route::get('/search', [UserController::class, 'search'])->name('search');
+    });
+
+    // products
+    Route::prefix('/products')->name('products.')->group(function(){
+        Route::get('/', [ProductController::class, 'index'])->name('index');
+        Route::get('/create', [ProductController::class, 'create'])->name('create');
+        Route::post('/store', [ProductController::class, 'store'])->name('store');
+        Route::get('/add-attribute-product', [ProductController::class, 'addAttr'])->name('addAttr');
+        Route::post('/store-attribute-product', [ProductController::class, 'storeAttr'])->name('storeAttr');
+        Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [ProductController::class, 'update'])->name('update');
+        Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('destroy');
+        Route::get('/search', [ProductController::class, 'search'])->name('search');
+
     });
 });
 

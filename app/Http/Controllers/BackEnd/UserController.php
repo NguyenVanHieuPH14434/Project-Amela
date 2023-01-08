@@ -4,9 +4,14 @@ namespace App\Http\Controllers\BackEnd;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\UserRequest;
 use App\Models\Profile;
 use App\Models\User;
+use App\Services\RoleService;
+use App\Services\UserService;
+use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -16,9 +21,22 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public $serviceUser;
+    public $serviceRole;
+    public $message;
+
+    public function __construct(UserService $serviceUser, RoleService $serviceRole, $message= [])
+    {
+        $this->serviceUser = $serviceUser;
+        $this->serviceRole = $serviceRole;
+        $this->message = $message;
+    }
+
     public function index()
     {
-        //
+        $listUser = $this->serviceUser->getPaginateUser();
+        return view('pages.user.list', compact('listUser'));
     }
 
     /**
@@ -28,7 +46,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $roles = $this->serviceRole->getAllRole();
+        return view('pages.user.create', compact('roles'));
     }
 
     /**
@@ -37,22 +56,18 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(RegisterRequest $req)
+
+
+    public function store(UserRequest $req)
     {
-        $create_profile = new Profile();
-        $create_profile->fill($req->all());
-        $create_profile->avatar = ' ';
-        $create_profile->save();
-
-        $create_account = new User();
-        $create_account->fill($req->all());
-        $create_account->password = Hash::make($req->password);
-        $create_account->is_active = 1;
-        $create_account->profile_id = $create_profile->id;
-        $create_account->remember_token = ' ';
-        $create_account->save();
-
-        return view('auth.login')->with('message', 'Success');
+        try {
+            $this->serviceUser->insertUser($req);
+            $this->message = ['success' => 'Thêm người dùng thành công!'];
+        } catch (\Exception $err) {
+            report($err->getMessage());
+            $this->message = ['error' => 'Error: ' . $err->getMessage()];
+        }
+        return redirect()->back()->with($this->message);
 
     }
     /**
@@ -74,7 +89,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::with('getProfile')->with('user_role')->findOrFail($id);
+        $roles = $this->serviceRole->getAllRole();
+        return view('pages.user.edit', compact('user', 'roles'));
     }
 
     /**
@@ -84,9 +101,29 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserRequest $request, $id)
     {
-        //
+        try {
+           $this->serviceUser->updateUser($request, $id);
+           $this->message = ['success' => 'Cập nhật người dùng thành công!'];
+        } catch (\Exception $err) {
+            report($err->getMessage());
+            $this->message = ['error' => 'Error: ' . $err->getMessage()];
+        }
+        return redirect()->back()->with($this->message);
+    }
+
+    public function search (Request $request) {
+        $key = trim($_GET['key']);
+        $requestData = ['username'];
+        if($key != ''){
+            $listUser = User::with('getProfile')->with('user_role')
+            ->where(querySearchByColumns($requestData, $key))
+            ->paginate(10);
+        }else{
+            $listUser = $this->serviceUser->getPaginateUser();
+        }
+        return view('pages.user.list', compact('listUser'));
     }
 
     /**
@@ -97,6 +134,13 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $this->serviceUser->deleteUser($id);
+            $this->message = ['success' => 'Xóa người dùng thành công!'];
+        } catch (\Exception $err) {
+            report($err->getMessage());
+            $this->message = ['error' => 'Error: ' . $err->getMessage()];
+        }
+        return redirect()->back()->with($this->message);
     }
 }

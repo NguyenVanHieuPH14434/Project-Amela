@@ -17,9 +17,17 @@ class PermissionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public $servicePms;
+    public $message = [];
+
+    public function __construct(PermissionService $servicePms)
+    {
+        $this->servicePms = $servicePms;
+    }
+
     public function index()
     {
-        $listPermission = Permission::where('parent_id', 0)->paginate(1);
+        $listPermission = $this->servicePms->getPaginatePermission();
         return view('pages.permission.list', compact('listPermission'));
     }
 
@@ -42,24 +50,23 @@ class PermissionController extends Controller
 
     public function store(PermissionRequest $request)
     {
-        $message = [];
-        try {
-            $servicePms = new PermissionService();
 
-            $module = $servicePms->insertPermission($request->module);
+        try {
+
+            $module = $this->servicePms->insertPermission($request->module);
 
             foreach ($request->action as $pms_action) {
                 $pmsName = $request->module . ' ' . $pms_action;
                 $pmsKey = $request->module . '_' . $pms_action;
-                $servicePms->insertPermission($pmsName, $pmsKey, $module);
+                $this->servicePms->insertPermission($pmsName, $pmsKey, $module);
             }
 
-            $message = ['message' => 'Create pms success'];
+            $this->message = ['message' => 'Thêm quyền thành công!'];
         } catch (\Throwable $err) {
             report($err->getMessage());
-            $message = ['error' => 'Error: ' . $err->getMessage()];
+            $this->message = ['error' => 'Error: ' . $err->getMessage()];
         }
-        return redirect()->route('permissions.create')->with($message);
+        return redirect()->route('permissions.create')->with($this->message);
     }
 
     /**
@@ -94,7 +101,7 @@ class PermissionController extends Controller
      */
     public function update(PermissionRequest $request, $id)
     {
-        $message = [];
+
         try {
             $pms = Permission::findOrFail($id);
 
@@ -106,15 +113,13 @@ class PermissionController extends Controller
 
             $arrNewIdPms = [];
 
-            $servicePms = new PermissionService();
-
-            $servicePms->updatepParentPermission($id, $request->module);
+            $this->servicePms->updatepParentPermission($id, $request->module);
 
             foreach ($request->action as $pms_action) {
                 $pmsName = $request->module . ' ' . $pms_action;
                 $pmsKey = $request->module . '_' . $pms_action;
-                 $idKey = $servicePms->insertPermission($pmsName, $pmsKey, $id);
-                 array_push($arrNewIdPms, $idKey);
+                $idKey = $this->servicePms->insertPermission($pmsName, $pmsKey, $id);
+                array_push($arrNewIdPms, $idKey);
             }
 
             foreach($arrIdPmsOld as $key => $valOld){
@@ -128,12 +133,25 @@ class PermissionController extends Controller
                 }
             }
 
-            $message = ['success' => 'Update success'];
+            $this->message = ['success' => 'Cập nhật quyền thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());
-            $message = ['error' => 'Error: ' . $err->getMessage()];
+            $this->message = ['error' => 'Error: ' . $err->getMessage()];
         }
-        return redirect()->route('permissions.edit', $id)->with($message);
+        return redirect()->route('permissions.edit', $id)->with($this->message);
+    }
+
+    public function search (Request $request) {
+        $key = trim($_GET['key']);
+        $requestData = ['pms_name'];
+        if($key != ''){
+            $listPermission = Permission::where('parent_id', 0)->where(querySearchByColumns($requestData, $key))
+            ->paginate(10);
+        }else{
+            $listPermission = $this->servicePms->getPaginatePermission();
+
+        }
+        return view('pages.permission.list', compact('listPermission'));
     }
 
     /**
@@ -144,7 +162,7 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        $message = [];
+
         try {
             $pmsParent = Permission::find($id);
             $getPmsChil = $pmsParent->getChildrentPermission;
@@ -152,10 +170,11 @@ class PermissionController extends Controller
                 DB::table('roles_permissions')->where('pms_id', $it->id)->delete();
             }
             $pmsParent->delete();
-            $message = ['success' => 'Delete success'];
+            $this->message = ['success' => 'Xóa quyền thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());
+            $this->message = ['error' => 'Error: '.$err->getMessage()];
         }
-        return redirect()->back()->with($message);
+        return redirect()->back()->with($this->message);
     }
 }

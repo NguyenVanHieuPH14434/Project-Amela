@@ -14,6 +14,11 @@ class Attribute extends Model
     protected $fillable = [
         'attr_name',
         'attr_img',
-        'attr_desc'
+        'attr_desc',
+        'parent_id'
     ];
+
+    public function getSubAttribute () {
+        return $this->hasMany(Attribute::class, 'parent_id', 'id');
+    }
 }

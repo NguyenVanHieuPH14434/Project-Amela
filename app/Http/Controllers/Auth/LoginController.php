@@ -53,7 +53,7 @@ class LoginController extends Controller
             $getMessage = [];
             if($user){
                 if(Auth::attempt(['username'=>$req->username, 'password'=>$req->password])){
-                    return redirect()->route('home');
+                    return redirect()->route('dashboard');
                 }elseif(!Auth::attempt(['password'=>$req->password])){
                     $getMessage = ['errPassword'=>'Password invalid!'];
                     return redirect()->route('login')->withInput($req->only('username', 'remember'))->with($getMessage);

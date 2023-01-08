@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -17,6 +18,9 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+
+    // protected $appends = ['new_username'];
+
     protected $fillable = [
         'username',
         'password',
@@ -26,6 +30,22 @@ class User extends Authenticatable
         'deleted_at'
     ];
 
+
+    // get profile
+    public function getProfile () {
+        return $this->belongsTo(Profile::class, 'profile_id', 'id');
+    }
+
+    //
+    public function user_role () {
+        return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
+    }
+
+    // // get new
+    // public function getNewUsernameAttribute () {
+    //     return $this->username . '_111';
+    // }
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -33,7 +53,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
+        // 'remember_token',
     ];
 
     /**
@@ -44,4 +64,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 }

@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController as ApiAuthController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\TestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/test', [TestController::class, 'test'])->name('test');
+Route::post('/test123', [AuthController::class, 'login']);
+Route::post('/sendMail', [Controller::class, 'sendMailtest']);
+Route::post('/registers', [ApiAuthController::class, 'store']);
+Route::get('/listt123', [ApiAuthController::class, 'index']);

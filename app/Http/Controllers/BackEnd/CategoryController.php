@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BackEnd;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
+use App\Services\CategoryService;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -14,9 +15,16 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public $message = [];
+    public $serviceCategory;
+    public function __construct(CategoryService $serviceCategory)
+    {
+        $this->serviceCategory = $serviceCategory;
+    }
+
     public function index()
     {
-        $listCate = Category::paginate(15);
+        $listCate = $this->serviceCategory->getPaginateCategory();
         return view('pages.category.list', compact('listCate'));
     }
 
@@ -39,24 +47,24 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        $message = [];
         try {
+            $dataImage = checkIssetImage($request, [
+                'image'=>'cate_image',
+                'prefixName'=>'category',
+                'folder'=>'uploads/categories',
+                'imageOld'=>''
+            ]);
             $cate = new Category();
             $cate->fill($request->all());
-            if($request->hasFile('cate_image')){
-                $file = $request->file('cate_image');
-                $cate->cate_image = fileUpload($file, 'category', 'uploads/categories');
-            }else{
-                $cate->cate_image = defaultImage();
-            }
+            $cate->cate_image = $dataImage;
             $cate->save();
 
-            $message = ['success'=>'Create category success'];
+            $this->message = ['success'=>'Thêm danh mục thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());
-            $message = ['error'=>'Error: '.$err->getMessage()];
+            $this->message = ['error'=>'Error: '.$err->getMessage()];
         }
-        return redirect()->back()->with($message);
+        return redirect()->back()->with($this->message);
     }
 
     /**
@@ -92,25 +100,37 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, $id)
     {
-        $message = [];
         try {
             $cate = Category::findOrFail($id);
             $cate->fill($request->all());
-            if($request->hasFile('cate_image')){
-                $file = $request->file('cate_image');
-                $cate->cate_image = fileUpload($file, 'category', 'uploads/categories');
-            }else{
-                $cate->cate_image = defaultImage();
-            }
+            $dataImage = checkIssetImage($request, [
+            'image'=>'cate_image',
+            'prefixName'=>'category',
+            'folder'=>'uploads/categories',
+            'imageOld'=> $cate->cate_image,
+            ]);
+            $cate->cate_image = $dataImage;
             $cate->update();
 
-            $message = ['success'=>'Update category success'];
+            $this->message = ['success'=>'Cập nhật danh mục thành công!'];
 
         } catch (\Exception $err) {
             report($err->getMessage());
-            $message = ['error'=>'Error: '.$err->getMessage()];
+            $this->message = ['error'=>'Error: '.$err->getMessage()];
         }
-        return redirect()->back()->with($message);
+        return redirect()->back()->with($this->message);
+    }
+
+    public function search (Request $request) {
+        $key = trim($_GET['key']);
+        $requestData = ['cate_name'];
+        if($key != ''){
+            $listCate = Category::where(querySearchByColumns($requestData, $key))
+            ->paginate(10);
+        }else{
+            $listCate = $this->serviceCategory->getPaginateCategory();
+        }
+        return view('pages.category.list', compact('listCate'));
     }
 
     /**
@@ -121,16 +141,15 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $message = [];
         try {
             $cate = Category::findOrFail($id);
             $cate->cate_product()->detach();
             $cate->delete();
-            $message = ['success'=>'Delete category success'];
+            $this->message = ['success'=>'Xóa danh mục thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());
-            $message = ['error'=>'Error: '.$err->getMessage()];
+            $this->message = ['error'=>'Error: '.$err->getMessage()];
         }
-        return redirect()->back()->with($message);
+        return redirect()->back()->with($this->message);
     }
 }

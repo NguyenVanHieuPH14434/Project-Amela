@@ -50,8 +50,8 @@
                             </div>
                         </div>
 
-                        @if(session('message'))
-                        <h3 class="center text-success">{{session('message')}}</h3>
+                        @if(session('success'))
+                        <h3 class="center text-success">{{session('success')}}</h3>
                         @endif
 
 

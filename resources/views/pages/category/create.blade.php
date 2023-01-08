@@ -39,11 +39,16 @@
                     <div class="panel-body">
                         <div class="mb-3">
                             <label for="" class="form-label"><b>Ảnh</b></label> <br>
-                            <p class="btn btn-primary btn-file">
-                                Browse...<input type="file" name="cate_image" onchange="preview()">
-                            </p> <br>
-                            <img src="" id="previewImage" width="120px" alt="" class="mb-2">
+                            <input type="file" name="cate_image" data-val="1" onchange="preview()" style="display: none" class="file">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" disabled placeholder="Upload file..." name="" id="file1">
+                                    <div class="input-group-append">
+                                        <button type="button" class="browse btn btn-primary">Browse..</button>
+                                    </div>
+                                </div>
+                                <img src="" id="previewImage" class="mt-2" width="120px" alt="" class="mb-2">
                         </div>
+
                     </div>
                     <div class="panel-body">
                         <div class="mb-3">
