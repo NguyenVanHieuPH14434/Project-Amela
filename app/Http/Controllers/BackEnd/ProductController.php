@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Services\AttributeService;
 use App\Services\CategoryService;
 use App\Services\ProductService;
+use DateTime;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -140,6 +141,16 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $product = Product::findOrFail($id);
+            $datetime = new DateTime();
+            $product->deleted_at = $datetime->format('Y-m-d H:i:s');
+            $product->update();
+            $this->message = ['success' => 'Xóa sản phẩm thành công!'];
+        } catch (\Exception $err) {
+            report($err->getMessage());
+            $this->message = ['error' => 'Error: '.$err->getMessage()];
+        }
+        return redirect()->back()->with($this->message);
     }
 }

@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\Hash;
 class UserService {
 
     public function getAllUser () {
-        return User::with('getProfile')->where('deleted_at', null)->get();
+        return User::with('getProfile')->where('deleted_at', null)->where('is_active', 1)->get();
     }
 
     public function getPaginateUser ($paginate = 10) {
-        return  User::with('getProfile')->where('deleted_at', null)->paginate($paginate);
+        return  User::with('getProfile')->where('deleted_at', null)->where('is_active', 1)->paginate($paginate);
     }
 
      public function insertUser ($req) {

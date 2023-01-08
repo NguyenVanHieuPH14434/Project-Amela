@@ -134,8 +134,6 @@
                                 <div id="more_item1"></div>
 
                             </div>
-
-
                         </div>
 
                     </div>
