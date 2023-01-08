@@ -134,15 +134,7 @@
                                 <div id="more_item1"></div>
 
                             </div>
-                                {{-- <div class="row mb-3 col-12 p-0 m-0">
-                                    <label for="" class="form-label"><b>Giá sản phẩm</b></label>
-                                    <input type="text" class="form-control" name="product_price" value="{{$product->product_price?$product->product_price:old('product_price')}}">
-                                    @error('product_price')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                                </div> --}}
+
 
                         </div>
 

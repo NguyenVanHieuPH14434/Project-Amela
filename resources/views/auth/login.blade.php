@@ -50,11 +50,6 @@
                             </div>
                         </div>
 
-                        @if(session('success'))
-                        <h3 class="center text-success">{{session('success')}}</h3>
-                        @endif
-
-
                         <div class="row mb-3">
                             <div class="col-md-6 offset-md-4">
                                 <div class="form-check">

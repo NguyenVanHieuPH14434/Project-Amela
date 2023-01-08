@@ -54,6 +54,9 @@ class ProductService {
     }
 
     public function updateProduct ($req, $id) {
+        $prices = explode(',', $req->product_price);
+        $stock = explode(',', $req->stock);
+
         $product = Product::findOrFail($id);
         $dataImage = checkIssetImage($req, [
             'image'=>'product_image',
@@ -67,6 +70,11 @@ class ProductService {
         $product->update();
 
         $product->categoryProduct()->sync($req->category_id);
+        $product->attributeProduct()->detach();
+        foreach($prices as $key => $val){
+            $product->attributeProduct()->attach($req->attr[$key], array('price'=>$val, 'stock'=>$stock[$key]));
+        }
+
         if($req->image){
             $product->productGallery()->delete();
             $this->serviceProGallery->insertProductGallery($product->id, $req);

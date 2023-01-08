@@ -146,47 +146,5 @@
             </div>
         </div>
     </div>
-
-    {{-- <script>
-        function show_selected() {
-        var selector = document.getElementById('id_of_select');
-        var value = selector[selector.selectedIndex].value;
-        $.ajax({
-            type: "get",
-            url: "{{route('products.showAttr', ['id'=>2])}}",
-            // data: {
-            //     "data":2
-            // },
-            dataType: "JSON",
-            success: function (data) {
-                console.log(data);
-            }
-        });
-        // document.getElementById('display').innerHTML = value;
-    }
-
-
-
-// document.getElementById('btn').addEventListener('click', show_selected);
-    </script> --}}
-    {{-- <script>
-        function testSelect() {
-            var selector = document.getElementById('id_of_select');
-            var value = selector[selector.selectedIndex].value;
-            if(value)
-            {
-                var outPut=`<div class="col-4">
-                        <div class="panel-body">
-                            <div class="mb-3">
-                                <label for="" class="form-label"><b>Số lượng nhập kho</b></label>
-                                <input type="text" class="form-control" name="stock[]" value="{{old('stock')}}">
-                            </div>
-                        </div>
-                    </div>`;
-                    $("#more_item1").before(outPut);
-            }
-        }
-    </script> --}}
-
 @endsection
 

@@ -73,8 +73,33 @@
         </nav>
 
         <main class="py-4">
+
             @yield('content')
         </main>
     </div>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+         // alert success
+      @if (session('success'))
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: '{{ session('success') }}',
+            showConfirmButton: false,
+            timer: 1800
+        })
+    @endif
+
+    // alert error
+    @if (session('error'))
+        Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: '{{ session('error') }}',
+            showConfirmButton: false,
+            timer: 1800
+        })
+    @endif
+    </script>
 </body>
 </html>

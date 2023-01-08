@@ -184,12 +184,7 @@
                             <!-- small box -->
                             <div class="card">
                                 <div class="card-body">
-                                    @if (session('success'))
-                                    <h3 class="text-success">{{ session('success') }}</h3>
-                                    @endif
-                                    @if (session('error'))
-                                        <h3 class="text-danger">{{ session('error') }}</h3>
-                                    @endif
+
                                  @yield('content')
                                 </div>
                              </div>

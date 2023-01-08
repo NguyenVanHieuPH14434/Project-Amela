@@ -35,7 +35,6 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Tên sản phẩm</th>
-                                    <th>Giá sản phẩm</th>
                                     <th>Danh mục</th>
                                     <th>Ảnh</th>
                                    <th class="text-center">Hành động</th>
@@ -49,7 +48,6 @@
                                 <tr>
                                     <td class="col-1"><a href="#" class="btn-link">#{{$item->id}}</a></td>
                                     <td class="col-3">{{$item->product_name}}</td>
-                                    <td class="col-2">{{number_format($item->product_price)}}</td>
                                     <td class="col-3">
                                         @foreach ($item->categoryProduct as $cate)
                                             <p class="mb-2">{{$cate->cate_name}}</p>

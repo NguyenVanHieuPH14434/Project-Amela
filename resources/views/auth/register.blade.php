@@ -10,17 +10,6 @@
                     <div class="card-body">
                         <form method="POST" action="{{ route('register') }}">
                             @csrf
-                            {{-- username',
-                        'password',
-                        'is_active',
-                        'profile_id',
-                        'remember_token',
-                        'deleted_at' --}}
-                            {{-- 'full_name',
-                        'phone',
-                        'email',
-                        'avatar',
-                        'deleted_at' --}}
 
                             <div class="row mb-3">
                                 <label for="username"
