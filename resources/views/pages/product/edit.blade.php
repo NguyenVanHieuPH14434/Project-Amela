@@ -103,7 +103,7 @@
                                 <div class="row col-12 p-0 m-0 mb-2">
                                     <label for="" class="form-label"><b>Thuộc tính</b></label>
                                     <select class="js-example-basic-multiple form-control"  id="id_of_select" data-placeholder="Chọn thuộc tính"
-                                        name="attr[]"  multiple="multiple" onchange="testSelect()">
+                                        name="attr[]"  multiple="multiple">
                                         @foreach ($attrs as $attr)
                                             <optgroup label="{{$attr->attr_name}}">
                                                     @foreach ($attr->getSubAttribute as $sub)

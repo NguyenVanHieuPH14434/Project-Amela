@@ -47,8 +47,8 @@
 
                                 <tr>
                                     <td class="col-1"><a href="#" class="btn-link">#{{$item->id}}</a></td>
-                                    <td class="col-3">{{$item->product_name}}</td>
-                                    <td class="col-3">
+                                    <td class="col-4">{{$item->product_name}}</td>
+                                    <td class="col-4">
                                         @foreach ($item->categoryProduct as $cate)
                                             <p class="mb-2">{{$cate->cate_name}}</p>
                                         @endforeach

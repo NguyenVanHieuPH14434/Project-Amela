@@ -43,7 +43,7 @@
                             @if($listPermission->total() != 0)
                                 @foreach ($listPermission as $item)
                                 <tr>
-                                    <td><a href="#" class="btn-link">#{{$item->id}}</a></td>
+                                    <td class="col-1"><a href="#" class="btn-link">#{{$item->id}}</a></td>
                                     @php
                                     foreach (Config::get('permission.module') as $key => $parent){
                                         if($key == $item->pms_name){
@@ -51,16 +51,16 @@
                                         }
                                     }
                                     @endphp
-                                    <td>{{$item->pms_name}}</td>
-                                    <td>{{$permissionName}}</td>
+                                    <td class="col-5">{{$item->pms_name}}</td>
+                                    <td class="col-5">{{$permissionName}}</td>
                                     @if ($item->parent_id == 0)
-                                    <td class="text-center">
-                                        <a href="{{ route('permissions.edit', $item->id) }}" class="label label-table label-success"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    <td class="col-1 text-center d-flex">
+                                        <a href="{{ route('permissions.edit', $item->id) }}" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
                                         <form id="deleteForm{{ $item->id }}" action="{{ route('permissions.destroy', $item->id) }}" method="post">
                                         @csrf
                                         @method('DELETE')
                                     </form>
-                                    <button data-form="deleteForm{{ $item->id }}" class="label label-table label-danger btn-delete" style="border: none" >Xóa</button>
+                                    <button data-form="deleteForm{{ $item->id }}" class="btn btn-danger btn-delete" style="border: none" ><i class="fa-regular fa-trash-can"></i></button>
                                     </td>
                                     @endif
                                 </tr>

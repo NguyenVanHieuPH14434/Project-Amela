@@ -49,13 +49,13 @@
                                     <td>{{$item->cate_name}}</td>
                                     <td><img src="{{asset($item->cate_image)}}" width="100px" alt=""></td>
 
-                                    <td class="text-center">
-                                        <a href="{{ route('categories.edit', $item->id) }}" class="label label-table label-success"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    <td class="text-center justify-content-center d-flex">
+                                        <a href="{{ route('categories.edit', $item->id) }}" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
                                         <form id="deleteForm{{ $item->id }}" action="{{ route('categories.destroy', $item->id) }}" method="post">
                                         @csrf
                                         @method('DELETE')
                                     </form>
-                                    <button data-form="deleteForm{{$item->id}}"  class="label label-table label-danger btn-delete" style="border: none" >Xóa</button>
+                                    <button data-form="deleteForm{{$item->id}}"  class="btn btn-danger btn-delete" style="border: none" ><i class="fa-regular fa-trash-can"></i></button>
                                     </td>
 
                                 </tr>

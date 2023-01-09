@@ -55,6 +55,7 @@
                         </li>
                     </ul> --}}
                 </li>
+                @can('list-pms')
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
@@ -70,14 +71,19 @@
                                 <p>Danh sách</p>
                             </a>
                         </li>
+                        @can('add-pms')
                         <li class="nav-item">
                             <a href="{{ route('permissions.create') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Thêm</p>
                             </a>
                         </li>
+                        @endcan
                     </ul>
                 </li>
+                @endcan
+
+                @can('list-role')
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
@@ -93,14 +99,19 @@
                                 <p>Danh sách</p>
                             </a>
                         </li>
+                        @can('add-role')
                         <li class="nav-item">
                             <a href="{{ route('roles.create') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Thêm</p>
                             </a>
                         </li>
+                        @endcan
                     </ul>
                 </li>
+                @endcan
+
+                @can('list-cate')
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
@@ -116,14 +127,19 @@
                                 <p>Danh sách</p>
                             </a>
                         </li>
+                        @can('add-cate')
                         <li class="nav-item">
                             <a href="{{ route('categories.create') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Thêm</p>
                             </a>
                         </li>
+                        @endcan
                     </ul>
                 </li>
+                @endcan
+
+                @can('list-attr')
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
@@ -139,14 +155,19 @@
                                 <p>Danh sách</p>
                             </a>
                         </li>
+                        @can('add-attr')
                         <li class="nav-item">
                             <a href="{{ route('attributes.create') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Thêm</p>
                             </a>
                         </li>
+                        @endcan
                     </ul>
                 </li>
+                @endcan
+
+                @can('list-user')
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
@@ -162,14 +183,19 @@
                                 <p>Danh sách</p>
                             </a>
                         </li>
+                        @can('add-user')
                         <li class="nav-item">
                             <a href="{{ route('users.create') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Thêm</p>
                             </a>
                         </li>
+                        @endcan
                     </ul>
                 </li>
+                @endcan
+
+                @can('list-product')
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
@@ -185,14 +211,17 @@
                                 <p>Danh sách</p>
                             </a>
                         </li>
+                        @can('add-product')
                         <li class="nav-item">
                             <a href="{{ route('products.create') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Thêm</p>
                             </a>
                         </li>
+                        @endcan
                     </ul>
                 </li>
+                @endcan
 
             {{-- <li class="nav-item">
                     <a href="#" class="nav-link">

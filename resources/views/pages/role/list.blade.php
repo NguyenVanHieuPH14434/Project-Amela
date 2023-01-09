@@ -50,15 +50,15 @@
                                     <td><a href="#" class="btn-link">#{{$item->id}}</a></td>
                                     <td>{{$item->role_name}}</td>
 
-                                    <td class="text-center">
+                                    <td class="text-center justify-content-center d-flex">
 
-                                        <a href="{{ route('roles.edit', $item->id) }}" class="label label-table label-success"><i class="fa-solid fa-pen-to-square"></i></a>
+                                        <a href="{{ route('roles.edit', $item->id) }}" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
 
                                         <form id="deleteForm{{ $item->id }}" action="{{ route('roles.destroy', $item->id) }}" method="post">
                                         @csrf
                                         @method('DELETE')
                                     </form>
-                                    <button data-form="deleteForm{{$item->id}}"  class="label label-table label-danger btn-delete" style="border: none" >Xóa</button>
+                                    <button data-form="deleteForm{{$item->id}}"  class="btn btn-danger btn-delete" style="border: none" ><i class="fa-regular fa-trash-can"></i></button>
 
                                     </td>
 

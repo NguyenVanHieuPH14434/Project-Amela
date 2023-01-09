@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
@@ -39,6 +40,18 @@ class User extends Authenticatable implements JWTSubject
     //
     public function user_role () {
         return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
+    }
+
+
+    // check permission
+    public function checkPermission ($pmsKey) {
+        $roles = Auth::guard('web')->user()->user_role;
+        foreach($roles as $role){
+            if($role->permission_role->contains('pms_key', $pmsKey)){
+               return true;
+            }
+        }
+        return false;
     }
 
     // // get new
@@ -79,4 +92,8 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    // public function checkRole () {
+
+    // }
 }

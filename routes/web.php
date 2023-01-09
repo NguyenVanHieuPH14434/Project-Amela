@@ -37,69 +37,67 @@ Route::middleware('auth')->prefix('/admin')->group(function(){
 
     // permissions
     Route::prefix('/permissions')->name('permissions.')->group(function(){
-        Route::get('/', [PermissionController::class, 'index'])->name('index');
-        Route::get('/create', [PermissionController::class, 'create'])->name('create');
-        Route::post('/store', [PermissionController::class, 'store'])->name('store');
-        Route::get('/edit/{id}', [PermissionController::class, 'edit'])->name('edit');
-        Route::put('/update/{id}', [PermissionController::class, 'update'])->name('update');
-        Route::delete('/destroy/{id}', [PermissionController::class, 'destroy'])->name('destroy');
+        Route::middleware(['can:list-pms'])->get('/', [PermissionController::class, 'index'])->name('index');
+        Route::middleware(['can:add-pms'])->get('/create', [PermissionController::class, 'create'])->name('create');
+        Route::middleware(['can:add-pms'])->post('/store', [PermissionController::class, 'store'])->name('store');
+        Route::middleware(['can:edit-pms'])->get('/edit/{id}', [PermissionController::class, 'edit'])->name('edit');
+        Route::middleware(['can:edit-pms'])->put('/update/{id}', [PermissionController::class, 'update'])->name('update');
+        Route::middleware(['can:delete-pms'])->delete('/destroy/{id}', [PermissionController::class, 'destroy'])->name('destroy');
         Route::get('/search', [PermissionController::class, 'search'])->name('search');
     });
 
     // roles
     Route::prefix('/roles')->name('roles.')->group(function(){
-        Route::get('/', [RoleController::class, 'index'])->name('index');
-        Route::get('/create', [RoleController::class, 'create'])->name('create');
-        Route::post('/store', [RoleController::class, 'store'])->name('store');
-        Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('edit');
-        Route::put('/update/{id}', [RoleController::class, 'update'])->name('update');
-        Route::delete('/destroy/{id}', [RoleController::class, 'destroy'])->name('destroy');
+        Route::middleware(['can:list-role'])->get('/', [RoleController::class, 'index'])->name('index');
+        Route::middleware(['can:add-role'])->get('/create', [RoleController::class, 'create'])->name('create');
+        Route::middleware(['can:add-role'])->post('/store', [RoleController::class, 'store'])->name('store');
+        Route::middleware(['can:edit-role'])->get('/edit/{id}', [RoleController::class, 'edit'])->name('edit');
+        Route::middleware(['can:edit-role'])->put('/update/{id}', [RoleController::class, 'update'])->name('update');
+        Route::middleware(['can:delete-role'])->delete('/destroy/{id}', [RoleController::class, 'destroy'])->name('destroy');
         Route::get('/search', [RoleController::class, 'search'])->name('search');
     });
 
     // categories
     Route::prefix('/categories')->name('categories.')->group(function(){
-        Route::get('/', [CategoryController::class, 'index'])->name('index');
-        Route::get('/create', [CategoryController::class, 'create'])->name('create');
-        Route::post('/store', [CategoryController::class, 'store'])->name('store');
-        Route::get('/edit/{id}', [CategoryController::class, 'edit'])->name('edit');
-        Route::put('/update/{id}', [CategoryController::class, 'update'])->name('update');
-        Route::delete('/destroy/{id}', [CategoryController::class, 'destroy'])->name('destroy');
+        Route::middleware(['can:list-cate'])->get('/', [CategoryController::class, 'index'])->name('index');
+        Route::middleware(['can:add-cate'])->get('/create', [CategoryController::class, 'create'])->name('create');
+        Route::middleware(['can:add-cate'])->post('/store', [CategoryController::class, 'store'])->name('store');
+        Route::middleware(['can:edit-cate'])->get('/edit/{id}', [CategoryController::class, 'edit'])->name('edit');
+        Route::middleware(['can:edit-cate'])->put('/update/{id}', [CategoryController::class, 'update'])->name('update');
+        Route::middleware(['can:delete-cate'])->delete('/destroy/{id}', [CategoryController::class, 'destroy'])->name('destroy');
         Route::get('/search', [CategoryController::class, 'search'])->name('search');
     });
 
     // attributes
     Route::prefix('/attributes')->name('attributes.')->group(function(){
-        Route::get('/', [AttributeController::class, 'index'])->name('index');
-        Route::get('/create', [AttributeController::class, 'create'])->name('create');
-        Route::post('/store', [AttributeController::class, 'store'])->name('store');
-        Route::get('/edit/{id}', [AttributeController::class, 'edit'])->name('edit');
-        Route::put('/update/{id}', [AttributeController::class, 'update'])->name('update');
-        Route::delete('/destroy/{id}', [AttributeController::class, 'destroy'])->name('destroy');
+        Route::middleware(['can:list-attr'])->get('/', [AttributeController::class, 'index'])->name('index');
+        Route::middleware(['can:add-attr'])->get('/create', [AttributeController::class, 'create'])->name('create');
+        Route::middleware(['can:add-attr'])->post('/store', [AttributeController::class, 'store'])->name('store');
+        Route::middleware(['can:edit-attr'])->get('/edit/{id}', [AttributeController::class, 'edit'])->name('edit');
+        Route::middleware(['can:edit-attr'])->put('/update/{id}', [AttributeController::class, 'update'])->name('update');
+        Route::middleware(['can:delete-attr'])->delete('/destroy/{id}', [AttributeController::class, 'destroy'])->name('destroy');
         Route::get('/search', [AttributeController::class, 'search'])->name('search');
     });
 
     // users
     Route::prefix('/users')->name('users.')->group(function(){
-        Route::get('/', [UserController::class, 'index'])->name('index');
-        Route::get('/create', [UserController::class, 'create'])->name('create');
-        Route::post('/store', [UserController::class, 'store'])->name('store');
-        Route::get('/edit/{id}', [UserController::class, 'edit'])->name('edit');
-        Route::put('/update/{id}', [UserController::class, 'update'])->name('update');
-        Route::delete('/destroy/{id}', [UserController::class, 'destroy'])->name('destroy');
+        Route::middleware(['can:list-user'])->get('/', [UserController::class, 'index'])->name('index');
+        Route::middleware(['can:add-user'])->get('/create', [UserController::class, 'create'])->name('create');
+        Route::middleware(['can:add-user'])->post('/store', [UserController::class, 'store'])->name('store');
+        Route::middleware(['can:edit-user'])->get('/edit/{id}', [UserController::class, 'edit'])->name('edit');
+        Route::middleware(['can:edit-user'])->put('/update/{id}', [UserController::class, 'update'])->name('update');
+        Route::middleware(['can:delete-user'])->delete('/destroy/{id}', [UserController::class, 'destroy'])->name('destroy');
         Route::get('/search', [UserController::class, 'search'])->name('search');
     });
 
     // products
     Route::prefix('/products')->name('products.')->group(function(){
-        Route::get('/', [ProductController::class, 'index'])->name('index');
-        Route::get('/create', [ProductController::class, 'create'])->name('create');
-        Route::post('/store', [ProductController::class, 'store'])->name('store');
-        Route::get('/add-attribute-product', [ProductController::class, 'addAttr'])->name('addAttr');
-        Route::post('/store-attribute-product', [ProductController::class, 'storeAttr'])->name('storeAttr');
-        Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('edit');
-        Route::put('/update/{id}', [ProductController::class, 'update'])->name('update');
-        Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('destroy');
+        Route::middleware(['can:list-product'])->get('/', [ProductController::class, 'index'])->name('index');
+        Route::middleware(['can:add-product'])->get('/create', [ProductController::class, 'create'])->name('create');
+        Route::middleware(['can:add-product'])->post('/store', [ProductController::class, 'store'])->name('store');
+        Route::middleware(['can:edit-product'])->get('/edit/{id}', [ProductController::class, 'edit'])->name('edit');
+        Route::middleware(['can:edit-product'])->put('/update/{id}', [ProductController::class, 'update'])->name('update');
+        Route::middleware(['can:delete-product'])->delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('destroy');
         Route::get('/search', [ProductController::class, 'search'])->name('search');
 
     });
@@ -117,5 +115,9 @@ Route::middleware('guest')->prefix('/')->group(function(){
     Route::post('/checklogin', [LoginController::class, 'checklogin'])->name('checklogin');
     // Route::get('/cates', [CategoryController::class, 'cate']);
 });
+
+Route::any('{url}', function(){
+    return view('errors.404');
+})->where('url', '.*');
 
 

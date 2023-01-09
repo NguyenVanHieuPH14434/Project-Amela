@@ -61,7 +61,7 @@ class PermissionController extends Controller
                 $this->servicePms->insertPermission($pmsName, $pmsKey, $module);
             }
 
-            $this->message = ['message' => 'Thêm quyền thành công!'];
+            $this->message = ['success' => 'Thêm quyền thành công!'];
         } catch (\Throwable $err) {
             report($err->getMessage());
             $this->message = ['error' => 'Error: ' . $err->getMessage()];

@@ -28,7 +28,7 @@
                         <div class="col-6">
                             <label for="" class="form-label"><b>Danh mục sản phẩm</b></label>
 
-                            <select class="js-example-basic-multiple form-control" onchange="show_selected()" data-placeholder="Chọn danh mục sản phẩm"
+                            <select class="js-example-basic-multiple form-control" data-placeholder="Chọn danh mục sản phẩm"
                                 name="category_id[]" multiple="multiple">
                                 @foreach ($categories as $cate)
                                   <option value="{{$cate->id}}">{{$cate->cate_name}}</option>
@@ -88,7 +88,7 @@
                                     <div class="row col-12 p-0 m-0 mb-2">
                                         <label for="" class="form-label"><b>Thuộc tính</b></label>
                                         <select class="js-example-basic-multiple form-control"  id="id_of_select" data-placeholder="Chọn thuộc tính"
-                                            name="attr[]"  multiple="multiple" onchange="testSelect()">
+                                            name="attr[]"  multiple="multiple">
                                             @foreach ($attrs as $attr)
                                                 <optgroup label="{{$attr->attr_name}}">
                                                         @foreach ($attr->getSubAttribute as $sub)

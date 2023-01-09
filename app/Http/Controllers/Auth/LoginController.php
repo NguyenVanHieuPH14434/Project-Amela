@@ -51,9 +51,16 @@ class LoginController extends Controller
         try {
             $user = User::where('username', $req->username)->first();
             $getMessage = [];
+            $matchRole = ['admin', 'manager'];
             if($user){
                 if(Auth::attempt(['username'=>$req->username, 'password'=>$req->password])){
-                    return redirect()->route('dashboard');
+                    foreach($matchRole as $role){
+                        if(Auth::guard('web')->user()->user_role->contains('role_key', $role)){
+                            return redirect()->route('dashboard');
+                        }else{
+                            return redirect()->route('home1');
+                        }
+                    }
                 }elseif(!Auth::attempt(['password'=>$req->password])){
                     $getMessage = ['errPassword'=>'Password invalid!'];
                     return redirect()->route('login')->withInput($req->only('username', 'remember'))->with($getMessage);
