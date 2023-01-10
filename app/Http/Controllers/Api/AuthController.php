@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
+use App\Models\Category;
 use App\Models\User;
+use App\Services\CategoryService;
 use App\Services\RoleService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -66,6 +68,14 @@ class AuthController extends Controller
             'data'=> $request->username,
         ], 200);
         // 422 => error validate
+    }
+
+
+    public function cate () {
+        $n = new CategoryService();
+        return response()->json([
+            'data'=>$n->getPaginateCategory(2)
+        ], 200);
     }
 
     /**

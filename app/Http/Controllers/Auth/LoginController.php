@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
@@ -9,7 +10,6 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 class LoginController extends Controller
 {
     /*
@@ -51,16 +51,9 @@ class LoginController extends Controller
         try {
             $user = User::where('username', $req->username)->first();
             $getMessage = [];
-            $matchRole = ['admin', 'manager'];
             if($user){
                 if(Auth::attempt(['username'=>$req->username, 'password'=>$req->password])){
-                    foreach($matchRole as $role){
-                        if(Auth::guard('web')->user()->user_role->contains('role_key', $role)){
-                            return redirect()->route('dashboard');
-                        }else{
-                            return redirect()->route('home1');
-                        }
-                    }
+                     return redirect()->route('dashboard');
                 }elseif(!Auth::attempt(['password'=>$req->password])){
                     $getMessage = ['errPassword'=>'Password invalid!'];
                     return redirect()->route('login')->withInput($req->only('username', 'remember'))->with($getMessage);

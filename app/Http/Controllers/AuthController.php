@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -16,21 +17,30 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
+        // $request->validate([
+        //     'username' => 'required|string',
+        //     'password' => 'required|string',
+        // ]);
+        $rules = [
             'username' => 'required|string',
             'password' => 'required|string',
-        ]);
+        ];
+        $validation = Validator::make($request->all(), $rules);
+
         $credentials = $request->only('username', 'password');
 
         $token = Auth::guard('api')->attempt($credentials);
+
         if (!$token) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Unauthorized',
+                'mess'=>$validation->errors()
             ], 401);
         }
 
         $user = Auth::guard('api')->user();
+        User::where('id', $user->id)->update(['remember_token'=>$token]);
         return response()->json([
                 'status' => 'success',
                 'user' => $user,
@@ -38,7 +48,7 @@ class AuthController extends Controller
                     'token' => $token,
                     'type' => 'bearer',
                 ]
-            ]);
+            ], 200);
 
     }
 
@@ -69,7 +79,8 @@ class AuthController extends Controller
 
     public function logout()
     {
-        Auth::logout();
+        User::where('id', Auth::guard('api')->user()->id)->update(['remember_token'=>null]);
+        Auth::guard('api')->logout();
         return response()->json([
             'status' => 'success',
             'message' => 'Successfully logged out',
@@ -80,7 +91,7 @@ class AuthController extends Controller
     {
         return response()->json([
             'status' => 'success',
-            'user' => Auth::user(),
+            'user' => Auth::guard('api')->user(),
             'authorisation' => [
                 'token' => Auth::refresh(),
                 'type' => 'bearer',

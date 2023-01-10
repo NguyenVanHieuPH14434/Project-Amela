@@ -24,6 +24,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/test', [TestController::class, 'test'])->name('test');
 Route::post('/test123', [AuthController::class, 'login']);
+Route::get('/test1234', [AuthController::class, 'refresh']);
+Route::get('/logouts', [AuthController::class, 'logout']);
 Route::post('/sendMail', [Controller::class, 'sendMailtest']);
 Route::post('/registers', [ApiAuthController::class, 'store']);
 Route::get('/listt123', [ApiAuthController::class, 'index']);
+Route::get('/listtCate', [ApiAuthController::class, 'cate']);

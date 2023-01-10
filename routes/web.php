@@ -33,7 +33,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::middleware('auth')->prefix('/admin')->group(function(){
+Route::middleware(['auth', 'checkRole'])->prefix('/admin')->group(function(){
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
 
