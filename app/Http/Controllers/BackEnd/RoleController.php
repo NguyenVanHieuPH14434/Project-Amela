@@ -118,14 +118,7 @@ class RoleController extends Controller
     }
 
     public function search (Request $request) {
-        $key = trim($_GET['key']);
-        $requestData = ['role_name'];
-        if($key != ''){
-            $listRole = Role::where('deleted_at', null)->where(querySearchByColumns($requestData, $key))
-            ->paginate(10);
-        }else{
-            $listRole = $this->serviceRole->getPaginateRole();
-        }
+        $listRole =  $this->serviceRole->searchRole($_GET['key']);
         return view('pages.role.list', compact('listRole'));
     }
 
@@ -139,9 +132,7 @@ class RoleController extends Controller
     {
 
         try {
-            $role = Role::findOrFail($id);
-            $role->permission_role()->detach();
-            $role->delete();
+            $this->serviceRole->deleteRole($id);
             $this->message = ['success'=>'Xóa vai trò thành công!'];
         }catch (\Exception $err) {
             report($err->getMessage());

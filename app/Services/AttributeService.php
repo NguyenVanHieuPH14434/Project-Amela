@@ -61,5 +61,24 @@ class AttributeService {
         }
     }
 
+    public function deleteAttribute ($id) {
+        $attr = Attribute::findOrFail($id);
+        $attr->getSubAttribute()->delete();
+        $attr->delete();
+    }
+
+    public function searchAttribute ($textSearch) {
+        $key = trim($textSearch);
+        $requestData = ['attr_name'];
+        $listAttr;
+        if($key != ''){
+            $listAttr = Attribute::where('parent_id', 0)->where(querySearchByColumns($requestData, $key))
+            ->paginate(10);
+        }else{
+            $listAttr = $this->getPaginateAttribute();
+        }
+        return $listAttr;
+    }
+
 
 }

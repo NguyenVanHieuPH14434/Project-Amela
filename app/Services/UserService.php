@@ -67,5 +67,20 @@ class UserService {
         $user->update();
     }
 
+    public function searchUser ($textSearch){
+        $key = trim($textSearch);
+        $requestData = ['username'];
+        $listUser;
+        if($key != ''){
+            $listUser = User::with('getProfile')->with('user_role')
+            ->where('deleted_at', null)
+            ->where(querySearchByColumns($requestData, $key))
+            ->paginate(10);
+        }else{
+            $listUser = $this->getPaginateUser();
+        }
+        return $listUser;
+    }
+
 
 }

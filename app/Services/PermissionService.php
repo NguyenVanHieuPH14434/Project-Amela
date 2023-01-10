@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Permission;
+use Illuminate\Support\Facades\DB;
 
 class PermissionService {
 
@@ -31,5 +32,27 @@ class PermissionService {
             $pms->update();
             $pms->getChildrentPermission()->delete();
             return $pms->id;
+    }
+
+    public function deletePermission ($id) {
+        $pmsParent = Permission::find($id);
+        $getPmsChil = $pmsParent->getChildrentPermission;
+        foreach($getPmsChil as $it){
+            DB::table('roles_permissions')->where('pms_id', $it->id)->delete();
+        }
+        $pmsParent->delete();
+    }
+
+    public function searchPermission ($textSearch) {
+        $key = trim($textSearch);
+        $requestData = ['pms_name'];
+        $listPermission;
+        if($key != ''){
+            $listPermission = Permission::where('parent_id', 0)->where(querySearchByColumns($requestData, $key))
+            ->paginate(10);
+        }else{
+            $listPermission = $this->getPaginatePermission();
+        }
+        return $listPermission;
     }
 }

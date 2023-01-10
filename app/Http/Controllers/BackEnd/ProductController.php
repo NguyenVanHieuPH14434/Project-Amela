@@ -121,15 +121,7 @@ class ProductController extends Controller
 
 
     public function search (Request $request) {
-        $key = trim($_GET['key']);
-        $requestData = ['product_name', 'product_price'];
-        if($key != ''){
-            $listProduct = Product::with('categoryProduct')->with('productGallery')
-            ->where(querySearchByColumns($requestData, $key))
-            ->paginate(10);
-        }else{
-            $listProduct = $this->serviceProduct->getPaginateProduct();
-        }
+        $listProduct = $this->serviceProduct->searchProduct($_GET['key']);
         return view('pages.product.list', compact('listProduct'));
     }
 
@@ -142,10 +134,7 @@ class ProductController extends Controller
     public function destroy($id)
     {
         try {
-            $product = Product::findOrFail($id);
-            $datetime = new DateTime();
-            $product->deleted_at = $datetime->format('Y-m-d H:i:s');
-            $product->update();
+            $this->serviceProduct->deleteProduct($id);
             $this->message = ['success' => 'Xóa sản phẩm thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());

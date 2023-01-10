@@ -14,4 +14,8 @@ class News extends Model
         'new_content',
         'deleted_at',
     ];
+
+    public function getCateNew () {
+        return $this->belongsToMany(CategoryNew::class, 'news_categories_has_news', 'new_id', 'new_category_id');
+    }
 }

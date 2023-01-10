@@ -6,6 +6,7 @@ use App\Models\Attribute;
 use App\Models\Permission;
 use App\Models\Product;
 use App\Models\ProductGallery;
+use DateTime;
 
 class ProductService {
 
@@ -79,5 +80,29 @@ class ProductService {
             $product->productGallery()->delete();
             $this->serviceProGallery->insertProductGallery($product->id, $req);
         }
+    }
+
+
+    public function deleteProduct ($id){
+        $product = Product::findOrFail($id);
+        $datetime = new DateTime();
+        $product->deleted_at = $datetime->format('Y-m-d H:i:s');
+        $product->update();
+    }
+
+    public function searchProduct ($textSearch) {
+        $key = trim($textSearch);
+        $requestData = ['product_name', 'product_price'];
+        $listProduct;
+        if($key != ''){
+            $listProduct = Product::with('categoryProduct')->with('productGallery')
+            ->where('deleted_at', null)
+            ->where('is_active', 1)
+            ->where(querySearchByColumns($requestData, $key))
+            ->paginate(10);
+        }else{
+            $listProduct = $this->getPaginateProduct();
+        }
+        return $listProduct;
     }
 }

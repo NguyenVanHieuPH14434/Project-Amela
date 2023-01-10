@@ -100,15 +100,8 @@ class AttributeController extends Controller
     }
 
     public function search (Request $request) {
-        $key = trim($_GET['key']);
-        $requestData = ['attr_name'];
-        if($key != ''){
-            $listAttr = Attribute::where('parent_id', 0)->where(querySearchByColumns($requestData, $key))
-            ->paginate(10);
-        }else{
-            $listAttr = $this->serviceAttribute->getPaginateAttribute();
 
-        }
+        $listAttr = $this->serviceAttribute->searchAttribute($_GET['key']);
         return view('pages.attribute.list', compact('listAttr'));
     }
 
@@ -121,9 +114,7 @@ class AttributeController extends Controller
     public function destroy($id)
     {
         try {
-           $attr = Attribute::findOrFail($id);
-           $attr->getSubAttribute()->delete();
-           $attr->delete();
+            $this->serviceAttribute->deleteAttribute($id);
             $this->message = ['success' => 'Xóa thuộc tính thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());

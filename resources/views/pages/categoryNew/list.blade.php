@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
-@section('title', 'Danh sách tài khoản người dùng')
-@section('titleContent', 'Danh sách tài khoản người dùng')
+@section('title', 'Danh sách danh mục bài viết')
+@section('titleContent', 'Danh sách danh mục bài viết')
 @section('content')
     <div class="row">
         <div class="col-lg-12">
@@ -16,12 +16,12 @@
                         <div class="row mb-3">
                             <div class="col-sm-4 table-toolbar-left">
 
-                                <a href="{{ route('users.create') }}" class="btn btn-info"><i class="fa-solid fa-plus"></i>Thêm</a>
+                                <a href="{{ route('categoryNews.create') }}" class="btn btn-info"><i class="fa-solid fa-plus"></i>Thêm</a>
 
                             </div>
                             <div class="col-sm-8 table-toolbar-right">
                                 <div class="form-group">
-                                    <form action="{{ route('users.search') }}" method="get">
+                                    <form action="{{ route('categoryNews.search') }}" method="get">
                                         <input type="text" autocomplete="off" name="key" class="form-control"
                                             placeholder="Search" id="demo-input-search2">
                                     </form>
@@ -35,34 +35,29 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Tên đăng nhập</th>
-                                    <th>Họ và tên</th>
+                                    <th>Tên danh mục bài viết</th>
                                     <th>Ảnh</th>
                                    <th class="text-center">Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if ($listUser->total() != 0)
+                                @if ($listCateNew->total() != 0)
 
-                                @foreach ($listUser as $item)
+                                @foreach ($listCateNew as $item)
 
                                 <tr>
-                                    <td class="col-1"><a href="#" class="btn-link">#{{$item->id}}</a></td>
-                                    <td class="col-4">{{$item->username}}</td>
-                                    <td class="col-4">{{$item->getProfile->full_name}}</td>
-                                    <td class="col-2"><img src="{{asset($item->getProfile->avatar)}}" width="100px" alt=""></td>
+                                    <td ><a href="#" class="btn-link">#{{$item->id}}</a></td>
+                                    <td >{{$item->new_cate_name}}</td>
+                                    <td ><img src="{{asset($item->new_cate_image)}}" width="100px" alt=""></td>
 
-                                    <td class="col-1 d-flex ">
-                                        <a href="{{ route('users.edit', $item->id) }}" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    <td class="text-center d-flex justify-content-center ">
+                                        <a href="{{ route('categoryNews.edit', $item->id) }}" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
 
-                                        @if (Auth::guard('web')->user()->id != $item->id)
-
-                                        <form id="deleteForm{{ $item->id }}" action="{{ route('users.destroy', $item->id) }}" method="post">
+                                        <form id="deleteForm{{ $item->id }}" action="{{ route('categoryNews.destroy', $item->id) }}" method="post">
                                         @csrf
                                         @method('DELETE')
                                         </form>
                                         <button data-form="deleteForm{{$item->id}}"  class="btn btn-danger btn-delete" style="border: none" ><i class="fa-regular fa-trash-can"></i></button>
-                                        @endif
                                     </td>
 
                                 </tr>
@@ -81,7 +76,7 @@
                     </div>
                     <hr class="new-section-xs">
                     <div class="pull-right">
-                        {{$listUser->links()}}
+                        {{$listCateNew->links()}}
                     </div>
                 </div>
                 <!--===================================================-->

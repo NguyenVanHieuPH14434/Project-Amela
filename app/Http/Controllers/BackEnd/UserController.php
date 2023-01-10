@@ -114,15 +114,7 @@ class UserController extends Controller
     }
 
     public function search (Request $request) {
-        $key = trim($_GET['key']);
-        $requestData = ['username'];
-        if($key != ''){
-            $listUser = User::with('getProfile')->with('user_role')
-            ->where(querySearchByColumns($requestData, $key))
-            ->paginate(10);
-        }else{
-            $listUser = $this->serviceUser->getPaginateUser();
-        }
+        $listUser = $this->serviceUser->searchUser($_GET['key']);
         return view('pages.user.list', compact('listUser'));
     }
 

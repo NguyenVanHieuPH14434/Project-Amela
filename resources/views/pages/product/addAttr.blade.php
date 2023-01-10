@@ -12,70 +12,95 @@
                 <!--Data Table-->
                 <!--===================================================-->
 
-                <form action="{{ route('products.addAttr') }}" method="post" enctype="multipart/form-data">
-                    @csrf
-                    <div class="panel-body">
-                        <div class="mb-3">
-                            <label for="" class="form-label"><b>Tên thuộc tính</b></label>
-                            <input type="text" class="form-control" name="parent_attr_name" value="{{old('parent_attr_name')}}">
-                            @error('parent_attr_name')
-                            <span class="text-danger" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-success" id="add_more_item">Thêm loại</button>
-                    <div class="row " id="fooBar">
-                    <input type="hidden" id="getIndex" value="1">
-                    <div class="col-4">
-                        <div class="panel-body">
-                            <div class="mb-3">
-                                <label for="" class="form-label"><b>Loại</b></label>
-                                <input type="text" class="form-control" name="attr_name[]" value="{{old('attr_name')}}">
-                                {{-- @error('attr_name')
-                                <span class="text-danger" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror --}}
-                            </div>
-                        </div>
-                        <div class="panel-body">
-                            <div class="mb-3">
-                                <label for="" class="form-label"><b>Ảnh</b></label> <br>
-                                {{-- <p class="btn btn-primary btn-file">
-                                    Browse...<input type="file" name="attr_img" class="file browse" data-val="1" >
-                                </p> <br> --}}
-                                <input type="file" name="attr_img[]" data-val="1" style="display: none" class="file">
-                                <div class="input-group my-2">
-                                    <input type="text" class="form-control" disabled placeholder="Upload file..." name="" id="file1">
-                                    <div class="input-group-append">
-                                        <button type="button" class="browse btn btn-primary">Browse..</button>
-                                    </div>
-                                </div>
-                                <img src="" id="previewImage1" width="120px" alt="" class="mb-2">
-                            </div>
-                        </div>
-                        <div class="panel-body">
-                            <div class="mb-3">
-                                <label for="" class="form-label"><b>Mô tả</b></label>
-                                <textarea name="attr_desc[]" class="form-control" cols="30" rows="10">{{old('attr_desc')?old('attr_desc'):''}}</textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="more_item" class="col-4"></div>
-                  </div>
 
-                    <button class="btn btn-primary">Thêm mới</button>
-                    <button class="btn btn-danger" type="reset">Nhập lại</button>
-                    <a href="{{ route('attributes.index') }}" class="btn btn-info">Quay lại</a>
+                    <form id="defaultForm" method="post" class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Test 1</label>
+                            <div class="col-lg-5">
+                                <input type="text" name="cities" id="aa" class="form-control" value="testing,bootstrap's, tagsInput,validation," data-role="tagsinput" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Test 2</label>
+                            <div class="col-lg-5">
+                                <input type="text" name="cities1" id="aa1" class="form-control" value="s@d.com,a@b.com" data-role="tagsinput" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-5 col-lg-offset-3">
+                                <button type="submit" class="btn btn-default">Validate</button>
+                            </div>
+                        </div>
+                    </form>
 
-                </form>
                 <!--===================================================-->
                 <!--End Data Table-->
 
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function () {
+    $('#defaultForm')
+        .find('[name="cities"]')
+    // Revalidate the color when it is changed
+    .change(function (e) {
+        console.warn($('[name="cities"]').val());
+        console.info($('#aa').val());
+        console.info($("#aa").tagsinput('items'));
+        var a = $("#aa").tagsinput('items');
+        console.log(typeof (a));
+        console.log(a.length);
+        $('#defaultForm').bootstrapValidator('revalidateField', 'cities');
+    })
+        .end()
+        .find('[name="cities1"]')
+    // Revalidate the color when it is changed
+    .change(function (e) {
+        console.warn($('[name="cities1"]').val());
+        console.info($('#aa1').val());
+        console.info($("#aa1").tagsinput('items'));
+        var a = $("#aa1").tagsinput('items');
+        console.log(typeof (a));
+        console.log(a.length);
+        $('#defaultForm').bootstrapValidator('revalidateField', 'cities1');
+    })
+        .end()
+        .bootstrapValidator({
+        excluded: ':disabled',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            cities: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please enter at least one city you like the most'
+                    }
+                }
+            },
+            cities1: {
+                validators: {
+                    callback: {
+                        message: 'Please enter a valid email address',
+                        callback: function (value, validator) {
+                            // Get the selected options
+                            var options = validator.getFieldElements('cities1').tagsinput('items');
+                            // console.info(options);
+                            return (options !== null && options.length >= 2 && options.length <= 4);
+                        }
+                    }
+                }
+            }
+        }
+    })
+        .on('success.form.bv', function (e) {
+        // Prevent form submission
+        e.preventDefault();
+    });
+});
+    </script>
 @endsection
 

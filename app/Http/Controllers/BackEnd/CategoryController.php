@@ -121,15 +121,9 @@ class CategoryController extends Controller
         return redirect()->back()->with($this->message);
     }
 
+    // search
     public function search (Request $request) {
-        $key = trim($_GET['key']);
-        $requestData = ['cate_name'];
-        if($key != ''){
-            $listCate = Category::where(querySearchByColumns($requestData, $key))
-            ->paginate(10);
-        }else{
-            $listCate = $this->serviceCategory->getPaginateCategory();
-        }
+        $listCate = $this->serviceCategory->searchCategory($_GET['key']);
         return view('pages.category.list', compact('listCate'));
     }
 
@@ -142,9 +136,7 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         try {
-            $cate = Category::findOrFail($id);
-            $cate->cate_product()->detach();
-            $cate->delete();
+           $this->serviceCategory->deleteCategory($id);
             $this->message = ['success'=>'Xóa danh mục thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());

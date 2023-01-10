@@ -142,15 +142,7 @@ class PermissionController extends Controller
     }
 
     public function search (Request $request) {
-        $key = trim($_GET['key']);
-        $requestData = ['pms_name'];
-        if($key != ''){
-            $listPermission = Permission::where('parent_id', 0)->where(querySearchByColumns($requestData, $key))
-            ->paginate(10);
-        }else{
-            $listPermission = $this->servicePms->getPaginatePermission();
-
-        }
+        $listPermission = $this->servicePms->searchPermission($_GET['key']);
         return view('pages.permission.list', compact('listPermission'));
     }
 
@@ -164,12 +156,7 @@ class PermissionController extends Controller
     {
 
         try {
-            $pmsParent = Permission::find($id);
-            $getPmsChil = $pmsParent->getChildrentPermission;
-            foreach($getPmsChil as $it){
-                DB::table('roles_permissions')->where('pms_id', $it->id)->delete();
-            }
-            $pmsParent->delete();
+           $this->servicePms->deletePermission($id);
             $this->message = ['success' => 'Xóa quyền thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());

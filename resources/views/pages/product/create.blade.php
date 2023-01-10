@@ -69,6 +69,11 @@
                                     </div>
                                 </div>
                                 <output id="result" class="mt-2" style="display: flex"/>
+                                @error('image.*')
+                                <span class="text-danger" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                     </div>
 

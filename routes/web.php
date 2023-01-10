@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BackEnd\AdminController;
 use App\Http\Controllers\BackEnd\AttributeController;
 use App\Http\Controllers\BackEnd\CategoryController;
+use App\Http\Controllers\BackEnd\CategoryNewController;
+use App\Http\Controllers\BackEnd\NewsController;
 use App\Http\Controllers\BackEnd\PermissionController;
 use App\Http\Controllers\BackEnd\ProductController;
 use App\Http\Controllers\BackEnd\RoleController;
@@ -101,6 +103,29 @@ Route::middleware('auth')->prefix('/admin')->group(function(){
         Route::get('/search', [ProductController::class, 'search'])->name('search');
 
     });
+
+    // category new
+    Route::prefix('/categoryNews')->name('categoryNews.')->group(function(){
+        Route::get('/', [CategoryNewController::class, 'index'])->name('index');
+        Route::get('/create', [CategoryNewController::class, 'create'])->name('create');
+        Route::post('/store', [CategoryNewController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [CategoryNewController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [CategoryNewController::class, 'update'])->name('update');
+        Route::delete('/destroy/{id}', [CategoryNewController::class, 'destroy'])->name('destroy');
+        Route::get('/search', [CategoryNewController::class, 'search'])->name('search');
+    });
+
+    // news
+    Route::prefix('/news')->name('news.')->group(function(){
+        Route::get('/', [NewsController::class, 'index'])->name('index');
+        Route::get('/create', [NewsController::class, 'create'])->name('create');
+        Route::post('/store', [NewsController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [NewsController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [NewsController::class, 'update'])->name('update');
+        Route::delete('/destroy/{id}', [NewsController::class, 'destroy'])->name('destroy');
+        Route::get('/search', [NewsController::class, 'search'])->name('search');
+    });
+
 });
 
 Route::middleware('auth')->post('/logout', [LoginController::class, 'logout'])->name('logout');
