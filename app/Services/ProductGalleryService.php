@@ -9,9 +9,6 @@ use App\Models\ProductGallery;
 
 class ProductGalleryService {
 
-    public function getAllProduct () {
-        return Product::where('is_active', 1)->where('deleted_at', null)->get();
-    }
 
     public function insertProductGallery ($productId, $req) {
         $files = $req->file('image');

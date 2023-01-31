@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
+use App\Models\Category;
+use App\Models\Product;
 use App\Models\Profile;
 use App\Models\User;
 use App\Notifications\MailRegister;
@@ -32,5 +34,20 @@ class Controller extends BaseController
 
     public function tesss (RegisterRequest $req) {
         dd($req->all());
+    }
+
+    public function chart () {
+        $dataCate = Category::where('deleted_at', null)
+        ->selectRaw('count(id) as totalCate')
+        // ->groupBy('cate_name')
+        ->get();
+
+        $dataProduct = Product::where('deleted_at', null)
+        ->selectRaw('count(id) as totalPro')
+        // ->groupBy('product_name')
+        ->get();
+
+
+        dd($dataCate, $dataProduct);
     }
 }

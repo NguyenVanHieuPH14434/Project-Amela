@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController as ApiAuthController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\TestController;
@@ -22,11 +25,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/test', [TestController::class, 'test'])->name('test');
-Route::post('/test123', [AuthController::class, 'login']);
-Route::get('/test1234', [AuthController::class, 'refresh']);
-Route::get('/logouts', [AuthController::class, 'logout']);
-Route::post('/sendMail', [Controller::class, 'sendMailtest']);
-Route::post('/registers', [ApiAuthController::class, 'store']);
-Route::get('/listt123', [ApiAuthController::class, 'index']);
-Route::get('/listtCate', [ApiAuthController::class, 'cate']);
+// Route::post('/test', [TestController::class, 'test'])->name('test');
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/refresh', [AuthController::class, 'refresh']);
+Route::get('/logout', [ApiAuthController::class, 'logout']);
+// Route::get('/logout', [AuthController::class, 'logout']);
+// Route::post('/sendMail', [Controller::class, 'sendMailtest']);
+Route::post('/register', [UserController::class, 'store']);
+// Route::get('/listt123', [ApiAuthController::class, 'index']);
+Route::get('/list-categories', [CategoryController::class, 'index']);
+Route::get('/list-product', [ProductController::class, 'index']);

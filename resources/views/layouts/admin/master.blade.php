@@ -215,6 +215,7 @@
     <!-- ./wrapper -->
 
    @include('layouts.admin._script')
+   @yield('page-js')
 </body>
 
 </html>

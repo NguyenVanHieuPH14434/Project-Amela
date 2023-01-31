@@ -35,7 +35,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $allCate = Category::all(['id', 'cate_name']);
+        $allCate = $this->serviceCategory->getAllCategory();
         return view('pages.category.create', compact('allCate'));
     }
 
@@ -87,7 +87,7 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $cate = Category::findOrFail($id);
-        $allCate = Category::all(['id', 'cate_name']);
+        $allCate = $this->serviceCategory->getAllCategory();
         return view('pages.category.edit', compact('cate', 'allCate'));
     }
 

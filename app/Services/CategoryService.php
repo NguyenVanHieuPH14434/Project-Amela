@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Category;
 use App\Models\Permission;
 use App\Models\Role;
+use DateTime;
 
 class CategoryService {
 
@@ -13,13 +14,15 @@ class CategoryService {
     }
 
     public function getPaginateCategory ($paginate = 10) {
-        return  Category::where('deleted_at', null)->paginate($paginate);
+        return  Category::with('getChildrenCateogory')->where('deleted_at', null)->paginate($paginate);
     }
 
     public function deleteCategory ($id){
         $cate = Category::findOrFail($id);
-        $cate->cate_product()->detach();
-        $cate->delete();
+        // $cate->cate_product()->detach();
+        $datetime = new DateTime();
+        $cate->deleted_at = $datetime->format('Y-m-d H:i:s');
+        $cate->update();
     }
 
     public function searchCategory ($textSearch) {

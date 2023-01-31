@@ -57,8 +57,6 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
 
-        // dd($is);
-        // dd($request->all());
         try {
             $this->serviceProduct->insertProduct($request);
             $this->message = ['success' => 'Thêm sản phẩm thành công!'];

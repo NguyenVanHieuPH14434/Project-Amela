@@ -10,13 +10,19 @@ use DateTime;
 
 class ProductService {
 
+    const ACTIVE = 1;
     public $serviceProGallery;
     public function __construct(ProductGalleryService $serviceProGallery)
     {
         $this->serviceProGallery = $serviceProGallery;
     }
+
     public function getAllProduct () {
-        return Product::with('categoryProduct')->with('productGallery')->where('is_active', 1)->where('deleted_at', null)->get();
+        return Product::with('categoryProduct')
+        ->with('productGallery')
+        ->where('is_active', self::ACTIVE)
+        ->where('deleted_at', null)
+        ->get();
     }
 
     public function getPaginateProduct ($paginate = 10) {

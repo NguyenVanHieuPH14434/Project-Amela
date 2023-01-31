@@ -26,27 +26,32 @@ class AuthController extends Controller
             'password' => 'required|string',
         ];
         $validation = Validator::make($request->all(), $rules);
+        if($validation->fails()){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Username or password invalid',
+            ], 422);
+        }
 
         $credentials = $request->only('username', 'password');
 
-        $token = Auth::guard('api')->attempt($credentials);
+        $token = Auth::guard('api')->setTTL(2)->attempt($credentials);
 
         if (!$token) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Unauthorized',
-                'mess'=>$validation->errors()
             ], 401);
         }
 
         $user = Auth::guard('api')->user();
-        User::where('id', $user->id)->update(['remember_token'=>$token]);
         return response()->json([
                 'status' => 'success',
                 'user' => $user,
                 'authorisation' => [
                     'token' => $token,
                     'type' => 'bearer',
+                    'expired' => Auth::guard('api')->factory()->getTTL()
                 ]
             ], 200);
 
@@ -79,7 +84,6 @@ class AuthController extends Controller
 
     public function logout()
     {
-        User::where('id', Auth::guard('api')->user()->id)->update(['remember_token'=>null]);
         Auth::guard('api')->logout();
         return response()->json([
             'status' => 'success',

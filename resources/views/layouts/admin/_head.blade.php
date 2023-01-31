@@ -45,6 +45,7 @@
     <!--Select2 [ OPTIONAL ]-->
     <link href="{{ asset('plugins/select2/css/select2.min.css') }}" rel="stylesheet">
 
-
+    {{-- morris chart --}}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
 
 </head>

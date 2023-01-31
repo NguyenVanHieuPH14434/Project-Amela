@@ -13,6 +13,7 @@ use App\Http\Controllers\BackEnd\ProductController;
 use App\Http\Controllers\BackEnd\RoleController;
 use App\Http\Controllers\BackEnd\UserController;
 use App\Http\Controllers\Client\ClientController;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -126,6 +127,11 @@ Route::middleware(['auth', 'checkRole'])->prefix('/admin')->group(function(){
         Route::get('/search', [NewsController::class, 'search'])->name('search');
     });
 
+    Route::get('/chart', [Controller::class, 'chart'])->name('chart');
+    Route::get('/test123', function(){
+        return view('pages.product.addAttr');
+    });
+
 });
 
 Route::middleware('auth')->post('/logout', [LoginController::class, 'logout'])->name('logout');
@@ -138,7 +144,6 @@ Route::middleware('guest')->prefix('/')->group(function(){
     Route::post('/register', [RegisterController::class, 'create'])->name('register');
     Route::get('/login', [LoginController::class, 'index'])->name('login');
     Route::post('/checklogin', [LoginController::class, 'checklogin'])->name('checklogin');
-    // Route::get('/cates', [CategoryController::class, 'cate']);
 });
 
 Route::any('{url}', function(){

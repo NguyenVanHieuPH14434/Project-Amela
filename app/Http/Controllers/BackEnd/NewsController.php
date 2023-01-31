@@ -117,7 +117,7 @@ class NewsController extends Controller
     {
         try {
             $this->serviceNew->deleteNew($id);
-            $this->message = ['success' => 'Xóa nhật bài viết thành công!'];
+            $this->message = ['success' => 'Xóa bài viết thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());
             $this->message = ['error' => 'Error: ' . $err->getMessage()];

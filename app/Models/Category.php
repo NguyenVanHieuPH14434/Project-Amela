@@ -20,4 +20,8 @@ class Category extends Model
     public function cate_product () {
         return $this->belongsToMany(Product::class, 'categories_products', 'cate_id', 'product_id')->withPivot('cate_id', 'product_id', 'created_at');
     }
+
+    public function getChildrenCateogory () {
+        return $this->hasMany(Category::class, 'parent_id', 'id');
+    }
 }

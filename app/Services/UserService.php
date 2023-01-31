@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Hash;
 
 class UserService {
 
+    const USER_ROLE = 2;
+
     public function getAllUser () {
         return User::with('getProfile')->where('deleted_at', null)->where('is_active', 1)->get();
     }
@@ -38,7 +40,14 @@ class UserService {
         $create_account->remember_token = ' ';
         $create_account->save();
 
-        $create_account->user_role()->attach($req->role);
+        $role = $req->role?$req->role:self::USER_ROLE;
+        $create_account->user_role()->attach($role);
+
+        $data = [
+            "account"=>$create_account,
+            "profile"=>$create_profile
+        ];
+        return $data;
     }
 
     public function updateUser ($req, $id) {
@@ -65,6 +74,11 @@ class UserService {
         $datetime = new DateTime();
         $user->deleted_at = $datetime->format('Y-m-d H:i:s');
         $user->update();
+
+        $user->getProfile()->update([
+            'deleted_at' => $datetime->format('Y-m-d H:i:s')
+        ]);
+
     }
 
     public function searchUser ($textSearch){

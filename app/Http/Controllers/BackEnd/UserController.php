@@ -12,8 +12,8 @@ use App\Services\UserService;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-
 class UserController extends Controller
 {
     /**
@@ -61,11 +61,14 @@ class UserController extends Controller
     public function store(UserRequest $req)
     {
         try {
+            DB::beginTransaction();
             $this->serviceUser->insertUser($req);
             $this->message = ['success' => 'Thêm người dùng thành công!'];
+            DB::commit();
         } catch (\Exception $err) {
             report($err->getMessage());
             $this->message = ['error' => 'Error: ' . $err->getMessage()];
+            DB::rollBack();
         }
         return redirect()->back()->with($this->message);
 
@@ -104,11 +107,14 @@ class UserController extends Controller
     public function update(UserRequest $request, $id)
     {
         try {
+           DB::beginTransaction();
            $this->serviceUser->updateUser($request, $id);
            $this->message = ['success' => 'Cập nhật người dùng thành công!'];
+           DB::commit();
         } catch (\Exception $err) {
             report($err->getMessage());
             $this->message = ['error' => 'Error: ' . $err->getMessage()];
+            DB::rollBack();
         }
         return redirect()->back()->with($this->message);
     }
@@ -127,11 +133,14 @@ class UserController extends Controller
     public function destroy($id)
     {
         try {
+            DB::beginTransaction();
             $this->serviceUser->deleteUser($id);
             $this->message = ['success' => 'Xóa người dùng thành công!'];
+            DB::commit();
         } catch (\Exception $err) {
             report($err->getMessage());
             $this->message = ['error' => 'Error: ' . $err->getMessage()];
+            DB::rollBack();
         }
         return redirect()->back()->with($this->message);
     }
