@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Requests\LoginApiRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -15,23 +17,8 @@ class AuthController extends Controller
         $this->middleware('auth:api', ['except' => ['login','register']]);
     }
 
-    public function login(Request $request)
+    public function login(LoginApiRequest $request)
     {
-        // $request->validate([
-        //     'username' => 'required|string',
-        //     'password' => 'required|string',
-        // ]);
-        $rules = [
-            'username' => 'required|string',
-            'password' => 'required|string',
-        ];
-        $validation = Validator::make($request->all(), $rules);
-        if($validation->fails()){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Username or password invalid',
-            ], 422);
-        }
 
         $credentials = $request->only('username', 'password');
 
@@ -39,8 +26,8 @@ class AuthController extends Controller
 
         if (!$token) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized',
+                'success'=>false,
+                'message' => 'Tài khoản hoặc mật khẩu không đúng!',
             ], 401);
         }
 
@@ -55,6 +42,16 @@ class AuthController extends Controller
                 ]
             ], 200);
 
+    }
+
+    // get info user
+    public function profile () {
+        $account = Auth::guard('api')->user();
+        return response()->json([
+            'success'=>true,
+            'message'=>'Thông tin cá nhân',
+            'data'=> $account->getProfile
+        ]);
     }
 
     public function register(Request $request){

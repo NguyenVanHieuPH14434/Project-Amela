@@ -36,10 +36,8 @@
                             <select name="parent_id" id="" class="form-control">
                                 <option value="">Chọn danh mục cha</option>
                                 @foreach ($allCate as $item)
-                                    @if ($cate->id == $item->id)
-                                    <option class="bg-gradient-gray" disabled {{$cate->parent_id == $item->id?"selected":""}} value="{{$item->id}}">{{$item->cate_name}}</option>
-                                    @else
-                                    <option {{$cate->parent_id == $item->id?"selected":""}} value="{{$item->id}}">{{$item->cate_name}}</option>
+                                    @if ($cate->id != $item->id)
+                                    <option  {{$cate->parent_id == $item->id?"selected":""}} value="{{$item->id}}">{{$item->cate_name}}</option>
                                     @endif
                                 @endforeach
                             </select>

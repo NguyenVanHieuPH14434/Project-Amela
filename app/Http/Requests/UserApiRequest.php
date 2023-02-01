@@ -69,9 +69,7 @@ class UserApiRequest extends FormRequest
 
             'success'   => false,
 
-            'message'   => 'Xác thực lỗi!',
-
-            'data'      => $validator->errors()->first(),
+            'message'   => $validator->errors()->first(),
 
         ], 422));
 

@@ -11,6 +11,7 @@ use App\Services\CategoryService;
 use App\Services\ProductService;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -56,13 +57,15 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-
+        DB::beginTransaction();
         try {
             $this->serviceProduct->insertProduct($request);
             $this->message = ['success' => 'Thêm sản phẩm thành công!'];
+            DB::commit();
         } catch (\Exception $err) {
             report($err->getMessage());
             $this->message = ['error' => 'Error: ' . $err->getMessage()];
+            DB::rollBack();
         }
         return redirect()->back()->with($this->message);
     }
@@ -107,12 +110,15 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, $id)
     {
+        DB::beginTransaction();
         try {
             $this->serviceProduct->updateProduct($request, $id);
             $this->message = ['success' => 'Cập nhật sản phẩm thành công!'];
+            DB::commit();
         } catch (\Exception $err) {
             report($err->getMessage());
             $this->message = ['error' => 'Error: ' . $err->getMessage()];
+            DB::rollBack();
         }
         return redirect()->back()->with($this->message);
     }
@@ -131,12 +137,15 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
+        DB::beginTransaction();
         try {
             $this->serviceProduct->deleteProduct($id);
             $this->message = ['success' => 'Xóa sản phẩm thành công!'];
+            DB::commit();
         } catch (\Exception $err) {
             report($err->getMessage());
             $this->message = ['error' => 'Error: '.$err->getMessage()];
+            DB::rollBack();
         }
         return redirect()->back()->with($this->message);
     }

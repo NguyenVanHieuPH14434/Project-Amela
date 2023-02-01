@@ -17,7 +17,7 @@ class CategoryController extends Controller
     public $serviceCategory;
     public function __construct(CategoryService $serviceCategory)
     {
-        $this->middleware('auth:api', ['except' => ['login','register']]);
+        // $this->middleware('auth:api', ['except' => ['login','register']]);
         $this->serviceCategory = $serviceCategory;
     }
 

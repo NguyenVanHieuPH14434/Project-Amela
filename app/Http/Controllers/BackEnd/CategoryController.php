@@ -25,6 +25,7 @@ class CategoryController extends Controller
     public function index()
     {
         $listCate = $this->serviceCategory->getPaginateCategory();
+        dd($listCate);
         return view('pages.category.list', compact('listCate'));
     }
 

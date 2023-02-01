@@ -20,6 +20,7 @@ class ProductService {
     public function getAllProduct () {
         return Product::with('categoryProduct')
         ->with('productGallery')
+        ->with('attributeProduct')
         ->where('is_active', self::ACTIVE)
         ->where('deleted_at', null)
         ->get();
@@ -28,6 +29,7 @@ class ProductService {
     public function getPaginateProduct ($paginate = 10) {
         return  Product::with('categoryProduct')
         ->with('productGallery')
+        ->with('attributeProduct')
         ->where('is_active', 1)
         ->where('deleted_at', null)
         ->paginate($paginate);

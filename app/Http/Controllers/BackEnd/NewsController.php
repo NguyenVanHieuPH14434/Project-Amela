@@ -8,6 +8,7 @@ use App\Models\News;
 use App\Services\CategoryNewService;
 use App\Services\NewService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class NewsController extends Controller
 {
@@ -49,12 +50,15 @@ class NewsController extends Controller
      */
     public function store(NewsRequest $request)
     {
+        DB::beginTransaction();
         try {
             $this->serviceNew->insertNew($request);
             $this->message = ['success' => 'Thêm bài viết thành công!'];
+            DB::commit();
         } catch (\Exception $err) {
             report($err->getMessage());
             $this->message = ['error' => 'Error: ' . $err->getMessage()];
+            DB::rollBack();
         }
         return redirect()->back()->with($this->message);
     }
@@ -92,12 +96,15 @@ class NewsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        DB::beginTransaction();
         try {
             $this->serviceNew->updateNew($request, $id);
             $this->message = ['success' => 'Cập nhật bài viết thành công!'];
+            DB::commit();
         } catch (\Exception $err) {
             report($err->getMessage());
             $this->message = ['error' => 'Error: ' . $err->getMessage()];
+            DB::rollBack();
         }
         return redirect()->back()->with($this->message);
     }

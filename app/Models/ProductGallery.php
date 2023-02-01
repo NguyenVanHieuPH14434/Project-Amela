@@ -15,4 +15,9 @@ class ProductGallery extends Model
         'product_id',
         'path_image'
     ];
+
+    protected $hidden = [
+        "created_at",
+        "updated_at",
+    ];
 }

@@ -17,6 +17,13 @@ class Category extends Model
         'deleted_at'
     ];
 
+    protected $hidden = [
+        'deleted_at',
+        "created_at",
+        "updated_at",
+        "is_active"
+    ];
+
     public function cate_product () {
         return $this->belongsToMany(Product::class, 'categories_products', 'cate_id', 'product_id')->withPivot('cate_id', 'product_id', 'created_at');
     }

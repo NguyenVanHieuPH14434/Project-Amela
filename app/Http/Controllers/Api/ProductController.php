@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 
@@ -49,7 +51,20 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $product = Product::with('categoryProduct')
+        ->with('productGallery')
+        ->with('attributeProduct')
+        ->findOrFail($id);
+
+        $similar_product = Category::with('cate_product')
+        ->findOrFail($product->categoryProduct[0]->id);
+
+        return response()->json([
+            'success'=>true,
+            'message'=> 'Dữ liệu sản phẩm '. $product->product_name,
+            'data'=> $product,
+            'similar_product'=> $similar_product->cate_product,
+        ]);
     }
 
     /**

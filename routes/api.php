@@ -28,10 +28,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Route::post('/test', [TestController::class, 'test'])->name('test');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/refresh', [AuthController::class, 'refresh']);
-Route::get('/logout', [ApiAuthController::class, 'logout']);
-// Route::get('/logout', [AuthController::class, 'logout']);
+// Route::get('/logout', [ApiAuthController::class, 'logout']);
+Route::get('/logout', [AuthController::class, 'logout']);
+Route::get('/profile', [AuthController::class, 'profile']);
 // Route::post('/sendMail', [Controller::class, 'sendMailtest']);
 Route::post('/register', [UserController::class, 'store']);
 // Route::get('/listt123', [ApiAuthController::class, 'index']);
 Route::get('/list-categories', [CategoryController::class, 'index']);
 Route::get('/list-product', [ProductController::class, 'index']);
+Route::get('/product-detail/{id}', [ProductController::class, 'show']);

@@ -20,6 +20,13 @@ class Product extends Model
         'deleted_at'
     ];
 
+    protected $hidden = [
+        'deleted_at',
+        "created_at",
+        "updated_at",
+        "is_active"
+    ];
+
     public function productGallery () {
         return $this->hasMany(ProductGallery::class, 'product_id', 'id');
     }

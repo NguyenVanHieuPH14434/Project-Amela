@@ -10,11 +10,15 @@ use DateTime;
 class CategoryService {
 
     public function getAllCategory () {
-        return Category::where('deleted_at', null)->get();
+        return Category::with('getChildrenCateogory')
+        ->with('cate_product')
+        ->where('deleted_at', null)->get();
     }
 
     public function getPaginateCategory ($paginate = 10) {
-        return  Category::with('getChildrenCateogory')->where('deleted_at', null)->paginate($paginate);
+        return  Category::with('getChildrenCateogory')
+        ->with('cate_product')
+        ->where('deleted_at', null)->paginate($paginate);
     }
 
     public function deleteCategory ($id){
@@ -23,6 +27,12 @@ class CategoryService {
         $datetime = new DateTime();
         $cate->deleted_at = $datetime->format('Y-m-d H:i:s');
         $cate->update();
+
+        foreach($cate->getChildrenCateogory as $item) {
+            $subCate = Category::findOrFail($item->id);
+            $subCate->parent_id = 0;
+            $subCate->update();
+        }
     }
 
     public function searchCategory ($textSearch) {
