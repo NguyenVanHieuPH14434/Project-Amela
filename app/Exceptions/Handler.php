@@ -54,7 +54,7 @@ class Handler extends ExceptionHandler
         return response()->json([
             'errors'=>[
                 'status'=>401,
-                'message'=>'Unauthenticated'
+                'message'=>'Chưa được xác thực!'
             ],
         ], 401);
     }

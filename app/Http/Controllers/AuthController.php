@@ -46,11 +46,11 @@ class AuthController extends Controller
 
     // get info user
     public function profile () {
-        $account = Auth::guard('api')->user();
+        $account = User::with('getProfile')->findOrFail(Auth::guard('api')->id());
         return response()->json([
             'success'=>true,
             'message'=>'Thông tin cá nhân',
-            'data'=> $account->getProfile
+            'data'=> $account
         ]);
     }
 
