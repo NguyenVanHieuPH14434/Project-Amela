@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Permission;
 use App\Models\Profile;
+use App\Models\Role;
 use App\Models\User;
 use DateTime;
 use Illuminate\Support\Facades\Hash;
@@ -55,7 +56,8 @@ class UserService {
         $user->fill($req->all());
         $user->update();
 
-        $profile = Profile::findOrFail($req->profile_id);
+        $idProfile = $req->profile_id?$req->profile_id:$user->profile_id;
+        $profile = Profile::findOrFail($idProfile);
         $profile->fill($req->all());
         $dataImage = checkIssetImage($req, [
             'image'=>'avatar',
@@ -66,7 +68,12 @@ class UserService {
         $profile->avatar = $dataImage;
         $profile->update();
 
-        $user->user_role()->sync($req->role);
+
+        if($req->role){
+            $user->user_role()->sync($req->role);
+        }
+
+        return $profile;
     }
 
     public function deleteUser ($id) {

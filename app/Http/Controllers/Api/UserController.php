@@ -76,7 +76,20 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+           $data = $this->serviceUser->updateUser($request, $id);
+            return response()->json([
+                'success'=> true,
+                'message'=> 'Cập nhật thông tin thành công!',
+                'data'=> $data,
+            ], 200);
+        } catch (\Exception $err) {
+            report($err->getMessage());
+            return response()->json([
+                'success'=> false,
+                'error'=> 'Đã xảy ra lỗi!'. $err->getMessage(),
+            ], 500);
+        }
     }
 
     /**

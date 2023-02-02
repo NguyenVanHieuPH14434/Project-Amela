@@ -31,6 +31,7 @@ Route::get('/refresh', [AuthController::class, 'refresh']);
 // Route::get('/logout', [ApiAuthController::class, 'logout']);
 Route::get('/logout', [AuthController::class, 'logout']);
 Route::get('/profile', [AuthController::class, 'profile']);
+Route::middleware('auth:api')->put('/edit-profile/{id}', [UserController::class, 'update']);
 // Route::post('/sendMail', [Controller::class, 'sendMailtest']);
 Route::post('/register', [UserController::class, 'store']);
 // Route::get('/listt123', [ApiAuthController::class, 'index']);
