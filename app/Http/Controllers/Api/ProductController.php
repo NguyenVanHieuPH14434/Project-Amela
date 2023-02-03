@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -76,7 +77,19 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $product = Product::find($id);
 
+        // $data = array();
+        // foreach ($request->stock as $plan) {
+        // // $data_plan = array($plan => array('stock' => $request->dia[$plan] ) );
+        //     array_push($data, $plan);
+        // }
+        // $data = $product->attributeProduct->contains('id', $request->idAttr)?true:false;
+        // DB::table('products_attributes')->where('id', $request->idAttr)->update(['stock'=>$request->stock]);
+
+        return response()->json([
+            'data'=> $request->product[0][]
+        ]);
     }
 
     /**

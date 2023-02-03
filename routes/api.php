@@ -37,4 +37,5 @@ Route::post('/register', [UserController::class, 'store']);
 // Route::get('/listt123', [ApiAuthController::class, 'index']);
 Route::get('/list-categories', [CategoryController::class, 'index']);
 Route::get('/list-product', [ProductController::class, 'index']);
+Route::patch('/order/{id}', [ProductController::class, 'update']);
 Route::get('/product-detail/{id}', [ProductController::class, 'show']);

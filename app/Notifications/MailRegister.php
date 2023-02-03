@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notification;
 class MailRegister extends Notification
 {
     use Queueable;
-    public $data ;
+    public $data;
 
     /**
      * Create a new notification instance.
@@ -42,11 +42,11 @@ class MailRegister extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    // ->line($this->title)
-                    // // ->line('The introduction to the notification.')
-                    // ->action('Notification Action', url('/'))
-                    // ->line('Thank you for using our application!')
-                    ->view('vendor.notifications.testt', ['data'=>$this->data]);
+            // ->line($this->title)
+            // // ->line('The introduction to the notification.')
+            // ->action('Notification Action', url('/'))
+            // ->line('Thank you for using our application!')
+            ->view('vendor.notifications.testt', ['data' => $this->data]);
     }
 
     /**

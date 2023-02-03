@@ -7,6 +7,7 @@ use App\Models\Permission;
 use App\Models\Product;
 use App\Models\ProductGallery;
 use DateTime;
+use Illuminate\Support\Facades\DB;
 
 class ProductService {
 
@@ -79,10 +80,20 @@ class ProductService {
         $product->update();
 
         $product->categoryProduct()->sync($req->category_id);
-        $product->attributeProduct()->detach();
-        foreach($prices as $key => $val){
-            $product->attributeProduct()->attach($req->attr[$key], array('price'=>$val, 'stock'=>$stock[$key]));
+
+        foreach($product->attributeProduct as $key => $it){
+            DB::table('products_attributes')
+            ->where('id', $it->pivot->id)
+            ->update([
+                'price'=>$prices[$key],
+                'stock'=>$stock[$key]
+            ]);
         }
+
+        // $product->attributeProduct()->detach();
+        // foreach($prices as $key => $val){
+        //     $product->attributeProduct()->attach($req->attr[$key], array('price'=>$val, 'stock'=>$stock[$key]));
+        // }
 
         if($req->image){
             $product->productGallery()->delete();
