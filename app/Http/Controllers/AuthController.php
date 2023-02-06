@@ -22,7 +22,7 @@ class AuthController extends Controller
 
         $credentials = $request->only('username', 'password');
 
-        $token = Auth::guard('api')->setTTL(2)->attempt($credentials);
+        $token = Auth::guard('api')->setTTL(1440)->attempt($credentials);
 
         if (!$token) {
             return response()->json([

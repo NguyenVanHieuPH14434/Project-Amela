@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Order;
+
     if(!function_exists('defaultImage')){
         function defaultImage() {
             return 'images/products/default-thumbnail.jpg';
@@ -41,5 +43,16 @@
                 foreach ($requestData as $field)
                    $q->orWhere($field, 'like', "%{$key}%");
             };
+        }
+    }
+
+    if(!function_exists('generateUniqueCode')){
+        function generateUniqueCode()
+        {
+            do {
+                $referal_code = random_int(100000000000, 999999999999);
+            } while (Order::where("id", "=", $referal_code)->first());
+    
+            return $referal_code;
         }
     }

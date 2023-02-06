@@ -1,3 +1,4 @@
+@inject('constanst', 'App\Constant\Constanst')
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
@@ -40,24 +41,16 @@
                with font-awesome or any other icon font library -->
                 <li class="nav-item ">
                 {{-- <li class="nav-item menu-open"> --}}
-                    <a href="{{ route('dashboard') }}" class="nav-link active">
+                    <a href="{{ route('dashboard') }}" class="nav-link {{ Request::url() == $constanst::DASHBOARD_URL ?"active":"" }}">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
                             {{-- <i class="right fas fa-angle-left"></i> --}}
                         </p>
                     </a>
-                    {{-- <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('permissions.create') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Permission</p>
-                            </a>
-                        </li>
-                    </ul> --}}
                 </li>
                 @can('list-pms')
-                <li class="nav-item">
+                <li class="nav-item {{in_array(Request::url(), [$constanst::PERMISSION_URL, $constanst::CREATE_PERMISSION_URL]) ?"menu-is-opening menu-open":"" }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
@@ -67,14 +60,14 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('permissions.index') }}" class="nav-link">
+                            <a href="{{ route('permissions.index') }}" class="nav-link {{ Request::url() == $constanst::PERMISSION_URL ?"active":"" }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Danh sách</p>
                             </a>
                         </li>
                         @can('add-pms')
                         <li class="nav-item">
-                            <a href="{{ route('permissions.create') }}" class="nav-link">
+                            <a href="{{ route('permissions.create') }}" class="nav-link {{ Request::url() == $constanst::CREATE_PERMISSION_URL ?"active":"" }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Thêm</p>
                             </a>
@@ -85,7 +78,7 @@
                 @endcan
 
                 @can('list-role')
-                <li class="nav-item">
+                <li class="nav-item {{ in_array(Request::url(), [$constanst::ROLE_URL, $constanst::CREATE_ROLE_URL]) ?"menu-is-opening menu-open":"" }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
@@ -95,14 +88,14 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('roles.index') }}" class="nav-link">
+                            <a href="{{ route('roles.index') }}" class="nav-link {{ Request::url() == $constanst::ROLE_URL ?"active":"" }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Danh sách</p>
                             </a>
                         </li>
                         @can('add-role')
                         <li class="nav-item">
-                            <a href="{{ route('roles.create') }}" class="nav-link">
+                            <a href="{{ route('roles.create') }}" class="nav-link {{ Request::url() == $constanst::CREATE_ROLE_URL ?"active":"" }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Thêm</p>
                             </a>
@@ -113,7 +106,7 @@
                 @endcan
 
                 @can('list-cate')
-                <li class="nav-item">
+                <li class="nav-item {{ in_array(Request::url(), [$constanst::CATEGORY_URL, $constanst::CREATE_CATEGORY_URL]) ?"menu-is-opening menu-open":"" }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
@@ -123,14 +116,14 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('categories.index') }}" class="nav-link">
+                            <a href="{{ route('categories.index') }}" class="nav-link {{ Request::url() == $constanst::CATEGORY_URL ?"active":"" }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Danh sách</p>
                             </a>
                         </li>
                         @can('add-cate')
                         <li class="nav-item">
-                            <a href="{{ route('categories.create') }}" class="nav-link">
+                            <a href="{{ route('categories.create') }}" class="nav-link {{ Request::url() == $constanst::CREATE_CATEGORY_URL ?"active":"" }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Thêm</p>
                             </a>
@@ -141,7 +134,7 @@
                 @endcan
 
                 @can('list-attr')
-                <li class="nav-item">
+                <li class="nav-item {{ in_array(Request::url(), [$constanst::ATTRIBUTE_URL, $constanst::CREATE_ATTRIBUTE_URL]) ?"menu-is-opening menu-open":"" }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
@@ -151,14 +144,14 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('attributes.index') }}" class="nav-link">
+                            <a href="{{ route('attributes.index') }}" class="nav-link {{ Request::url() == $constanst::ATTRIBUTE_URL ?"active":"" }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Danh sách</p>
                             </a>
                         </li>
                         @can('add-attr')
                         <li class="nav-item">
-                            <a href="{{ route('attributes.create') }}" class="nav-link">
+                            <a href="{{ route('attributes.create') }}" class="nav-link {{ Request::url() == $constanst::CREATE_ATTRIBUTE_URL ?"active":"" }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Thêm</p>
                             </a>
@@ -169,7 +162,7 @@
                 @endcan
 
                 @can('list-user')
-                <li class="nav-item">
+                <li class="nav-item {{ in_array(Request::url(), [$constanst::USER_URL, $constanst::CREATE_USER_URL]) ?"menu-is-opening menu-open":"" }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
@@ -179,14 +172,14 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('users.index') }}" class="nav-link">
+                            <a href="{{ route('users.index') }}" class="nav-link {{ Request::url() == $constanst::USER_URL ?"active":"" }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Danh sách</p>
                             </a>
                         </li>
                         @can('add-user')
                         <li class="nav-item">
-                            <a href="{{ route('users.create') }}" class="nav-link">
+                            <a href="{{ route('users.create') }}" class="nav-link {{ Request::url() == $constanst::CREATE_USER_URL ?"active":"" }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Thêm</p>
                             </a>
@@ -197,7 +190,7 @@
                 @endcan
 
                 @can('list-product')
-                <li class="nav-item">
+                <li class="nav-item {{ in_array(Request::url(), [$constanst::PRODUCT_URL, $constanst::CREATE_PRODUCT_URL]) ?"menu-is-opening menu-open":"" }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
@@ -207,14 +200,14 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('products.index') }}" class="nav-link">
+                            <a href="{{ route('products.index') }}" class="nav-link {{ Request::url() == $constanst::PRODUCT_URL ?"active":"" }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Danh sách</p>
                             </a>
                         </li>
                         @can('add-product')
                         <li class="nav-item">
-                            <a href="{{ route('products.create') }}" class="nav-link">
+                            <a href="{{ route('products.create') }}" class="nav-link {{ Request::url() == $constanst::CREATE_PRODUCT_URL ?"active":"" }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Thêm</p>
                             </a>
@@ -225,7 +218,7 @@
                 @endcan
 
                 {{-- @can('list-product') --}}
-                <li class="nav-item">
+                <li class="nav-item {{ in_array(Request::url(), [$constanst::NEW_CATEGORY_URL, $constanst::NEW_URL]) ?"menu-is-opening menu-open":"" }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
@@ -235,14 +228,14 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('categoryNews.index') }}" class="nav-link">
+                            <a href="{{ route('categoryNews.index') }}" class="nav-link {{ Request::url() == $constanst::NEW_CATEGORY_URL ?"active":"" }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Danh sách danh mục bài viết</p>
                             </a>
                         </li>
                         {{-- @can('add-product') --}}
                         <li class="nav-item">
-                            <a href="{{ route('news.index') }}" class="nav-link">
+                            <a href="{{ route('news.index') }}" class="nav-link {{ Request::url() == $constanst::NEW_URL ?"active":"" }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Danh sách bài viết</p>
                             </a>
