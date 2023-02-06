@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Constant\Constanst;
 use App\Models\Permission;
 use App\Models\Profile;
 use App\Models\Role;
@@ -11,14 +12,12 @@ use Illuminate\Support\Facades\Hash;
 
 class UserService {
 
-    const USER_ROLE = 2;
-
     public function getAllUser () {
-        return User::with('getProfile')->where('deleted_at', null)->where('is_active', 1)->get();
+        return User::with('getProfile')->where('deleted_at', null)->where('is_active', Constanst::ACTIVE)->get();
     }
 
-    public function getPaginateUser ($paginate = 10) {
-        return  User::with('getProfile')->where('deleted_at', null)->where('is_active', 1)->paginate($paginate);
+    public function getPaginateUser ($paginate = Constanst::LIMIT_PERPAG) {
+        return  User::with('getProfile')->where('deleted_at', null)->where('is_active', Constanst::ACTIVE)->paginate($paginate);
     }
 
      public function insertUser ($req) {
@@ -36,12 +35,12 @@ class UserService {
         $create_account = new User();
         $create_account->fill($req->all());
         $create_account->password = Hash::make($req->password);
-        $create_account->is_active = 1;
+        $create_account->is_active = Constanst::ACTIVE;
         $create_account->profile_id = $create_profile->id;
         $create_account->remember_token = ' ';
         $create_account->save();
 
-        $role = $req->role?$req->role:self::USER_ROLE;
+        $role = $req->role?$req->role:Constanst::ROLE_USER;
         $create_account->user_role()->attach($role);
 
         $data = [

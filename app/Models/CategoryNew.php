@@ -14,4 +14,14 @@ class CategoryNew extends Model
         'new_cate_image',
         'deleted_at',
     ];
+
+    protected $hidden = [
+        'deleted_at',
+        'updated_at',
+        'created_at',
+    ];
+
+    public function getNew () {
+        return $this->belongsToMany(News::class, 'news_categories_has_news', 'new_category_id', 'new_id');
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Constant\Constanst;
 use App\Models\Category;
 use App\Models\CategoryNew;
 use App\Models\News;
@@ -15,8 +16,8 @@ class NewService {
         return News::where('deleted_at', null)->get();
     }
 
-    public function getPaginateNew ($paginate = 10) {
-        return  News::where('deleted_at', null)->paginate($paginate);
+    public function getPaginateNew ($paginate = Constanst::LIMIT_PERPAG) {
+        return  News::with('getCateNew')->where('deleted_at', null)->paginate($paginate);
     }
 
     public function insertNew ($req) {
@@ -46,7 +47,7 @@ class NewService {
         $listNew;
         if($key != ''){
             $listNew = News::where('deleted_at', null)->where(querySearchByColumns($requestData, $key))
-            ->paginate(10);
+            ->paginate(Constanst::LIMIT_PERPAG);
         }else{
             $listNew = $this->getPaginateNew();
         }

@@ -209,6 +209,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
+        'Constant'=> App\Constant\Constanst::class,
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 

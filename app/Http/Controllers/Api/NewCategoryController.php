@@ -3,30 +3,29 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
-use App\Services\CategoryService;
+use App\Services\CategoryNewService;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class NewCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public $serviceCategory;
-    public function __construct(CategoryService $serviceCategory)
+    public $serviceCategoryNew;
+    public function __construct(CategoryNewService $serviceCategoryNew)
     {
-        $this->serviceCategory = $serviceCategory;
+        $this->serviceCategoryNew = $serviceCategoryNew;
     }
 
-    public function index(Request $req)
+    public function index(Request $request)
     {
-        $listCate = $this->serviceCategory->getPaginateCategory($req->perPage??$req->perPage);
+        $listCateNew = $this->serviceCategoryNew->getPaginateCategoryNew($request->perPage??$request->perPage);
         return response()->json([
             "success"=>true,
-            "message"=>"Danh sách danh mục sản phẩm!",
-            "data"=>$listCate
+            "message"=> "Danh sách danh mục tin tức",
+            "data"=>$listCateNew
         ]);
     }
 

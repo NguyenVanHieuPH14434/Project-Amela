@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Constant\Constanst;
 use App\Models\Attribute;
 use App\Models\Permission;
 use App\Models\Product;
@@ -10,7 +11,6 @@ use DateTime;
 
 class ProductService {
 
-    const ACTIVE = 1;
     public $serviceProGallery;
     public function __construct(ProductGalleryService $serviceProGallery)
     {
@@ -21,16 +21,16 @@ class ProductService {
         return Product::with('categoryProduct')
         ->with('productGallery')
         ->with('attributeProduct')
-        ->where('is_active', self::ACTIVE)
+        ->where('is_active', Constanst::ACTIVE)
         ->where('deleted_at', null)
         ->get();
     }
 
-    public function getPaginateProduct ($paginate = 10) {
+    public function getPaginateProduct ($paginate = Constanst::LIMIT_PERPAG) {
         return  Product::with('categoryProduct')
         ->with('productGallery')
         ->with('attributeProduct')
-        ->where('is_active', 1)
+        ->where('is_active', Constanst::ACTIVE)
         ->where('deleted_at', null)
         ->paginate($paginate);
     }
@@ -46,7 +46,7 @@ class ProductService {
         ]);
         $product = new Product();
         $product->fill($req->all());
-        $product->is_active = 1;
+        $product->is_active = Constanst::ACTIVE;
         $product->product_image = $dataImage;
         $product->save();
 
@@ -74,7 +74,7 @@ class ProductService {
             'imageOld'=>$product->product_image
         ]);
         $product->fill($req->all());
-        $product->is_active = 1;
+        $product->is_active = Constanst::ACTIVE;
         $product->product_image = $dataImage;
         $product->update();
 
@@ -100,14 +100,14 @@ class ProductService {
 
     public function searchProduct ($textSearch) {
         $key = trim($textSearch);
-        $requestData = ['product_name', 'product_price'];
+        $requestData = ['product_name'];
         $listProduct;
         if($key != ''){
             $listProduct = Product::with('categoryProduct')->with('productGallery')
             ->where('deleted_at', null)
-            ->where('is_active', 1)
+            ->where('is_active', Constanst::ACTIVE)
             ->where(querySearchByColumns($requestData, $key))
-            ->paginate(10);
+            ->paginate(Constanst::LIMIT_PERPAG);
         }else{
             $listProduct = $this->getPaginateProduct();
         }

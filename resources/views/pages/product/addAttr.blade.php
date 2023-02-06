@@ -13,8 +13,6 @@
                 <!--===================================================-->
 
 
-
-
                 <style type="text/css">
                 .bootstrap-tagsinput {
                     width: 100%;

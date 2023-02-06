@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Constant\Constanst;
 use App\Models\Permission;
 use App\Models\Role;
 
@@ -11,7 +12,7 @@ class RoleService {
         return Role::with('permission_role')->where('deleted_at', null)->get();
     }
 
-    public function getPaginateRole ($paginate = 10) {
+    public function getPaginateRole ($paginate = Constanst::LIMIT_PERPAG) {
         return  Role::with('permission_role')->where('deleted_at', null)->paginate($paginate);
     }
 

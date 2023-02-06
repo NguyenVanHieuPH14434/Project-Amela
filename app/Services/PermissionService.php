@@ -2,20 +2,21 @@
 
 namespace App\Services;
 
+use App\Constant\Constanst;
 use App\Models\Permission;
 use Illuminate\Support\Facades\DB;
 
 class PermissionService {
 
     public function getAllPermission () {
-        return Permission::where('parent_id', 0)->get();
+        return Permission::where('parent_id', Constanst::PARENT)->get();
     }
 
-    public function getPaginatePermission ($paginate = 10) {
-        return  Permission::where('parent_id', 0)->paginate($paginate);
+    public function getPaginatePermission ($paginate = Constanst::LIMIT_PERPAG) {
+        return  Permission::where('parent_id', Constanst::PARENT)->paginate($paginate);
     }
 
-     public function insertPermission ($pmsName, $pmsKey=' ', $parentId=0) {
+     public function insertPermission ($pmsName, $pmsKey=' ', $parentId=Constanst::PARENT) {
             $action = new Permission();
             $action->pms_name = $pmsName;
             $action->pms_key = $pmsKey;
@@ -28,7 +29,7 @@ class PermissionService {
             $pms = Permission::findOrFail($id);
             $pms->pms_name = $pmsName;
             $pms->pms_key = ' ';
-            $pms->parent_id = 0;
+            $pms->parent_id = Constanst::PARENT;
             $pms->update();
             $pms->getChildrentPermission()->delete();
             return $pms->id;
@@ -48,8 +49,8 @@ class PermissionService {
         $requestData = ['pms_name'];
         $listPermission;
         if($key != ''){
-            $listPermission = Permission::where('parent_id', 0)->where(querySearchByColumns($requestData, $key))
-            ->paginate(10);
+            $listPermission = Permission::where('parent_id', Constanst::PARENT)->where(querySearchByColumns($requestData, $key))
+            ->paginate(Constanst::LIMIT_PERPAG);
         }else{
             $listPermission = $this->getPaginatePermission();
         }

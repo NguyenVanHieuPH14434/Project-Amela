@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\AuthController as ApiAuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\NewCategoryController;
+use App\Http\Controllers\Api\NewController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\AuthController;
@@ -25,16 +27,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Route::post('/test', [TestController::class, 'test'])->name('test');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/refresh', [AuthController::class, 'refresh']);
-// Route::get('/logout', [ApiAuthController::class, 'logout']);
 Route::get('/logout', [AuthController::class, 'logout']);
 Route::get('/profile', [AuthController::class, 'profile']);
-Route::middleware('auth:api')->put('/edit-profile/{id}', [UserController::class, 'update']);
+Route::middleware('auth:api')->post('/edit-profile/{id}', [UserController::class, 'update']);
 // Route::post('/sendMail', [Controller::class, 'sendMailtest']);
 Route::post('/register', [UserController::class, 'store']);
-// Route::get('/listt123', [ApiAuthController::class, 'index']);
 Route::get('/list-categories', [CategoryController::class, 'index']);
 Route::get('/list-product', [ProductController::class, 'index']);
 Route::get('/product-detail/{id}', [ProductController::class, 'show']);
+Route::get('/list-new-category', [NewCategoryController::class, 'index']);
+Route::get('/list-new', [NewController::class, 'index']);
+Route::post('/order', [Controller::class, 'order']);

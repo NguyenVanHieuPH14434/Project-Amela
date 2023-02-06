@@ -22,9 +22,9 @@ class ProductController extends Controller
         $this->serviceProduct = $serviceProduct;
     }
 
-    public function index()
+    public function index(Request $req)
     {
-        $listProduct = $this->serviceProduct->getPaginateProduct();
+        $listProduct = $this->serviceProduct->getPaginateProduct($req->perPage??$req->perPage);
         return response()->json([
             "success"=>true,
             "message"=>"Danh sách danh mục sản phẩm!",

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Constant\Constanst;
 use App\Models\Category;
 use App\Models\Permission;
 use App\Models\Role;
@@ -15,7 +16,7 @@ class CategoryService {
         ->where('deleted_at', null)->get();
     }
 
-    public function getPaginateCategory ($paginate = 10) {
+    public function getPaginateCategory ($paginate = Constanst::LIMIT_PERPAG) {
         return  Category::with('getChildrenCateogory')
         ->with('cate_product')
         ->where('deleted_at', null)->paginate($paginate);
@@ -23,14 +24,13 @@ class CategoryService {
 
     public function deleteCategory ($id){
         $cate = Category::findOrFail($id);
-        // $cate->cate_product()->detach();
         $datetime = new DateTime();
         $cate->deleted_at = $datetime->format('Y-m-d H:i:s');
         $cate->update();
 
         foreach($cate->getChildrenCateogory as $item) {
             $subCate = Category::findOrFail($item->id);
-            $subCate->parent_id = 0;
+            $subCate->parent_id = Constanst::PARENT;
             $subCate->update();
         }
     }
@@ -41,7 +41,7 @@ class CategoryService {
         $listCate;
         if($key != ''){
             $listCate = Category::where(querySearchByColumns($requestData, $key))
-            ->paginate(10);
+            ->paginate(Constanst::LIMIT_PERPAG);
         }else{
             $listCate = $this->getPaginateCategory();
         }

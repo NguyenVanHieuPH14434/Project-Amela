@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Constant\Constanst;
 use App\Models\Attribute;
 use App\Models\Permission;
 use Mockery\Undefined;
@@ -9,11 +10,11 @@ use Mockery\Undefined;
 class AttributeService {
 
     public function getAllAttribute () {
-        return Attribute::with('getSubAttribute')->where('parent_id', 0)->get();
+        return Attribute::with('getSubAttribute')->where('parent_id', Constanst::PARENT)->get();
     }
 
-    public function getPaginateAttribute ($paginate = 10) {
-        return  Attribute::with('getSubAttribute')->where('parent_id', 0)->paginate($paginate);
+    public function getPaginateAttribute ($paginate = Constanst::LIMIT_PERPAG) {
+        return  Attribute::with('getSubAttribute')->where('parent_id', Constanst::PARENT)->paginate($paginate);
     }
 
     public function insertAttribute ($req) {
@@ -72,8 +73,8 @@ class AttributeService {
         $requestData = ['attr_name'];
         $listAttr;
         if($key != ''){
-            $listAttr = Attribute::where('parent_id', 0)->where(querySearchByColumns($requestData, $key))
-            ->paginate(10);
+            $listAttr = Attribute::where('parent_id', Constanst::PARENT)->where(querySearchByColumns($requestData, $key))
+            ->paginate(Constanst::LIMIT_PERPAG);
         }else{
             $listAttr = $this->getPaginateAttribute();
         }

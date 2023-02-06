@@ -15,6 +15,12 @@ class News extends Model
         'deleted_at',
     ];
 
+    protected $hidden = [
+        'deleted_at',
+        'updated_at',
+        'created_at',
+    ];
+
     public function getCateNew () {
         return $this->belongsToMany(CategoryNew::class, 'news_categories_has_news', 'new_id', 'new_category_id');
     }

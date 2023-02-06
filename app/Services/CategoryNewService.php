@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Constant\Constanst;
 use App\Models\Category;
 use App\Models\CategoryNew;
 use App\Models\Permission;
@@ -14,8 +15,8 @@ class CategoryNewService {
         return CategoryNew::where('deleted_at', null)->get();
     }
 
-    public function getPaginateCategoryNew ($paginate = 10) {
-        return  CategoryNew::where('deleted_at', null)->paginate($paginate);
+    public function getPaginateCategoryNew ($paginate = Constanst::LIMIT_PERPAG) {
+        return  CategoryNew::with('getNew')->where('deleted_at', null)->paginate($paginate);
     }
 
     public function insertCategoryNew ($req) {
@@ -57,7 +58,7 @@ class CategoryNewService {
         $listCateNew;
         if($key != ''){
             $listCateNew = CategoryNew::where('deleted_at', null)->where(querySearchByColumns($requestData, $key))
-            ->paginate(10);
+            ->paginate(Constanst::LIMIT_PERPAG);
         }else{
             $listCateNew = $this->getPaginateCategoryNew();
         }

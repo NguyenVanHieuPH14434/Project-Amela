@@ -11,6 +11,7 @@ use App\Notifications\MailRegister;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Request;
 use Illuminate\Notifications\Notification;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Notification as FacadesNotification;
@@ -22,7 +23,7 @@ class Controller extends BaseController
 
     public function sendMailtest () {
         $user = User::first();
-        // $user = Profile::first();
+        Product::all();
         $user->getProfile->notify(new MailRegister("A new user has visited on your application."));
         // FacadesNotification::send($user->getProfile, new MailRegister('sss'));
         return response()->json([
@@ -32,8 +33,12 @@ class Controller extends BaseController
     }
 
 
-    public function tesss (RegisterRequest $req) {
-        dd($req->all());
+    public function order (Request $req) {
+        // dd($req->all());
+        $cus = $req->data;
+        return response()->json([
+            'data'=>$req->data[0]['product_id'],
+        ]);
     }
 
     public function chart () {
