@@ -24,4 +24,14 @@ class Order extends Model
         'total_price',
         'deleted_at',
     ];
+
+    protected $hidden = [
+        'deleted_at',
+        'updated_at',
+        'created_at',
+    ];
+
+    public function getOrderItem () {
+        return $this->hasMany(OrderItem::class, 'order_id', 'id');
+    }
 }

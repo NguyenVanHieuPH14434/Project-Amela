@@ -18,6 +18,12 @@ class Attribute extends Model
         'parent_id'
     ];
 
+    protected $hidden = [
+        'deleted_at',
+        'updated_at',
+        'created_at',
+    ];
+
     public function getSubAttribute () {
         return $this->hasMany(Attribute::class, 'parent_id', 'id');
     }

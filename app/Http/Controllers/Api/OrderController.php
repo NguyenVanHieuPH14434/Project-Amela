@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
@@ -21,7 +22,13 @@ class OrderController extends Controller
     }
     public function index()
     {
-        //
+         $listOrder = $this->orderService->getPaginateOrder(Auth::guard('api')->id());
+        $account = Auth::guard('api')->user();
+        return response()->json([
+            "success"=>true,
+            "message"=>"Danh sách đơn hàng người dùng ". $account->getProfile->full_name,
+            "data"=>$listOrder
+        ], 200);
     }
 
     /**

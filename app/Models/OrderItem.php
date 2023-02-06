@@ -17,4 +17,10 @@ class OrderItem extends Model
         'quantity',
         'deleted_at',
     ];
+
+    protected $hidden = [
+        'deleted_at',
+        'updated_at',
+        'created_at',
+    ];
 }
