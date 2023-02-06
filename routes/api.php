@@ -41,3 +41,5 @@ Route::get('/product-detail/{id}', [ProductController::class, 'show']);
 Route::get('/list-new-category', [NewCategoryController::class, 'index']);
 Route::get('/list-new', [NewController::class, 'index']);
 Route::post('/order', [OrderController::class, 'store']);
+Route::get('/list-order', [OrderController::class, 'index']);
+Route::get('/list-order/{id}', [OrderController::class, 'show']);

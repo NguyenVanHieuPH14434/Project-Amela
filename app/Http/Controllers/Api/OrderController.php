@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\OrderItemService;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
@@ -15,13 +17,23 @@ class OrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     protected $orderService;
-    public function __construct(OrderService $orderService)
+    protected $orderDetailService;
+    public function __construct(OrderService $orderService, OrderItemService $orderDetailService)
     {
+        $this->middleware('auth:api', ['except' => ['login']]);
         $this->orderService = $orderService;
+        $this->orderDetailService = $orderDetailService;
     }
+
     public function index()
     {
-        //
+        $listOrder = $this->orderService->getPaginateOrder(Auth::guard('api')->id());
+        $account = Auth::guard('api')->user();
+        return response()->json([
+            "success"=>true,
+            "message"=>"Danh sách đơn hàng người dùng ". $account->getProfile->full_name,
+            "data"=>$listOrder
+        ], 200);
     }
 
     /**
@@ -60,7 +72,12 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        //
+        $listOrderDetail = $this->orderDetailService->getOrderDetail($id);
+        return response()->json([
+            "success"=>true,
+            "message"=>"Dữ liệu đơn hàng",
+            "data"=>$listOrderDetail
+        ], 200);
     }
 
     /**

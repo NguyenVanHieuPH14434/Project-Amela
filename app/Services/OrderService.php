@@ -18,12 +18,12 @@ class OrderService {
     {
         $this->orderItemService = $orderItemService;
     }
-    public function getAllAttribute () {
-        return Attribute::with('getSubAttribute')->where('parent_id', Constanst::PARENT)->get();
+    public function getAllOrder ($user_id) {
+        return Order::with('getOrderItem')->where('user_id', $user_id)->where('deleted_at',null)->get();
     }
 
-    public function getPaginateAttribute ($paginate = Constanst::LIMIT_PERPAG) {
-        return  Attribute::with('getSubAttribute')->where('parent_id', Constanst::PARENT)->paginate($paginate);
+    public function getPaginateOrder ($user_id, $paginate = Constanst::LIMIT_PERPAG) {
+        return Order::with('getOrderItem')->where('user_id', $user_id)->where('deleted_at',null)->paginate($paginate);
     }
 
     public function insertOrder ($req) {

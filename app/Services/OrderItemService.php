@@ -20,6 +20,10 @@ class OrderItemService {
         return OrderItem::with('getSubAttribute')->where('parent_id', Constanst::PARENT)->paginate($paginate);
     }
 
+    public function getOrderDetail ($id) {
+        return OrderItem::with(['getProduct', 'getAttr'])->where('order_id', $id)->where('deleted_at',null)->get();
+    }
+
     public function insertOrderItem ($req, $order_id) {
            
         foreach($req->data as $item){
