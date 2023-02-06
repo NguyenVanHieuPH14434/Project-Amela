@@ -47,16 +47,16 @@
                                 @foreach ($listNew as $item)
 
                                 <tr>
-                                    <td ><a href="#" class="btn-link">#{{$item->id}}</a></td>
-                                    <td >{{$item->new_title}}</td>
-                                    <td >
+                                    <td scope="col"><a href="#" class="btn-link">#{{$item->id}}</a></td>
+                                    <td scope="col">{{$item->new_title}}</td>
+                                    <td scope="col">
                                         @foreach ($item->getCateNew as $cateNew)
                                             {{$cateNew->new_cate_name}}
                                         @endforeach
                                     </td>
-                                    <td >{{ Str::limit($item->new_content, '5', '...') }}</td>
+                                    <td scope="col">{{ Str::limit($item->new_content, '50', '...') }}</td>
 
-                                    <td class="text-center d-flex justify-content-center ">
+                                    <td scope="col" class="text-center d-flex justify-content-center ">
                                         <a href="{{ route('news.edit', $item->id) }}" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
 
                                         <form id="deleteForm{{ $item->id }}" action="{{ route('news.destroy', $item->id) }}" method="post">

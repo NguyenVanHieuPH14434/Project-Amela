@@ -33,17 +33,17 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>Key mô đun</th>
-                                    <th>Tên mô đun</th>
-                                    <th class="text-center">Hành động</th>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Key mô đun</th>
+                                    <th scope="col">Tên mô đun</th>
+                                    <th scope="col" class="text-center">Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
                             @if($listPermission->total() != 0)
                                 @foreach ($listPermission as $item)
                                 <tr>
-                                    <td class="col-1"><a href="#" class="btn-link">#{{$item->id}}</a></td>
+                                    <td scope="col"><a href="#" class="btn-link">#{{$item->id}}</a></td>
                                     @php
                                     foreach (Config::get('permission.module') as $key => $parent){
                                         if($key == $item->pms_name){
@@ -51,10 +51,10 @@
                                         }
                                     }
                                     @endphp
-                                    <td class="col-5">{{$item->pms_name}}</td>
-                                    <td class="col-5">{{$permissionName}}</td>
+                                    <td scope="col">{{$item->pms_name}}</td>
+                                    <td scope="col">{{$permissionName}}</td>
                                     @if ($item->parent_id == 0)
-                                    <td class="col-1 text-center d-flex">
+                                    <td class="text-center justify-content-center d-flex">
                                         <a href="{{ route('permissions.edit', $item->id) }}" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
                                         <form id="deleteForm{{ $item->id }}" action="{{ route('permissions.destroy', $item->id) }}" method="post">
                                         @csrf

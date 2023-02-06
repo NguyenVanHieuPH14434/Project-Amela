@@ -33,11 +33,11 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Danh mục</th>
-                                    <th>Ảnh</th>
-                                   <th class="text-center">Hành động</th>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Tên sản phẩm</th>
+                                    <th scope="col">Danh mục</th>
+                                    <th scope="col">Ảnh</th>
+                                   <th scope="col" class="text-center">Hành động</th>
                                 </tr>
                             </thead>
                             @if ($listProduct->total() != 0)
@@ -46,16 +46,16 @@
                                 @foreach ($listProduct as $item)
 
                                 <tr>
-                                    <td class="col-1"><a href="#" class="btn-link">#{{$item->id}}</a></td>
-                                    <td class="col-4">{{$item->product_name}}</td>
-                                    <td class="col-4">
+                                    <td scope="col"><a href="#" class="btn-link">#{{$item->id}}</a></td>
+                                    <td scope="col">{{$item->product_name}}</td>
+                                    <td scope="col">
                                         @foreach ($item->categoryProduct as $cate)
                                             <p class="mb-2">{{$cate->cate_name}}</p>
                                         @endforeach
                                     </td>
-                                    <td class="col-2"><img src="{{asset($item->product_image)}}" width="100px" alt=""></td>
+                                    <td scope="col"><img src="{{asset($item->product_image)}}" width="100px" alt=""></td>
 
-                                    <td class="col-1 d-flex ">
+                                    <td scope="col" class="text-center justify-content-center d-flex">
                                         <a href="{{ route('products.edit', $item->id) }}" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
                                         <form id="deleteForm{{ $item->id }}" action="{{ route('products.destroy', $item->id) }}" method="post">
                                         @csrf

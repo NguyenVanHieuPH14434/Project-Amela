@@ -34,11 +34,11 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>Tên đăng nhập</th>
-                                    <th>Họ và tên</th>
-                                    <th>Ảnh</th>
-                                   <th class="text-center">Hành động</th>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Tên đăng nhập</th>
+                                    <th scope="col">Họ và tên</th>
+                                    <th scope="col">Ảnh</th>
+                                   <th scope="col" class="text-center">Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -47,12 +47,12 @@
                                 @foreach ($listUser as $item)
 
                                 <tr>
-                                    <td class="col-1"><a href="#" class="btn-link">#{{$item->id}}</a></td>
-                                    <td class="col-4">{{$item->username}}</td>
-                                    <td class="col-4">{{$item->getProfile->full_name}}</td>
-                                    <td class="col-2"><img src="{{asset($item->getProfile->avatar)}}" width="100px" alt=""></td>
+                                    <td scope="col" ><a href="#" class="btn-link">#{{$item->id}}</a></td>
+                                    <td scope="col" >{{$item->username}}</td>
+                                    <td scope="col" >{{$item->getProfile->full_name}}</td>
+                                    <td scope="col" ><img src="{{asset($item->getProfile->avatar)}}" width="100px" alt=""></td>
 
-                                    <td class="col-1 d-flex ">
+                                    <td scope="col" class="text-center justify-content-center d-flex">
                                         <a href="{{ route('users.edit', $item->id) }}" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
 
                                         @if (Auth::guard('web')->user()->id != $item->id)

@@ -34,10 +34,10 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>Tên vai trò</th>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Tên vai trò</th>
 
-                                   <th class="text-center">Hành động</th>
+                                   <th scope="col" class="text-center">Hành động</th>
 
                                 </tr>
                             </thead>
@@ -47,10 +47,10 @@
                                 @foreach ($listRole as $item)
 
                                 <tr>
-                                    <td><a href="#" class="btn-link">#{{$item->id}}</a></td>
-                                    <td>{{$item->role_name}}</td>
+                                    <td scope="col"><a href="#" class="btn-link">#{{$item->id}}</a></td>
+                                    <td scope="col">{{$item->role_name}}</td>
 
-                                    <td class="text-center justify-content-center d-flex">
+                                    <td class="text-center justify-content-center d-flex" scope="col">
 
                                         <a href="{{ route('roles.edit', $item->id) }}" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
 
