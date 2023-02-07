@@ -47,11 +47,11 @@ class OrderController extends Controller
         DB::beginTransaction();
         try {
             $this->orderService->insertOrder($request);
+            DB::commit();
             return response()->json([
                 "success"=>true,
                 "message"=>"Đặt hàng thành công!",
             ], 201);
-            DB::commit();
         } catch (\Throwable $err) {
             DB::rollBack();
             report($err->getMessage());
