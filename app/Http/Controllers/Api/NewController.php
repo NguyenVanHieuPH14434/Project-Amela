@@ -48,7 +48,12 @@ class NewController extends Controller
      */
     public function show($id)
     {
-        //
+        $newDetail = $this->serviceNew->getNewDetail($id);
+        return response()->json([
+            "success"=>true,
+            "message"=> "Danh sách tin tức",
+            "data"=>$newDetail
+        ]);
     }
 
     /**

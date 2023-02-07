@@ -29,17 +29,25 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/login', [AuthController::class, 'login']);
-Route::get('/refresh', [AuthController::class, 'refresh']);
+Route::post('/register', [UserController::class, 'store']);
+// Route::get('/refresh', [AuthController::class, 'refresh']);
 Route::get('/logout', [AuthController::class, 'logout']);
 Route::get('/profile', [AuthController::class, 'profile']);
 Route::middleware('auth:api')->post('/edit-profile/{id}', [UserController::class, 'update']);
 // Route::post('/sendMail', [Controller::class, 'sendMailtest']);
-Route::post('/register', [UserController::class, 'store']);
 Route::get('/list-categories', [CategoryController::class, 'index']);
 Route::get('/list-product', [ProductController::class, 'index']);
 Route::get('/product-detail/{id}', [ProductController::class, 'show']);
 Route::get('/list-new-category', [NewCategoryController::class, 'index']);
 Route::get('/list-new', [NewController::class, 'index']);
+Route::get('/list-new/{id}', [NewController::class, 'show']);
 Route::post('/order', [OrderController::class, 'store']);
 Route::get('/list-order', [OrderController::class, 'index']);
 Route::get('/list-order/{id}', [OrderController::class, 'show']);
+
+Route::any('{url}', function(){
+    return response()->json([
+        "success"=>false,
+        "message"=>"Not found!"
+    ], 404);
+})->where('url', '.*');
