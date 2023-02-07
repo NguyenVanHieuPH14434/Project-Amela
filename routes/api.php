@@ -45,7 +45,7 @@ Route::get('/list-new/{id}', [NewController::class, 'show']);
 Route::post('/order', [OrderController::class, 'store']);
 Route::get('/list-order', [OrderController::class, 'index']);
 Route::get('/list-order/{id}', [OrderController::class, 'show']);
-Route::get('/comment', [CommentController::class, 'store']);
+Route::post('/comment', [CommentController::class, 'store']);
 
 Route::any('{url}', function(){
     return response()->json([
