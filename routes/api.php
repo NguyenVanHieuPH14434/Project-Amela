@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController as ApiAuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\NewCategoryController;
 use App\Http\Controllers\Api\NewController;
 use App\Http\Controllers\Api\OrderController;
@@ -44,6 +45,7 @@ Route::get('/list-new/{id}', [NewController::class, 'show']);
 Route::post('/order', [OrderController::class, 'store']);
 Route::get('/list-order', [OrderController::class, 'index']);
 Route::get('/list-order/{id}', [OrderController::class, 'show']);
+Route::get('/comment', [CommentController::class, 'store']);
 
 Route::any('{url}', function(){
     return response()->json([

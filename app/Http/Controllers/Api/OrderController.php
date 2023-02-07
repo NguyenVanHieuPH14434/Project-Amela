@@ -44,16 +44,16 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        // DB::beginTransaction();
+        DB::beginTransaction();
         try {
             $this->orderService->insertOrder($request);
             return response()->json([
                 "success"=>true,
                 "message"=>"Đặt hàng thành công!",
             ], 201);
-            // DB::commit();
+            DB::commit();
         } catch (\Throwable $err) {
-            // DB::rollBack();
+            DB::rollBack();
             report($err->getMessage());
             return response()->json([
                 "success"=>false,
