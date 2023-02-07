@@ -30,9 +30,9 @@ class OrderItemService {
             $orderItem->quantity = $item['quantity'];
             $orderItem->save();
 
-            $updateStock = DB::table('products_attributes')->where('attr_id', $item['attr_id'])->first();
+            $updateStock = DB::table('products_attributes')->where('product_id', $item['product_id'])->where('attr_id', $item['attr_id'])->first();
             $newStock = $updateStock->stock - $item['attr_id'];
-            DB::table('products_attributes')->where('attr_id', $item['attr_id'])->update(['stock'=>$newStock]);
+            DB::table('products_attributes')->where('product_id', $item['product_id'])->where('attr_id', $item['attr_id'])->update(['stock'=>$newStock]);
         }
 
     }

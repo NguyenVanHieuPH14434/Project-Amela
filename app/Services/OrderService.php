@@ -6,6 +6,7 @@ use App\Constant\Constanst;
 use App\Models\Attribute;
 use App\Models\Order;
 use App\Models\Permission;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Mockery\Undefined;
 
@@ -33,7 +34,8 @@ class OrderService {
             $order->email = $req->customer['email'];
             $order->phone = $req->customer['phone'];
             $order->note = $req->customer['note'];
-            $order->user_id = $req->customer['user_id'];
+            $order->user_id = Auth::guard('api')->id();
+            // $order->user_id = $req->customer['user_id'];
             $order->payment_id = $req->customer['payment_id'];
             $order->total_price = $req->customer['total_price'];
             $order->code_order = generateUniqueCode();

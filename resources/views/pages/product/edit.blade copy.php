@@ -100,7 +100,7 @@
                         <div class="mb-3 col-6">
 
                             <div class="row col-12 p-0 m-0">
-                                {{-- <div class="row col-12 p-0 m-0 mb-2">
+                                <div class="row col-12 p-0 m-0 mb-2">
                                     <label for="" class="form-label"><b>Thuộc tính</b></label>
                                     <select class="js-example-basic-multiple form-control"  id="id_of_select" data-placeholder="Chọn thuộc tính"
                                         name="attr[]"  multiple="multiple">
@@ -112,19 +112,6 @@
                                             </optgroup>
                                         @endforeach
                                     </select>
-                                </div> --}}
-                                <div class="row col-12 p-0 m-0 mb-2">
-                                    {{-- <label for="" class="form-label"><b>Màu sắc</b></label> --}}
-                                    @foreach ($attrs as $attr)
-                                           <div class="d-block row col-12">
-                                               <label for="">{{ $attr->attr_name }}</label> <br>
-                                                @foreach ($attr->getSubAttribute as $sub)
-                                                    <input type="checkbox" name="attr[]" value="{{$sub->id}}"/>{{$sub->attr_name}}
-                                                    <input type="text" id="inputTaggs" data-role="tagsinput" style="width: 50px" name="price" value="">Giá
-                                                    <input type="text" id="inputTaggs" data-role="tagsinput" style="width: 50px" name="stock" value="">Số lượng
-                                                @endforeach
-                                            </div> 
-                                    @endforeach
                                 </div>
                                 <div class="row col-12 p-0 m-0">
                                     <label for="" class="form-label"><b>Giá sản phẩm</b></label>
