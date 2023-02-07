@@ -23,4 +23,12 @@ class OrderItem extends Model
         'updated_at',
         'created_at',
     ];
+
+    public function getProduct () {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
+
+    public function getAttr () {
+        return $this->belongsTo(Attribute::class, 'attr_id', 'id');
+    }
 }
