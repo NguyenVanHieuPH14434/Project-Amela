@@ -20,13 +20,9 @@ class OrderItemService {
         return OrderItem::with('getSubAttribute')->where('parent_id', Constanst::PARENT)->paginate($paginate);
     }
 
-    public function getOrderDetail ($id) {
-        return OrderItem::with(['getProduct', 'getAttr'])->where('order_id', $id)->where('deleted_at',null)->get();
-    }
-
     public function insertOrderItem ($req, $order_id) {
            
-        foreach($req->data as $item){
+        foreach($req->data as $key => $item){
             $orderItem = new OrderItem();
             $orderItem->order_id = $order_id;
             $orderItem->attr_id = $item['attr_id'];
@@ -34,9 +30,9 @@ class OrderItemService {
             $orderItem->quantity = $item['quantity'];
             $orderItem->save();
 
-            $updateStock = DB::table('products_attributes')->where('product_id', $item['product_id'])->where('attr_id', $item['attr_id'])->first();
-            $newStock = $updateStock->stock - $item['attr_id'];
-            DB::table('products_attributes')->where('product_id', $item['product_id'])->where('attr_id', $item['attr_id'])->update(['stock'=>$newStock]);
+            $updateStock = DB::table('products_attributes')->where('attr_id', $item['attr_id'])->where('product_id', $item['product_id'])->first();
+                $newStock =$updateStock->stock - $item['quantity'];
+            DB::table('products_attributes')->where('attr_id', $item['attr_id'])->where('product_id', $item['product_id'])->update(['stock'=>$newStock]);
         }
 
     }

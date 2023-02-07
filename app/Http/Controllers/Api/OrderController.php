@@ -27,22 +27,13 @@ class OrderController extends Controller
 
     public function index()
     {
-<<<<<<< HEAD
-         $listOrder = $this->orderService->getPaginateOrder(Auth::guard('api')->id());
-=======
         $listOrder = $this->orderService->getPaginateOrder(Auth::guard('api')->id());
->>>>>>> MP04-09-api-order-detail
         $account = Auth::guard('api')->user();
         return response()->json([
             "success"=>true,
             "message"=>"Danh sách đơn hàng người dùng ". $account->getProfile->full_name,
             "data"=>$listOrder
-<<<<<<< HEAD
         ], 200);
-=======
-        ], 200);    
-        
->>>>>>> MP04-09-api-order-detail
     }
 
     /**
@@ -53,16 +44,16 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        DB::beginTransaction();
+        // DB::beginTransaction();
         try {
             $this->orderService->insertOrder($request);
             return response()->json([
                 "success"=>true,
                 "message"=>"Đặt hàng thành công!",
             ], 201);
-            DB::commit();
+            // DB::commit();
         } catch (\Throwable $err) {
-            DB::rollBack();
+            // DB::rollBack();
             report($err->getMessage());
             return response()->json([
                 "success"=>false,
