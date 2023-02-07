@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\NewCategoryController;
 use App\Http\Controllers\Api\NewController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\RepliesController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
@@ -46,6 +47,7 @@ Route::post('/order', [OrderController::class, 'store']);
 Route::get('/list-order', [OrderController::class, 'index']);
 Route::get('/list-order/{id}', [OrderController::class, 'show']);
 Route::post('/comment', [CommentController::class, 'store']);
+Route::post('/replies', [RepliesController::class, 'store']);
 
 Route::any('{url}', function(){
     return response()->json([
