@@ -5,6 +5,8 @@ namespace App\Http\Controllers\BackEnd;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\NewsRequest;
 use App\Models\News;
+use App\Repositories\NewCategory\NewCategoryRepositoryinterface;
+use App\Repositories\News\NewRepositoryInterface;
 use App\Services\CategoryNewService;
 use App\Services\NewService;
 use Illuminate\Http\Request;
@@ -17,17 +19,17 @@ class NewsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public $serviceNew;
-    public $serviceCateNew;
+    public $newRepo;
+    public $newCateRepo;
     public $message = [];
-    public function __construct(NewService $serviceNew, CategoryNewService $serviceCateNew)
+    public function __construct(NewRepositoryInterface $newRepo, NewCategoryRepositoryinterface $newCateRepo)
     {
-        $this->serviceNew = $serviceNew;
-        $this->serviceCateNew = $serviceCateNew;
+        $this->newRepo = $newRepo;
+        $this->newCateRepo = $newCateRepo;
     }
     public function index()
     {
-        $listNew = $this->serviceNew->getPaginateNew();
+        $listNew = $this->newRepo->getNews();
         return view('pages.new.list', compact('listNew'));
     }
 
@@ -38,7 +40,7 @@ class NewsController extends Controller
      */
     public function create()
     {
-        $cateNews = $this->serviceCateNew->getAllCategoryNew();
+        $cateNews = $this->newCateRepo->getAllNewCategory();
         return view('pages.new.create', compact('cateNews'));
     }
 
@@ -52,7 +54,7 @@ class NewsController extends Controller
     {
         DB::beginTransaction();
         try {
-            $this->serviceNew->insertNew($request);
+            $this->newRepo->insertNews($request);
             $this->message = ['success' => 'Thêm bài viết thành công!'];
             DB::commit();
         } catch (\Exception $err) {
@@ -83,7 +85,7 @@ class NewsController extends Controller
     public function edit($id)
     {
         $new = News::with('getCateNew')->findOrFail($id);
-        $cateNews = $this->serviceCateNew->getAllCategoryNew();
+        $cateNews = $this->newCateRepo->getAllNewCategory();
         return view('pages.new.edit', compact('new', 'cateNews'));
     }
 
@@ -98,7 +100,7 @@ class NewsController extends Controller
     {
         DB::beginTransaction();
         try {
-            $this->serviceNew->updateNew($request, $id);
+            $this->newRepo->updateNews($request, $id);
             $this->message = ['success' => 'Cập nhật bài viết thành công!'];
             DB::commit();
         } catch (\Exception $err) {
@@ -110,8 +112,11 @@ class NewsController extends Controller
     }
 
     public function search (Request $request) {
-        $listNew = $this->serviceNew->searchNew($_GET['key']);
-        return view('pages.new.list', compact('listNew'));
+      if($_GET['key'] && $_GET['key'] != ''){
+            $listNew = $this->newRepo->search($_GET['key'], ['new_title']);
+            return view('pages.new.list', compact('listNew'));
+      }
+      return redirect()->route('news.index');
     }
 
     /**
@@ -123,7 +128,7 @@ class NewsController extends Controller
     public function destroy($id)
     {
         try {
-            $this->serviceNew->deleteNew($id);
+            $this->newRepo->deleteNews($id);
             $this->message = ['success' => 'Xóa bài viết thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BackEnd;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AttributeRequest;
 use App\Models\Attribute;
+use App\Repositories\Attribute\AttributeRepositoryInterface;
 use App\Services\AttributeService;
 use Illuminate\Http\Request;
 
@@ -15,15 +16,15 @@ class AttributeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public $serviceAttribute;
+    public $attrRepo;
     public $message = [];
-    public function __construct(AttributeService $serviceAttribute)
+    public function __construct(AttributeRepositoryInterface $attrRepo)
     {
-        $this->serviceAttribute = $serviceAttribute;
+        $this->attrRepo = $attrRepo;
     }
     public function index()
     {
-        $listAttr = $this->serviceAttribute->getPaginateAttribute();
+        $listAttr = $this->attrRepo->getAttribute();
         return view('pages.attribute.list', compact('listAttr'));
     }
 
@@ -46,7 +47,7 @@ class AttributeController extends Controller
     public function store(Request $request)
     {
         try {
-            $this->serviceAttribute->insertAttribute($request);
+            $this->attrRepo->insertAttribute($request);
             $this->message = ['success' => 'Thêm thuộc tính thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());
@@ -90,7 +91,7 @@ class AttributeController extends Controller
     {
 
         try {
-            $this->serviceAttribute->updateAttribute($request, $id);
+            $this->attrRepo->updateAttribute($request, $id);
             $this->message = ['success' => 'Cập nhật thuộc tính thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());
@@ -101,8 +102,11 @@ class AttributeController extends Controller
 
     public function search (Request $request) {
 
-        $listAttr = $this->serviceAttribute->searchAttribute($_GET['key']);
+      if($_GET['key'] && $_GET['key'] != ''){
+        $listAttr = $this->attrRepo->searchAttribute($_GET['key'], ['attr_name']);
         return view('pages.attribute.list', compact('listAttr'));
+      }
+      return redirect()->route('attributes.index');
     }
 
     /**
@@ -114,7 +118,7 @@ class AttributeController extends Controller
     public function destroy($id)
     {
         try {
-            $this->serviceAttribute->deleteAttribute($id);
+            $this->attrRepo->deleteAttribute($id);
             $this->message = ['success' => 'Xóa thuộc tính thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());

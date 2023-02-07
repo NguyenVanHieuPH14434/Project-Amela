@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BackEnd;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryNewRequest;
 use App\Models\CategoryNew;
+use App\Repositories\NewCategory\NewCategoryRepositoryinterface;
 use App\Services\CategoryNewService;
 use Illuminate\Http\Request;
 
@@ -15,15 +16,15 @@ class CategoryNewController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public $serviceCategoryNew;
+    public $newCateRepo;
     public $message = [];
-    public function __construct(CategoryNewService $serviceCategoryNew)
+    public function __construct(NewCategoryRepositoryinterface $newCateRepo)
     {
-        $this->serviceCategoryNew = $serviceCategoryNew;
+        $this->newCateRepo = $newCateRepo;
     }
     public function index()
     {
-        $listCateNew = $this->serviceCategoryNew->getPaginateCategoryNew();
+        $listCateNew = $this->newCateRepo->getNewCategory();
         return view('pages.categoryNew.list', compact('listCateNew'));
     }
 
@@ -45,9 +46,8 @@ class CategoryNewController extends Controller
      */
     public function store(CategoryNewRequest $request)
     {
-        // dd($request->all());
         try {
-            $this->serviceCategoryNew->insertCategoryNew($request);
+            $this->newCateRepo->insertNewCategory($request);
             $this->message = ['success' => 'Thêm danh mục bài viết thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());
@@ -89,7 +89,7 @@ class CategoryNewController extends Controller
     public function update(CategoryNewRequest $request, $id)
     {
         try {
-            $this->serviceCategoryNew->updateCategoryNew($request, $id);
+            $this->newCateRepo->updateNewCategory($request, $id);
             $this->message = ['success' => 'Cập nhật danh mục bài viết thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());
@@ -99,8 +99,11 @@ class CategoryNewController extends Controller
     }
 
     public function search (Request $request) {
-        $listCateNew = $this->serviceCategoryNew->searchCategoryNew($_GET['key']);
-        return view('pages.categoryNew.list', compact('listCateNew'));
+       if($_GET['key'] && $_GET['key'] != ''){ 
+            $listCateNew = $this->newCateRepo->search($_GET['key'], ['new_cate_name']);
+            return view('pages.categoryNew.list', compact('listCateNew'));
+       }
+       return redirect()->route('categoryNews.index');
     }
 
     /**
@@ -112,7 +115,7 @@ class CategoryNewController extends Controller
     public function destroy($id)
     {
         try {
-            $this->serviceCategoryNew->deleteCategoryNew($id);
+            $this->newCateRepo->deleteNewCategory($id);
             $this->message = ['success' => 'Xóa danh mục bài viết thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());

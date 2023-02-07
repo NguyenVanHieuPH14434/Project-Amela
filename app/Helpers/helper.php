@@ -46,6 +46,16 @@ use App\Models\Order;
         }
     }
 
+    if(!function_exists('sortOrder')){
+        function sortOrder ($sort = 'desc'){
+            $sortOrder = 'desc';
+            if($sort && in_array($sort, ['asc', 'desc'])){
+                $sortOrder = $sort;
+            }
+            return $sortOrder;
+        }
+    }
+
     if(!function_exists('generateUniqueCode')){
         function generateUniqueCode()
         {

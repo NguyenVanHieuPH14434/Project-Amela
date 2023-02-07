@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Repositories\Product\ProductRepositoryInterface;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 
@@ -16,15 +17,18 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public $serviceProduct;
+    public $productRepo;
 
-    public function __construct(ProductService $serviceProduct)
+    public function __construct(ProductService $serviceProduct, ProductRepositoryInterface $productRepo)
     {
         $this->serviceProduct = $serviceProduct;
+        $this->productRepo = $productRepo;
     }
 
     public function index(Request $req)
     {
-        $listProduct = $this->serviceProduct->getPaginateProduct($req->perPage??$req->perPage);
+        $listProduct = $this->productRepo->all();
+        // $listProduct = $this->serviceProduct->getPaginateProduct($req->perPage??$req->perPage);
         return response()->json([
             "success"=>true,
             "message"=>"Danh sách danh mục sản phẩm!",

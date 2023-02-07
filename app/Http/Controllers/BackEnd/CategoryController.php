@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BackEnd;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
+use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Services\CategoryService;
 use Illuminate\Http\Request;
 
@@ -16,15 +17,16 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public $message = [];
-    public $serviceCategory;
-    public function __construct(CategoryService $serviceCategory)
+    public $cateRepo;
+    
+    public function __construct(CategoryRepositoryInterface $cateRepo)
     {
-        $this->serviceCategory = $serviceCategory;
+        $this->cateRepo = $cateRepo;
     }
 
     public function index()
     {
-        $listCate = $this->serviceCategory->getPaginateCategory();
+        $listCate = $this->cateRepo->getCategory();
         return view('pages.category.list', compact('listCate'));
     }
 
@@ -35,7 +37,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $allCate = $this->serviceCategory->getAllCategory();
+        $allCate = $this->cateRepo->all();
         return view('pages.category.create', compact('allCate'));
     }
 
@@ -48,17 +50,7 @@ class CategoryController extends Controller
     public function store(CategoryRequest $request)
     {
         try {
-            $dataImage = checkIssetImage($request, [
-                'image'=>'cate_image',
-                'prefixName'=>'category',
-                'folder'=>'uploads/categories',
-                'imageOld'=>''
-            ]);
-            $cate = new Category();
-            $cate->fill($request->all());
-            $cate->cate_image = $dataImage;
-            $cate->save();
-
+            $this->cateRepo->insertCategory($request);
             $this->message = ['success'=>'Thêm danh mục thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());
@@ -87,7 +79,7 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $cate = Category::findOrFail($id);
-        $allCate = $this->serviceCategory->getAllCategory();
+        $allCate = $this->cateRepo->all();
         return view('pages.category.edit', compact('cate', 'allCate'));
     }
 
@@ -101,16 +93,7 @@ class CategoryController extends Controller
     public function update(CategoryRequest $request, $id)
     {
         try {
-            $cate = Category::findOrFail($id);
-            $cate->fill($request->all());
-            $dataImage = checkIssetImage($request, [
-            'image'=>'cate_image',
-            'prefixName'=>'category',
-            'folder'=>'uploads/categories',
-            'imageOld'=> $cate->cate_image,
-            ]);
-            $cate->cate_image = $dataImage;
-            $cate->update();
+           $this->cateRepo->updateCategory($request, $id);
 
             $this->message = ['success'=>'Cập nhật danh mục thành công!'];
 
@@ -123,8 +106,11 @@ class CategoryController extends Controller
 
     // search
     public function search (Request $request) {
-        $listCate = $this->serviceCategory->searchCategory($_GET['key']);
+      if($_GET['key'] && $_GET['key'] != ''){
+        $listCate = $this->cateRepo->search($_GET['key'], ['cate_name']);
         return view('pages.category.list', compact('listCate'));
+      }
+      return redirect()->route('categories.index');
     }
 
     /**
@@ -136,7 +122,7 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         try {
-           $this->serviceCategory->deleteCategory($id);
+           $this->cateRepo->deleteCategory($id);
             $this->message = ['success'=>'Xóa danh mục thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());

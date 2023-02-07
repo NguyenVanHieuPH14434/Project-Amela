@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Models\Attribute;
 use App\Models\Product;
+use App\Repositories\Attribute\AttributeRepositoryInterface;
+use App\Repositories\Category\CategoryRepositoryInterface;
+use App\Repositories\Product\ProductRepositoryInterface;
 use App\Services\AttributeService;
 use App\Services\CategoryService;
 use App\Services\ProductService;
@@ -20,20 +23,20 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public $serviceCategory;
-    public $serviceProduct;
-    public $serviceAttr;
+    public $productRepo;
+    public $cateRepo;
+    public $attrRepo;
     public $message = [];
-    public function __construct(CategoryService $serviceCategory, ProductService $serviceProduct, AttributeService $serviceAttr)
+    public function __construct(CategoryRepositoryInterface $cateRepo, AttributeRepositoryInterface $attrRepo, ProductRepositoryInterface $productRepo)
     {
-        $this->serviceCategory = $serviceCategory;
-        $this->serviceProduct = $serviceProduct;
-        $this->serviceAttr = $serviceAttr;
+        $this->productRepo = $productRepo;
+        $this->cateRepo = $cateRepo;
+        $this->attrRepo = $attrRepo;
     }
 
     public function index()
     {
-        $listProduct = $this->serviceProduct->getPaginateProduct();
+        $listProduct = $this->productRepo->getProduct();
         return view('pages.product.list', compact('listProduct'));
     }
 
@@ -44,8 +47,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories =  $this->serviceCategory->getAllCategory();
-        $attrs =  $this->serviceAttr->getAllAttribute();
+        $categories =  $this->cateRepo->all();
+        $attrs =  $this->attrRepo->getAllAttribute();
         return view('pages.product.create', compact('categories', 'attrs'));
     }
 
@@ -59,7 +62,7 @@ class ProductController extends Controller
     {
         DB::beginTransaction();
         try {
-            $this->serviceProduct->insertProduct($request);
+            $this->productRepo->insertProduct($request);
             $this->message = ['success' => 'Thêm sản phẩm thành công!'];
             DB::commit();
         } catch (\Exception $err) {
@@ -90,8 +93,8 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::with('categoryProduct')->with('productGallery')->findOrFail($id);
-        $categories =  $this->serviceCategory->getAllCategory();
-        $attrs =  $this->serviceAttr->getAllAttribute();
+        $categories =  $this->cateRepo->all();
+        $attrs =  $this->attrRepo->getAllAttribute();
         $price = array();
         $stock = array();
         foreach($product->attributeProduct as $i){
@@ -112,7 +115,7 @@ class ProductController extends Controller
     {
         DB::beginTransaction();
         try {
-            $this->serviceProduct->updateProduct($request, $id);
+            $this->productRepo->updateProduct($request, $id);
             $this->message = ['success' => 'Cập nhật sản phẩm thành công!'];
             DB::commit();
         } catch (\Exception $err) {
@@ -125,8 +128,11 @@ class ProductController extends Controller
 
 
     public function search (Request $request) {
-        $listProduct = $this->serviceProduct->searchProduct($_GET['key']);
-        return view('pages.product.list', compact('listProduct'));
+        if($_GET['key'] && $_GET['key'] != null){
+            $listProduct = $this->productRepo->search($_GET['key'], ['product_name']);
+         return view('pages.product.list', compact('listProduct'));
+        }
+        return redirect()->route('products.index');
     }
 
     /**
@@ -139,7 +145,7 @@ class ProductController extends Controller
     {
         DB::beginTransaction();
         try {
-            $this->serviceProduct->deleteProduct($id);
+            $this->productRepo->deleteProduct($id);
             $this->message = ['success' => 'Xóa sản phẩm thành công!'];
             DB::commit();
         } catch (\Exception $err) {
