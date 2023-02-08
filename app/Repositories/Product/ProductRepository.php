@@ -90,7 +90,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $product->fill($req->all());
         $product->is_active = Constanst::ACTIVE;
         $product->product_image = $dataImage;
-        $product->product_price = min($prices)."-".max($prices);
+        $product->product_price = min($prices);
         $product->update();
 
         $product->categoryProduct()->sync($req->category_id);

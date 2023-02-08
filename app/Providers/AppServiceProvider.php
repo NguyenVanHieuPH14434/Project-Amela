@@ -78,6 +78,11 @@ class AppServiceProvider extends ServiceProvider
         \App\Repositories\Content\ContentRepositoryInterface::class,
         \App\Repositories\Content\ContentRepository::class,
       );
+
+      $this->app->singleton(
+        \App\Repositories\Replies\RepliesRepositoryInterface::class,
+        \App\Repositories\Replies\RepliesRepository::class,
+      );
     }
 
     /**

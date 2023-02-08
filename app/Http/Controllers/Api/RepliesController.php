@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\Replies\RepliesRepositoryInterface;
 use App\Services\RepliesService;
 use Illuminate\Http\Request;
 
@@ -14,10 +15,12 @@ class RepliesController extends Controller
      * @return \Illuminate\Http\Response
      */
     protected $replieService;
-    public function __construct(RepliesService $replieService)
+    protected $replieRepo;
+    public function __construct(RepliesService $replieService, RepliesRepositoryInterface $replieRepo)
     {
         $this->middleware('auth:api', ['except' => ['login']]);
         $this->replieService = $replieService;
+        $this->replieRepo = $replieRepo;
     }
     public function index()
     {
@@ -33,7 +36,7 @@ class RepliesController extends Controller
     public function store(Request $request)
     {
         try {
-            $this->replieService->insertReplies($request);
+            $this->replieRepo->insertReplies($request);
             return response()->json([
                 "success"=>true,
             ]);
