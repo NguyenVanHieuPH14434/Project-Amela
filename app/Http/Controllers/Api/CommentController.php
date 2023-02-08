@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\Comment\CommentRepositoryInterface;
 use App\Services\CommentService;
 use Illuminate\Http\Request;
 
@@ -13,11 +14,11 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    protected $commentService;
-    public function __construct(CommentService $commentService)
+    protected $commnetRepo;
+    public function __construct(CommentRepositoryInterface $commnetRepo)
     {
         $this->middleware('auth:api', ['except' => ['login']]);
-        $this->commentService = $commentService;
+        $this->commnetRepo = $commnetRepo;
     }
 
     public function index()
@@ -34,7 +35,7 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         try {
-            $this->commentService->insertComment($request);
+            $this->commnetRepo->insertComment($request);
             return response()->json([
                 "success"=>true,
             ]);
