@@ -20,6 +20,10 @@ class NewService {
         return  News::with('getCateNew')->where('deleted_at', null)->paginate($paginate);
     }
 
+    public function getNewDetail ($id) {
+        return News::with('getCateNew')->where('id', $id)->where('deleted_at', null)->first();
+    }
+
     public function insertNew ($req) {
         $new = new News();
         $new->fill($req->all());
