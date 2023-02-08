@@ -28,7 +28,16 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
     }
 
     public function getPaginateOrder ($user_id, $paginate = Constanst::LIMIT_PERPAG) {
-        return $this->model->where('user_id', $user_id)->where('deleted_at',null)->paginate($paginate);
+        // return $this->model->where('user_id', $user_id)->where('deleted_at',null)->paginate($paginate);
+
+        $columns = ['id', 'code_order', 'created_at'];
+        $data = $this->model->where('user_id', $user_id)
+        ->where('deleted_at', null)->where(function($q) use($columns) {
+            scopeFilter($q, $columns);
+        });
+        
+        $result = $data->orderBY(sortBy($columns), sortOrder())->paginate($paginate);
+        return $result;
     }
 
     public function insertOrder ($req) {

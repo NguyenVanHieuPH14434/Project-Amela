@@ -18,22 +18,18 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    protected $orderService;
-    protected $orderDetailService;
     protected $orderRepo;
     protected $orderDetailRepo;
-    public function __construct(OrderService $orderService, OrderItemService $orderDetailService, OrderRepositoryInterface $orderRepo, OrderItemRepositoryInterface $orderDetailRepo)
+    public function __construct(OrderRepositoryInterface $orderRepo, OrderItemRepositoryInterface $orderDetailRepo)
     {
         $this->middleware('auth:api', ['except' => ['login']]);
-        $this->orderService = $orderService;
-        $this->orderDetailService = $orderDetailService;
         $this->orderRepo = $orderRepo;
         $this->orderDetailRepo = $orderDetailRepo;
     }
 
     public function index()
     {
-        $listOrder = $this->orderRepo->getPaginateOrder(Auth::guard('api')->id());
+        $listOrder = $this->orderRepo->getPaginateOrder(Auth::guard('api')->id(), request('per_page'));
         $account = Auth::guard('api')->user();
         return response()->json([
             "success"=>true,
