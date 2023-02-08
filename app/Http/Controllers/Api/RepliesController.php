@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\RepliesService;
 use Illuminate\Http\Request;
 
 class RepliesController extends Controller
@@ -12,6 +13,12 @@ class RepliesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected $replieService;
+    public function __construct(RepliesService $replieService)
+    {
+        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->replieService = $replieService;
+    }
     public function index()
     {
         //
@@ -25,7 +32,18 @@ class RepliesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $this->replieService->insertReplies($request);
+            return response()->json([
+                "success"=>true,
+            ]);
+        } catch (\Throwable $err) {
+           report($err->getMessage());
+           return response()->json([
+            "success"=>false,
+            "message"=>"Đã xảy ra lỗi!"
+            ]);
+        }
     }
 
     /**
