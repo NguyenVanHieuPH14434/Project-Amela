@@ -16,19 +16,16 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public $serviceProduct;
     public $productRepo;
 
-    public function __construct(ProductService $serviceProduct, ProductRepositoryInterface $productRepo)
+    public function __construct( ProductRepositoryInterface $productRepo)
     {
-        $this->serviceProduct = $serviceProduct;
         $this->productRepo = $productRepo;
     }
 
-    public function index(Request $req)
+    public function index()
     {
-        $listProduct = $this->productRepo->all();
-        // $listProduct = $this->serviceProduct->getPaginateProduct($req->perPage??$req->perPage);
+        $listProduct = $this->productRepo->getProduct(request('per_page'));
         return response()->json([
             "success"=>true,
             "message"=>"Danh sách danh mục sản phẩm!",

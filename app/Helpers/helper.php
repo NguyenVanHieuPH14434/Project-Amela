@@ -47,12 +47,22 @@ use App\Models\Order;
     }
 
     if(!function_exists('sortOrder')){
-        function sortOrder ($sort = 'desc'){
+        function sortOrder (){
             $sortOrder = 'desc';
-            if($sort && in_array($sort, ['asc', 'desc'])){
-                $sortOrder = $sort;
+            if(request('sortOrder') && in_array(request('sortOrder'), ['asc', 'desc'])){
+                $sortOrder = request('sortOrder');
             }
             return $sortOrder;
+        }
+    }
+    
+    if(!function_exists('sortBy')){
+        function sortBy ($sortByColumns = []){
+            $sortBy = 'id';
+            if(request('sortBy') && in_array(request('sortBy'), $sortByColumns)){
+                $sortBy = request('sortBy');
+            }
+            return $sortBy;
         }
     }
 
@@ -65,4 +75,18 @@ use App\Models\Order;
     
             return $referal_code;
         }
+    }
+
+    if(!function_exists('scopeFilter')){
+        function scopeFilter($q, $columns = [])
+    {
+        if (request('keyword')) {
+            $q->where(querySearchByColumns($columns, request('keyword')));
+        }
+        if (request('price_from')) {
+            $q->wherebetween('product_price', [(int)request('price_from'), (int)request('price_to')]);
+        }
+
+        return $q;
+    }
     }

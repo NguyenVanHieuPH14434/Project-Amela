@@ -9,7 +9,7 @@ interface AttributeRepositoryInterface extends RepositoryInterface {
 
     public function getAllAttribute ();
 
-    public function getAttribute ($req = null, $paginate = Constanst::LIMIT_PERPAG);
+    public function getAttribute ($paginate = Constanst::LIMIT_PERPAG);
 
     public function insertAttribute ($req);
     

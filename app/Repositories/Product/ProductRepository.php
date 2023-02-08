@@ -10,12 +10,6 @@ use DateTime;
 
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface {
 
-    // protected $productGalleryRepo;
-
-    // public function __construct(ProductGalleryRepositoryInterface $productGalleryRepo)
-    // {
-    //     $this->productGalleryRepo = $productGalleryRepo;
-    // }
     public function getModel()
     {
         return Product::class;
@@ -29,20 +23,18 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     }
 
 
-    public function getProduct($req = null, $paginate = Constanst::LIMIT_PERPAG)
+    public function getProduct($paginate = Constanst::LIMIT_PERPAG)
     {
+        $columns = ['product_name', 'id', 'created_at'];
         $data = $this->model->with(['categoryProduct', 'productGallery', 'attributeProduct'])
         ->where('is_active', Constanst::ACTIVE)
         ->where('deleted_at', null);
 
-        $colums = ['product_name'];
+        $data->where(function($q) use($columns){
+            scopeFilter($q, $columns);
+        });
 
-        if($req != null && $req->keyword){
-            $data->where(querySearchByColumns($colums, $req->keyword));
-        }
-        $sortOrder = sortOrder($req != null && $req->sortOrder??$req->sortOrder);
-
-        $result = $data->orderBY('id',$sortOrder)->paginate($paginate);
+        $result = $data->orderBY(sortBy($columns), sortOrder())->paginate($paginate);
         return $result;
     }
 
@@ -60,6 +52,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $product->fill($req->all());
         $product->is_active = Constanst::ACTIVE;
         $product->product_image = $dataImage;
+        $product->product_price = min($prices)."-".max($prices);
         $product->save();
 
         foreach($prices as $key => $val){
@@ -93,6 +86,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $product->fill($req->all());
         $product->is_active = Constanst::ACTIVE;
         $product->product_image = $dataImage;
+        $product->product_price = min($prices)."-".max($prices);
         $product->update();
 
         $product->categoryProduct()->sync($req->category_id);

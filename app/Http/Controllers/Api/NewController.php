@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\News\NewRepositoryInterface;
 use App\Services\NewService;
 use Illuminate\Http\Request;
 
@@ -14,14 +15,14 @@ class NewController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     public $serviceNew;
-     public function __construct(NewService $serviceNew)
+     public $newRepo;
+     public function __construct(NewRepositoryInterface $newRepo)
      {
-         $this->serviceNew = $serviceNew;
+         $this->newRepo = $newRepo;
      }
     public function index(Request $request)
     {
-        $listNew = $this->serviceNew->getPaginateNew($request->perPage??$request->perPage);
+        $listNew = $this->newRepo->getNews(request('per_page'));
         return response()->json([
             "success"=>true,
             "message"=> "Danh sách tin tức",

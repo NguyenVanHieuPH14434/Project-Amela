@@ -9,7 +9,7 @@ interface ProductRepositoryInterface extends RepositoryInterface {
     
     public function getAllProduct ();
 
-    public function getProduct ($req = null, $paginate = Constanst::LIMIT_PERPAG);
+    public function getProduct ($paginate = Constanst::LIMIT_PERPAG);
 
     public function insertProduct ($req);
 

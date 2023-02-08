@@ -35,19 +35,13 @@
                                     <label for="" class="form-label"><b>Loại</b></label>
                                     <input type="text" class="form-control" name="sub_name[]" value="{{$subAttr->attr_name?$subAttr->attr_name:old('attr_name')}}">
                                     <input type="hidden" class="form-control" name="subId[]" value="{{$subAttr->id}}">
-                                    {{-- @error('attr_name')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror --}}
+                                    
                                 </div>
                             </div>
                             <div class="panel-body">
                                 <div class="mb-3">
                                     <label for="" class="form-label"><b>Ảnh</b></label> <br>
-                                    {{-- <p class="btn btn-primary btn-file">
-                                        Browse...<input type="file" name="attr_img" class="file browse" data-val="1" >
-                                    </p> <br> --}}
+                                
                                     <input type="file" name="sub_img[]" data-val="{{$key}}" style="display: none" class="file">
                                     <div class="input-group my-2">
                                         <input type="text" class="form-control" disabled placeholder="Upload file..." name="" id="file{{$key}}">
@@ -67,16 +61,6 @@
                                 </div>
                             </div>
                         </div>
-                                {{-- <div class="col-4 mb-2">
-                                    <label for="">Loại</label>
-                                    <input type="hidden" name="sub_id[]" value="{{$subAttr->id}}">
-                                    <input type="text" class="form-control" name="sub_attr[]" value="{{$subAttr->attr_name}}">
-                                </div> --}}
-
-                                {{-- <div class="col-12">
-                                    <label for="">{{$subAttr->attr_name}}:</label> &nbsp;&nbsp;
-                                    <a href="{{route('attributes.show', ['id'=>$attr->id, 'subId'=>$subAttr->id])}}">Sửa</a>
-                                </div> --}}
 
                             @endforeach
                             <div id="more_item" class="col-4"></div>

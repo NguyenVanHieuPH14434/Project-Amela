@@ -113,6 +113,7 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, $id)
     {
+        // dd($request->product_price);
         DB::beginTransaction();
         try {
             $this->productRepo->updateProduct($request, $id);

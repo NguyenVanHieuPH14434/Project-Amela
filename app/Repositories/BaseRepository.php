@@ -3,14 +3,20 @@
 namespace App\Repositories;
 
 use App\Constant\Constanst;
+use App\Repositories\ProductGallery\ProductGalleryRepositoryInterface;
+use App\Services\OrderItemService;
 
 abstract class BaseRepository implements RepositoryInterface {
 
     protected $model;
+    protected $orderItemRepo;
+    protected $productGalleryRepo;
 
-    public function __construct()
+    public function __construct(OrderItemService $orderItemRepo, ProductGalleryRepositoryInterface $productGalleryRepo)
     {
         $this->setModel();
+        // $this->orderItemRepo = $orderItemRepo;
+        // $this->productGalleryRepo = $productGalleryRepo;
     }
 
     abstract public function getModel();

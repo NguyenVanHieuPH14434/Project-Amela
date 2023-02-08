@@ -10,7 +10,7 @@ interface NewCategoryRepositoryinterface extends RepositoryInterface {
 
     public function getAllNewCategory ();
 
-    public function getNewCategory ($req = null, $paginate = Constanst::LIMIT_PERPAG);
+    public function getNewCategory ($paginate = Constanst::LIMIT_PERPAG);
 
     public function insertNewCategory ($req);
 

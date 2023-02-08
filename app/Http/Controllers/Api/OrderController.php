@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\Order\OrderRepositoryInterface;
+use App\Repositories\OrderItem\OrderItemRepositoryInterface;
 use App\Services\OrderItemService;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
@@ -18,16 +20,20 @@ class OrderController extends Controller
      */
     protected $orderService;
     protected $orderDetailService;
-    public function __construct(OrderService $orderService, OrderItemService $orderDetailService)
+    protected $orderRepo;
+    protected $orderDetailRepo;
+    public function __construct(OrderService $orderService, OrderItemService $orderDetailService, OrderRepositoryInterface $orderRepo, OrderItemRepositoryInterface $orderDetailRepo)
     {
         $this->middleware('auth:api', ['except' => ['login']]);
         $this->orderService = $orderService;
         $this->orderDetailService = $orderDetailService;
+        $this->orderRepo = $orderRepo;
+        $this->orderDetailRepo = $orderDetailRepo;
     }
 
     public function index()
     {
-        $listOrder = $this->orderService->getPaginateOrder(Auth::guard('api')->id());
+        $listOrder = $this->orderRepo->getPaginateOrder(Auth::guard('api')->id());
         $account = Auth::guard('api')->user();
         return response()->json([
             "success"=>true,
@@ -44,16 +50,16 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        // DB::beginTransaction();
+        DB::beginTransaction();
         try {
-            $this->orderService->insertOrder($request);
+            $this->orderRepo->insertOrder($request);
+            DB::commit();
             return response()->json([
                 "success"=>true,
                 "message"=>"Đặt hàng thành công!",
             ], 201);
-            // DB::commit();
         } catch (\Throwable $err) {
-            // DB::rollBack();
+            DB::rollBack();
             report($err->getMessage());
             return response()->json([
                 "success"=>false,
@@ -72,7 +78,7 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        $listOrderDetail = $this->orderDetailService->getOrderDetail($id);
+        $listOrderDetail = $this->orderDetailRepo->getOrderDetail($id);
         return response()->json([
             "success"=>true,
             "message"=>"Dữ liệu đơn hàng",

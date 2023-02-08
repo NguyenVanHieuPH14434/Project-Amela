@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\RoleRequest;
 use App\Models\Permission;
 use App\Models\Role;
+use App\Repositories\Role\RoleRepositoryInterface;
 use App\Services\RoleService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,14 +20,16 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public $serviceRole;
+    public $roleRepo;
     public $message = [];
-    public function __construct(RoleService $serviceRole)
+    public function __construct(RoleService $serviceRole, RoleRepositoryInterface $roleRepo)
     {
         $this->serviceRole = $serviceRole;
+        $this->roleRepo = $roleRepo;
     }
     public function index()
     {
-        $listRole = $this->serviceRole->getPaginateRole();
+        $listRole = $this->roleRepo->getRole();
         return view('pages.role.list', compact('listRole'));
     }
 
@@ -51,14 +54,7 @@ class RoleController extends Controller
     {
         DB::beginTransaction();
        try {
-
-         $role = new Role();
-         $role->fill($request->all());
-         $role->role_key = Str::lower($request->role_name);
-         $role->save();
-
-         $role->permission_role()->attach($request->permission_id);
-
+        $this->roleRepo->insertRole($request);
          $this->message = ['success'=>'Thêm vai trò thành công!'];
          DB::commit();
         } catch (\Exception $err) {
@@ -104,11 +100,7 @@ class RoleController extends Controller
     {
             DB::beginTransaction();
         try {
-            $role = Role::findOrFail($id);
-            $role->fill($request->all());
-            $role->role_key = Str::lower($request->role_name);
-            $role->update();
-            $role->permission_role()->sync($request->permission_id);
+            $this->roleRepo->updateRole($request, $id);
             $this->message = ['success'=>'Cập nhật vai trò thành công!'];
             DB::commit();
         } catch (\Exception $err) {
@@ -120,8 +112,11 @@ class RoleController extends Controller
     }
 
     public function search (Request $request) {
-        $listRole =  $this->serviceRole->searchRole($_GET['key']);
-        return view('pages.role.list', compact('listRole'));
+        if($_GET['key'] && $_GET['key'] != ''){
+            $listRole =  $this->roleRepo->search($_GET['key'], ['role_name']);
+            return view('pages.role.list', compact('listRole'));
+        }
+        return redirect()->route('roles.index');
     }
 
     /**
@@ -134,7 +129,8 @@ class RoleController extends Controller
     {
         DB::beginTransaction();
         try {
-            $this->serviceRole->deleteRole($id);
+            // $this->serviceRole->deleteRole($id);
+            $this->roleRepo->deleteRole($id);
             $this->message = ['success'=>'Xóa vai trò thành công!'];
             DB::commit();
         }catch (\Exception $err) {

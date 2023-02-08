@@ -15,12 +15,13 @@ class Product extends Model
         'is_active',
         'product_short_desc',
         'product_desc',
-        'deleted_at'
+        'deleted_at',
+        'product_price'
     ];
 
     protected $hidden = [
         'deleted_at',
-        "created_at",
+        // "created_at",
         "updated_at",
         "is_active"
     ];

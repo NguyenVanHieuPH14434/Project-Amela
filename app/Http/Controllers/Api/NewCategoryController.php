@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\NewCategory\NewCategoryRepositoryinterface;
 use App\Services\CategoryNewService;
 use Illuminate\Http\Request;
 
@@ -13,15 +14,15 @@ class NewCategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public $serviceCategoryNew;
-    public function __construct(CategoryNewService $serviceCategoryNew)
+    public $newCateRepo;
+    public function __construct(NewCategoryRepositoryinterface $newCateRepo)
     {
-        $this->serviceCategoryNew = $serviceCategoryNew;
+        $this->newCateRepo = $newCateRepo;
     }
 
     public function index(Request $request)
     {
-        $listCateNew = $this->serviceCategoryNew->getPaginateCategoryNew($request->perPage??$request->perPage);
+        $listCateNew = $this->newCateRepo->getNewCategory(request('per_page'));
         return response()->json([
             "success"=>true,
             "message"=> "Danh sách danh mục tin tức",

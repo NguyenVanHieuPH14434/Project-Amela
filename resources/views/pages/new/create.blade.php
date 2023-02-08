@@ -63,7 +63,7 @@
 
                     <button class="btn btn-primary">Thêm mới</button>
                     <button class="btn btn-danger" type="reset">Nhập lại</button>
-                    <a href="{{ route('categoryNews.index') }}" class="btn btn-info">Quay lại</a>
+                    <a href="{{ route('news.index') }}" class="btn btn-info">Quay lại</a>
 
                 </form>
                 <!--===================================================-->

@@ -9,7 +9,7 @@ interface CategoryRepositoryInterface extends RepositoryInterface {
 
     public function getAllCategory ();
 
-    public function getCategory ($req = null, $paginate = Constanst::LIMIT_PERPAG);
+    public function getCategory ($paginate = Constanst::LIMIT_PERPAG);
 
     public function insertCategory ($req);
 

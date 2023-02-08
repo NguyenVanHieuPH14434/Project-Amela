@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PermissionRequest;
 use App\Models\Permission;
 use App\Models\Role;
+use App\Repositories\Permission\PermissionRepositoryInterface;
 use App\Services\PermissionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,17 +18,17 @@ class PermissionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public $servicePms;
+    public $permissionRepo;
     public $message = [];
 
-    public function __construct(PermissionService $servicePms)
+    public function __construct(PermissionRepositoryInterface $permissionRepo)
     {
-        $this->servicePms = $servicePms;
+        $this->permissionRepo = $permissionRepo;
     }
 
     public function index()
     {
-        $listPermission = $this->servicePms->getPaginatePermission();
+        $listPermission = $this->permissionRepo->getPermission();
         return view('pages.permission.list', compact('listPermission'));
     }
 
@@ -50,21 +51,22 @@ class PermissionController extends Controller
 
     public function store(PermissionRequest $request)
     {
-
+        DB::beginTransaction();
         try {
 
-            $module = $this->servicePms->insertPermission($request->module);
+            $module = $this->permissionRepo->insertPermission($request->module);
 
             foreach ($request->action as $pms_action) {
                 $pmsName = $request->module . ' ' . $pms_action;
                 $pmsKey = $request->module . '_' . $pms_action;
-                $this->servicePms->insertPermission($pmsName, $pmsKey, $module);
+                $this->permissionRepo->insertPermission($pmsName, $pmsKey, $module);
             }
-
+            DB::commit();
             $this->message = ['success' => 'Thêm quyền thành công!'];
         } catch (\Throwable $err) {
             report($err->getMessage());
             $this->message = ['error' => 'Error: ' . $err->getMessage()];
+            DB::rollBack();
         }
         return redirect()->route('permissions.create')->with($this->message);
     }
@@ -102,6 +104,7 @@ class PermissionController extends Controller
     public function update(PermissionRequest $request, $id)
     {
 
+        DB::beginTransaction();
         try {
             $pms = Permission::findOrFail($id);
 
@@ -113,12 +116,12 @@ class PermissionController extends Controller
 
             $arrNewIdPms = [];
 
-            $this->servicePms->updatepParentPermission($id, $request->module);
+            $this->permissionRepo->updatePermission($id, $request->module);
 
             foreach ($request->action as $pms_action) {
                 $pmsName = $request->module . ' ' . $pms_action;
                 $pmsKey = $request->module . '_' . $pms_action;
-                $idKey = $this->servicePms->insertPermission($pmsName, $pmsKey, $id);
+                $idKey = $this->permissionRepo->insertPermission($pmsName, $pmsKey, $id);
                 array_push($arrNewIdPms, $idKey);
             }
 
@@ -132,18 +135,22 @@ class PermissionController extends Controller
                     }
                 }
             }
-
+            DB::commit();
             $this->message = ['success' => 'Cập nhật quyền thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());
             $this->message = ['error' => 'Error: ' . $err->getMessage()];
+            DB::rollBack();
         }
         return redirect()->route('permissions.edit', $id)->with($this->message);
     }
 
     public function search (Request $request) {
-        $listPermission = $this->servicePms->searchPermission($_GET['key']);
-        return view('pages.permission.list', compact('listPermission'));
+      if($_GET['key'] && $_GET['key'] != ''){
+            $listPermission = $this->permissionRepo->searchPermission($_GET['key'], ['pms_name']);
+            return view('pages.permission.list', compact('listPermission'));
+      }
+      return redirect()->route('permissions.index');
     }
 
     /**
@@ -156,7 +163,7 @@ class PermissionController extends Controller
     {
 
         try {
-           $this->servicePms->deletePermission($id);
+           $this->permissionRepo->deletePermission($id);
             $this->message = ['success' => 'Xóa quyền thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());

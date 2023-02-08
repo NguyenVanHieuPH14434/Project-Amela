@@ -25,8 +25,7 @@ class CategoryController extends Controller
 
     public function index(Request $req)
     {
-        $listCate = $this->cateRepo->getCategory($req, $req->perPage??$req->perPage);
-        // $listCate = $this->serviceCategory->getPaginateCategory($req->perPage??$req->perPage);
+        $listCate = $this->cateRepo->getCategory(request('per_page'));
         return response()->json([
             "success"=>true,
             "message"=>"Danh sách danh mục sản phẩm!",

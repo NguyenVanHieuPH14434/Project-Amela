@@ -4,6 +4,7 @@ namespace App\Repositories\Permission;
 
 use App\Constant\Constanst;
 use App\Models\OrderItem;
+use App\Models\Permission;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\DB;
 
@@ -11,7 +12,7 @@ class PermissionRepository extends BaseRepository implements PermissionRepositor
 
     public function getModel()
     {
-        return OrderItem::class;
+        return Permission::class;
     }
 
     public function getAllPermission()
@@ -19,17 +20,15 @@ class PermissionRepository extends BaseRepository implements PermissionRepositor
         return $this->model->where('parent_id', Constanst::PARENT)->get();
     }
 
-    public function getPermission($req = null, $paginate = Constanst::LIMIT_PERPAG)
+    public function getPermission($paginate = Constanst::LIMIT_PERPAG)
     {
-        $data = $this->model->where('parent_id', Constanst::PARENT);
-        $colums = ['pms_name'];
+        $columns = ['pms_name', 'created_at', 'id'];
+        $data = $this->model->where('parent_id', Constanst::PARENT)
+        ->where(function($q) use($columns) {
+            scopeFilter($q, $columns);
+        });
 
-        if($req != null && $req->keyword){
-            $data->where(querySearchByColumns($colums, $req->keyword));
-        }
-        $sortOrder = sortOrder($req != null && $req->sortOrder??$req->sortOrder);
-
-        $result = $data->orderBY('id',$sortOrder)->paginate($paginate);
+        $result = $data->orderBY(sortBy($columns),sortOrder())->paginate($paginate);
         return $result;
     }  
     

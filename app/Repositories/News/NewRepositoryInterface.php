@@ -9,7 +9,7 @@ interface NewRepositoryInterface extends RepositoryInterface {
 
     public function getAllNews ();
 
-    public function getNews ($req = null, $paginate = Constanst::LIMIT_PERPAG);
+    public function getNews ($paginate = Constanst::LIMIT_PERPAG);
 
     public function insertNews ($req);
 

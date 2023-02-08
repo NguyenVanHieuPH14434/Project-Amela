@@ -9,7 +9,7 @@ interface PermissionRepositoryInterface extends RepositoryInterface {
 
     public function getAllPermission ();
 
-    public function getPermission ($req = null, $paginate = Constanst::LIMIT_PERPAG);
+    public function getPermission ($paginate = Constanst::LIMIT_PERPAG);
 
     public function insertPermission ($pmsName, $pmsKey=' ', $parentId=Constanst::PARENT);
 

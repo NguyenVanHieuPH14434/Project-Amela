@@ -16,7 +16,7 @@
                     @csrf
                     <div class="panel-body">
                         <div class="mb-3">
-                            <label for="" class="form-label"><b>Tên thuộc tính</b></label>
+                            <label for="" class="form-label"><b>{{ __('Tên thuộc tính') }}</b></label>
                             <input type="text" class="form-control" name="parent_attr_name" value="{{old('parent_attr_name')}}">
                             @error('parent_attr_name')
                             <span class="text-danger" role="alert">
@@ -33,19 +33,12 @@
                             <div class="mb-3">
                                 <label for="" class="form-label"><b>Loại</b></label>
                                 <input type="text" class="form-control" name="attr_name[]" value="{{old('attr_name')}}">
-                                {{-- @error('attr_name')
-                                <span class="text-danger" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror --}}
+                              
                             </div>
                         </div>
                         <div class="panel-body">
                             <div class="mb-3">
                                 <label for="" class="form-label"><b>Ảnh</b></label> <br>
-                                {{-- <p class="btn btn-primary btn-file">
-                                    Browse...<input type="file" name="attr_img" class="file browse" data-val="1" >
-                                </p> <br> --}}
                                 <input type="file" name="attr_img[]" data-val="1" style="display: none" class="file">
                                 <div class="input-group my-2">
                                     <input type="text" class="form-control" disabled placeholder="Upload file..." name="" id="file1">

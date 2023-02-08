@@ -31,4 +31,8 @@ class OrderItem extends Model
     public function getAttr () {
         return $this->belongsTo(Attribute::class, 'attr_id', 'id');
     }
+
+    public function getOrder () {
+        return $this->belongsTo(Order::class, 'order_id', 'id');
+    }
 }

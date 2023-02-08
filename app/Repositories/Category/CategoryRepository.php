@@ -19,18 +19,15 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
         return $this->model->where('deleted_at', null)->get();
     }
 
-    public function getCategory($req = null, $paginate = Constanst::LIMIT_PERPAG)
+    public function getCategory($paginate = Constanst::LIMIT_PERPAG)
     {
+        $columns = ['cate_name', 'cate_desc', 'created_at', 'id'];
         $data = $this->model->with(['getChildrenCateogory', 'cate_product'])
-        ->where('deleted_at', null);
-        $colums = ['cate_name', 'cate_desc'];
-
-        if($req != null && $req->keyword){
-            $data->where(querySearchByColumns($colums, $req->keyword));
-        }
-        $sortOrder = sortOrder($req != null && $req->sortOrder??$req->sortOrder);
-
-        $result = $data->orderBY('id',$sortOrder)->paginate($paginate);
+        ->where('deleted_at', null)->where(function($q) use($columns) {
+            scopeFilter($q, $columns);
+        });
+        
+        $result = $data->orderBY(sortBy($columns), sortOrder())->paginate($paginate);
         return $result;
     }
 

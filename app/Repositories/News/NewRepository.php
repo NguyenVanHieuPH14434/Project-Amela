@@ -19,18 +19,15 @@ class NewRepository extends BaseRepository implements NewRepositoryInterface {
         return $this->model->where('deleted_at', null)->get();
     }
 
-    public function getNews($req = null, $paginate = Constanst::LIMIT_PERPAG)
+    public function getNews($paginate = Constanst::LIMIT_PERPAG)
     {
+        $columns = ['new_title', 'created_at', 'id'];
         $data = $this->model->with(['getCateNew'])
-        ->where('deleted_at', null);
-        $colums = ['new_title'];
+        ->where('deleted_at', null)->where(function($q) use($columns) {
+            scopeFilter($q, $columns);
+        });
 
-        if($req != null && $req->keyword){
-            $data->where(querySearchByColumns($colums, $req->keyword));
-        }
-        $sortOrder = sortOrder($req != null && $req->sortOrder??$req->sortOrder);
-
-        $result = $data->orderBY('id',$sortOrder)->paginate($paginate);
+        $result = $data->orderBY(sortBy($columns), sortOrder())->paginate($paginate);
         return $result;
     }
 

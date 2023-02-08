@@ -19,19 +19,15 @@ class AttributeRepository extends BaseRepository implements AttributeRepositoryI
         ->where('parent_id', Constanst::PARENT)->get();
     }
 
-    public function getAttribute($req = null, $paginate = Constanst::LIMIT_PERPAG)
+    public function getAttribute($paginate = Constanst::LIMIT_PERPAG)
     {
+        $columns = ['attr_name', 'id', 'created_at'];
         $data = $this->model->with(['getSubAttribute'])
-        ->where('parent_id', Constanst::PARENT);
-        $colums = ['attr_name'];
+        ->where('parent_id', Constanst::PARENT)->where(function($q) use($columns){
+            scopeFilter($q, $columns);
+        });
 
-        if($req != null && $req->keyword){
-            $data->where(querySearchByColumns($colums, $req->keyword));
-        }
-        
-        $sortOrder = sortOrder($req != null && $req->sortOrder??$req->sortOrder);
-
-        $result = $data->orderBY('id',$sortOrder)->paginate($paginate);
+        $result = $data->orderBY(sortBy($columns), sortOrder())->paginate($paginate);
         return $result;
     }
 

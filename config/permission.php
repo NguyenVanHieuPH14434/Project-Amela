@@ -10,6 +10,8 @@ return [
         'Attribute'=>'Thuộc tính',
         'New_category'=>'Danh mục tin tức',
         'New'=>'Tin tức',
+        'test'=>'Tét',
+        'test1'=>'Chưng',
     ],
     'action'=>[
         'add'=>'Thêm',

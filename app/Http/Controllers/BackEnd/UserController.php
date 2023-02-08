@@ -7,6 +7,8 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\Profile;
 use App\Models\User;
+use App\Repositories\Role\RoleRepositoryInterface;
+use App\Repositories\User\UserRepositoryInterface;
 use App\Services\RoleService;
 use App\Services\UserService;
 use DateTime;
@@ -22,20 +24,20 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public $serviceUser;
-    public $serviceRole;
+    public $roleRepo;
+    public $userRepo;
     public $message;
 
-    public function __construct(UserService $serviceUser, RoleService $serviceRole, $message= [])
+    public function __construct(RoleRepositoryInterface $roleRepo, UserRepositoryInterface $userRepo, $message= [])
     {
-        $this->serviceUser = $serviceUser;
-        $this->serviceRole = $serviceRole;
+        $this->roleRepo = $roleRepo;
+        $this->userRepo = $userRepo;
         $this->message = $message;
     }
 
     public function index()
     {
-        $listUser = $this->serviceUser->getPaginateUser();
+        $listUser = $this->userRepo->getUser();
         return view('pages.user.list', compact('listUser'));
     }
 
@@ -46,7 +48,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = $this->serviceRole->getAllRole();
+        $roles = $this->roleRepo->getAllRole();
         return view('pages.user.create', compact('roles'));
     }
 
@@ -62,7 +64,7 @@ class UserController extends Controller
     {
         DB::beginTransaction();
         try {
-            $this->serviceUser->insertUser($req);
+            $this->userRepo->insertUser($req);
             $this->message = ['success' => 'Thêm người dùng thành công!'];
             DB::commit();
         } catch (\Exception $err) {
@@ -93,7 +95,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::with('getProfile')->with('user_role')->findOrFail($id);
-        $roles = $this->serviceRole->getAllRole();
+        $roles = $this->roleRepo->getAllRole();
         return view('pages.user.edit', compact('user', 'roles'));
     }
 
@@ -108,7 +110,7 @@ class UserController extends Controller
     {
         DB::beginTransaction();
         try {
-           $this->serviceUser->updateUser($request, $id);
+           $this->userRepo->updateUser($request, $id);
            $this->message = ['success' => 'Cập nhật người dùng thành công!'];
            DB::commit();
         } catch (\Exception $err) {
@@ -120,8 +122,11 @@ class UserController extends Controller
     }
 
     public function search (Request $request) {
-        $listUser = $this->serviceUser->searchUser($_GET['key']);
-        return view('pages.user.list', compact('listUser'));
+       if($_GET['key'] && $_GET['key'] != ''){
+            $listUser = $this->serviceUser->searchUser($_GET['key']);
+            return view('pages.user.list', compact('listUser'));
+       }
+       return redirect()->route('users.index');
     }
 
     /**
@@ -134,7 +139,7 @@ class UserController extends Controller
     {
         DB::beginTransaction();
         try {
-            $this->serviceUser->deleteUser($id);
+            $this->userRepo->deleteUser($id);
             $this->message = ['success' => 'Xóa người dùng thành công!'];
             DB::commit();
         } catch (\Exception $err) {
