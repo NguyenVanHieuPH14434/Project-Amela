@@ -10,18 +10,18 @@ use Illuminate\Support\Facades\Auth;
 
 class OrderRepository extends BaseRepository implements OrderRepositoryInterface {
 
-    // protected $orderItemService;
+    protected $orderItemRepo;
 
     public function getModel()
     {
         return Order::class;
     }
 
-    // public function __construct(OrderItemService $orderItemService)
-    // {
-    //     parent::__construct($orderItemService);
-    //     $this->orderItemService = $orderItemService;
-    // }
+    public function __construct(OrderItemService $orderItemRepo)
+    {
+        parent::__construct($orderItemRepo);
+        $this->orderItemRepo = $orderItemRepo;
+    }
 
     public function getAllOrder ($user_id) {
         return $this->model->with('getOrderItem')->where('user_id', $user_id)->where('deleted_at',null)->get();
@@ -45,7 +45,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
             $order->status_order = 1;
             $order->save();
 
-            // $this->orderItemRepo->insertOrderItem($req, $order->id);
+            $this->orderItemRepo->insertOrderItem($req, $order->id);
 
     }
 

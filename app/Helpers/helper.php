@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Order;
+use Illuminate\Support\Facades\Storage;
 
     if(!function_exists('defaultImage')){
         function defaultImage() {
@@ -24,6 +25,7 @@ use App\Models\Order;
         function checkIssetImage ($req, $data=['image'=>'', 'prefixName'=>'', 'folder'=>'', 'imageOld'=>'']) {
             $dataImage = '';
             if($req->hasFile($data['image'])){
+                deleteFile($data['imageOld']);
                 $file = $req->file($data['image']);
                 $dataImage = fileUpload($file, $data['prefixName'], $data['folder']);
             }elseif($data['imageOld']){
@@ -79,14 +81,22 @@ use App\Models\Order;
 
     if(!function_exists('scopeFilter')){
         function scopeFilter($q, $columns = [])
-    {
-        if (request('keyword')) {
-            $q->where(querySearchByColumns($columns, request('keyword')));
-        }
-        if (request('price_from')) {
-            $q->wherebetween('product_price', [(int)request('price_from'), (int)request('price_to')]);
-        }
+        {
+            if (request('keyword')) {
+                $q->where(querySearchByColumns($columns, request('keyword')));
+            }
+            if (request('price_from')) {
+                $q->wherebetween('product_price', [(int)request('price_from'), (int)request('price_to')]);
+            }
 
-        return $q;
+            return $q;
+        }
     }
+
+    if(!function_exists('deleteFile')){
+        function deleteFile ($dataImage) {
+            if(Storage::exists($dataImage)){
+                Storage::delete($dataImage);
+            }
+        }
     }

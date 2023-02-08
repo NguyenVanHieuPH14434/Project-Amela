@@ -46,7 +46,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface {
         $create_profile->avatar = $dataImage;
         $create_profile->save();
 
-        $create_account = new User();
+        $create_account = new $this->model();
         $create_account->fill($req->all());
         $create_account->password = Hash::make($req->password);
         $create_account->is_active = Constanst::ACTIVE;

@@ -7,12 +7,21 @@ use App\Models\Product;
 use App\Repositories\BaseRepository;
 use App\Repositories\ProductGallery\ProductGalleryRepositoryInterface;
 use DateTime;
+use Illuminate\Support\Facades\Storage;
 
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface {
+
+    protected $productGallery;
 
     public function getModel()
     {
         return Product::class;
+    }
+
+    public function __construct(ProductGalleryRepositoryInterface $productGallery)
+    {
+        parent::__construct($productGallery);
+        $this->productGallery = $productGallery;
     }
 
     public function getAllProduct()
@@ -61,13 +70,8 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
         $product->categoryProduct()->attach($req->category_id);
 
-        // if($req->image){
-        //     $this->productGalleryRepo->insertProductGallery($product->id, $req);
-        // }
         if($req->image){
-            $productGallery = new ProductGalleryRepositoryInterface();
-
-            $productGallery->insertProductGallery($product->id, $req);
+            $this->productGallery->insertProductGallery($product->id, $req);
         }
     }
 
@@ -95,15 +99,12 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             $product->attributeProduct()->attach($req->attr[$key], array('price'=>$val, 'stock'=>$stock[$key]));
         }
 
-        // if($req->image){
-        //     $product->productGallery()->delete();
-        //     $this->serviceProGallery->insertProductGallery($product->id, $req);
-        // }
-
         if($req->image){
-            $productGallery = new ProductGalleryRepositoryInterface();
+            foreach( $product->productGallery as $it){
+                deleteFile($it->path_image);
+            }
             $product->productGallery()->delete();
-            $productGallery->insertProductGallery($product->id, $req);
+            $this->productGallery->insertProductGallery($product->id, $req);
         }
     }
 
