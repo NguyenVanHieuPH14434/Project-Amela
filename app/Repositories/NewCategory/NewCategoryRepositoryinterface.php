@@ -16,6 +16,5 @@ interface NewCategoryRepositoryinterface extends RepositoryInterface {
 
     public function updateNewCategory ($req, $id);
 
-    public function deleteNewCategory ($id);
 
 }

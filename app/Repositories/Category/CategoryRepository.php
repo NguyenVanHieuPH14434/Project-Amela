@@ -62,11 +62,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
 
     public function deleteCategory($id)
     {
-        $cate = $this->model->find($id);
-        $datetime = new DateTime();
-        $cate->deleted_at = $datetime->format('Y-m-d H:i:s');
-        $cate->update();
-
+        $cate = $this->softDelete($id);
         foreach($cate->getChildrenCateogory as $item) {
             $subCate = $this->model->find($item->id);
             $subCate->parent_id = Constanst::PARENT;

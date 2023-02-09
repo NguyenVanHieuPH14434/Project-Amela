@@ -5,6 +5,7 @@ namespace App\Repositories\Order;
 use App\Constant\Constanst;
 use App\Models\Order;
 use App\Repositories\BaseRepository;
+use App\Repositories\OrderItem\OrderItemRepositoryInterface;
 use App\Services\OrderItemService;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,7 +18,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         return Order::class;
     }
 
-    public function __construct(OrderItemService $orderItemRepo)
+    public function __construct(OrderItemRepositoryInterface $orderItemRepo)
     {
         parent::__construct($orderItemRepo);
         $this->orderItemRepo = $orderItemRepo;

@@ -108,14 +108,6 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         }
     }
 
-    public function deleteProduct($id)
-    {
-        $product = $this->model->findOrFail($id);
-        $datetime = new DateTime();
-        $product->deleted_at = $datetime->format('Y-m-d H:i:s');
-        $product->update();
-    }
-
     public function searchProduct($textSearch)
     {
         $key = trim($textSearch);

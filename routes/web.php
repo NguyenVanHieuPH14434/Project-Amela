@@ -8,6 +8,8 @@ use App\Http\Controllers\BackEnd\AttributeController;
 use App\Http\Controllers\BackEnd\CategoryController;
 use App\Http\Controllers\BackEnd\CategoryNewController;
 use App\Http\Controllers\BackEnd\NewsController;
+use App\Http\Controllers\BackEnd\OrderStatus;
+use App\Http\Controllers\BackEnd\OrderStatusController;
 use App\Http\Controllers\BackEnd\PermissionController;
 use App\Http\Controllers\BackEnd\ProductController;
 use App\Http\Controllers\BackEnd\RoleController;
@@ -125,6 +127,17 @@ Route::middleware(['auth', 'checkRole'])->prefix('/admin')->group(function(){
         Route::put('/update/{id}', [NewsController::class, 'update'])->name('update');
         Route::delete('/destroy/{id}', [NewsController::class, 'destroy'])->name('destroy');
         Route::get('/search', [NewsController::class, 'search'])->name('search');
+    });
+
+    // order status
+    Route::prefix('/orderStatus')->name('orderStatus.')->group(function(){
+        Route::get('/', [OrderStatusController::class, 'index'])->name('index');
+        Route::get('/create', [OrderStatusController::class, 'create'])->name('create');
+        Route::post('/store', [OrderStatusController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [OrderStatusController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [OrderStatusController::class, 'update'])->name('update');
+        Route::delete('/destroy/{id}', [OrderStatusController::class, 'destroy'])->name('destroy');
+        Route::get('/search', [OrderStatusController::class, 'search'])->name('search');
     });
 
     Route::get('/chart', [Controller::class, 'chart'])->name('chart');

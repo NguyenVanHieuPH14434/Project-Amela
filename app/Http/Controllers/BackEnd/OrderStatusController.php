@@ -3,29 +3,27 @@
 namespace App\Http\Controllers\BackEnd;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoryNewRequest;
-use App\Models\CategoryNew;
-use App\Repositories\NewCategory\NewCategoryRepositoryinterface;
-use App\Services\CategoryNewService;
+use App\Http\Requests\OrderStatusrequset;
+use App\Repositories\OrderStatus\OrderStatusRepositoryInterface;
 use Illuminate\Http\Request;
 
-class CategoryNewController extends Controller
+class OrderStatusController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public $newCateRepo;
+    protected $orderStatusRepo;
     public $message = [];
-    public function __construct(NewCategoryRepositoryinterface $newCateRepo)
+    public function __construct(OrderStatusRepositoryInterface $orderStatusRepo)
     {
-        $this->newCateRepo = $newCateRepo;
+        $this->orderStatusRepo = $orderStatusRepo;
     }
     public function index()
     {
-        $listCateNew = $this->newCateRepo->getNewCategory();
-        return view('pages.categoryNew.list', compact('listCateNew'));
+        $listOrderStatus = $this->orderStatusRepo->getOrderStatus();
+        return view('pages.orderSatus.list', compact('listOrderStatus'));
     }
 
     /**
@@ -35,7 +33,7 @@ class CategoryNewController extends Controller
      */
     public function create()
     {
-        return view('pages.categoryNew.create');
+        return view('pages.orderSatus.create');
     }
 
     /**
@@ -44,11 +42,11 @@ class CategoryNewController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryNewRequest $request)
+    public function store(OrderStatusrequset $request)
     {
         try {
-            $this->newCateRepo->insertNewCategory($request);
-            $this->message = ['success' => 'Thêm danh mục bài viết thành công!'];
+            $this->orderStatusRepo->insertOrderStatus($request);
+            $this->message = ['success' => 'Thêm trạng thái thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());
             $this->message = ['error' => 'Error: ' . $err->getMessage()];
@@ -75,8 +73,8 @@ class CategoryNewController extends Controller
      */
     public function edit($id)
     {
-        $cateNew = CategoryNew::findOrFail($id);
-        return view('pages.categoryNew.edit', compact('cateNew'));
+        $orderStatus = $this->orderStatusRepo->find($id);
+        return view('pages.orderSatus.edit', compact('orderStatus'));
     }
 
     /**
@@ -86,11 +84,11 @@ class CategoryNewController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryNewRequest $request, $id)
+    public function update(OrderStatusrequset $request, $id)
     {
         try {
-            $this->newCateRepo->updateNewCategory($request, $id);
-            $this->message = ['success' => 'Cập nhật danh mục bài viết thành công!'];
+            $this->orderStatusRepo->updateOrderStatus($request, $id);
+            $this->message = ['success' => 'Cập nhật trạng thái thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());
             $this->message = ['error' => 'Error: ' . $err->getMessage()];
@@ -98,13 +96,14 @@ class CategoryNewController extends Controller
         return redirect()->back()->with($this->message);
     }
 
+    
     public function search (Request $request) {
-       if($_GET['key'] && $_GET['key'] != ''){ 
-            $listCateNew = $this->newCateRepo->search($_GET['key'], ['new_cate_name']);
-            return view('pages.categoryNew.list', compact('listCateNew'));
-       }
-       return redirect()->route('categoryNews.index');
-    }
+        if($_GET['key'] && $_GET['key'] != ''){
+              $listOrderStatus = $this->orderStatusRepo->search($_GET['key'], ['status_name']);
+              return view('pages.orderSatus.list', compact('listOrderStatus'));
+        }
+        return redirect()->route('orderStatus.index');
+      }
 
     /**
      * Remove the specified resource from storage.
@@ -115,8 +114,8 @@ class CategoryNewController extends Controller
     public function destroy($id)
     {
         try {
-            $this->newCateRepo->softDelete($id);
-            $this->message = ['success' => 'Xóa danh mục bài viết thành công!'];
+            $this->orderStatusRepo->softDelete($id);
+            $this->message = ['success' => 'Xóa trạng thái thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());
             $this->message = ['error' => 'Error: ' . $err->getMessage()];

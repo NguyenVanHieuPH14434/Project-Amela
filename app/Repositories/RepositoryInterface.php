@@ -21,4 +21,7 @@ interface RepositoryInterface {
 
     // search
     public function search($key, $columns = []);
+
+    // soft delete
+    public function softDelete ($id);
 }

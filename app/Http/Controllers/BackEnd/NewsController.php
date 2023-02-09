@@ -128,7 +128,7 @@ class NewsController extends Controller
     public function destroy($id)
     {
         try {
-            $this->newRepo->deleteNews($id);
+            $this->newRepo->softDelete($id);
             $this->message = ['success' => 'Xóa bài viết thành công!'];
         } catch (\Exception $err) {
             report($err->getMessage());

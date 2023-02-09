@@ -15,6 +15,4 @@ interface NewRepositoryInterface extends RepositoryInterface {
 
     public function updateNews ($req, $id);
 
-    public function deleteNews ($id);
-
 }

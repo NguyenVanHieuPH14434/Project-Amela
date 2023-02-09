@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Constant\Constanst;
+use DateTime;
 
 abstract class BaseRepository implements RepositoryInterface {
 
@@ -64,6 +65,15 @@ abstract class BaseRepository implements RepositoryInterface {
 
         $result = $data->paginate(Constanst::LIMIT_PERPAG);
         return $result;
+    }
+
+    public function softDelete($id)
+    {
+        $data = $this->model->findOrFail($id);
+        $datetime = new DateTime();
+        $data->deleted_at = $datetime->format('Y-m-d H:i:s');
+        $data->update();
+        return $data;
     }
 
 }

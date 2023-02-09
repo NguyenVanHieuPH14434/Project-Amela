@@ -92,11 +92,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface {
 
     public function deleteUser($id)
     {
-        $user = $this->model->findOrFail($id);
         $datetime = new DateTime();
-        $user->deleted_at = $datetime->format('Y-m-d H:i:s');
-        $user->update();
-
+        $user = $this->softDelete($id);
         $user->getProfile()->update([
             'deleted_at' => $datetime->format('Y-m-d H:i:s')
         ]);

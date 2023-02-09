@@ -46,6 +46,7 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->data[0]['price']);
         DB::beginTransaction();
         try {
             $this->orderRepo->insertOrder($request);

@@ -83,6 +83,11 @@ class AppServiceProvider extends ServiceProvider
         \App\Repositories\Replies\RepliesRepositoryInterface::class,
         \App\Repositories\Replies\RepliesRepository::class,
       );
+
+      $this->app->singleton(
+        \App\Repositories\OrderStatus\OrderStatusRepositoryInterface::class,
+        \App\Repositories\OrderStatus\OrderStatusRepository::class,
+      );
     }
 
     /**

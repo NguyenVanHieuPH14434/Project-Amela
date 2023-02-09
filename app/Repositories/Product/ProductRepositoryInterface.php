@@ -15,8 +15,6 @@ interface ProductRepositoryInterface extends RepositoryInterface {
 
     public function updateProduct ($req, $id);
 
-    public function deleteProduct ($id);
-
     public function searchProduct ($textSearch);
     
 }

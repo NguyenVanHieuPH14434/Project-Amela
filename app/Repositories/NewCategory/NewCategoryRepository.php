@@ -59,12 +59,6 @@ class NewCategoryRepository extends BaseRepository implements NewCategoryReposit
         $cateNew->update();
     }
 
-    public function deleteNewCategory($id)
-    {
-        $cateNew = $this->model->findOrFail($id);
-        $datetime = new DateTime();
-        $cateNew->deleted_at = $datetime->format('Y-m-d H:i:s');
-        $cateNew->update();
-    }
+    
 
 }

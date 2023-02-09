@@ -7,7 +7,7 @@ class Constanst {
     const ROLE_USER = 2;
     const PARENT = 0;
     const LIMIT_PERPAG = 10;
-    const BASE_URL = 'http://project-amela.net/';
+    const BASE_URL = 'http://localhost:8000/';
     const DASHBOARD_URL = self::BASE_URL . 'admin/dashboard'; 
     const PERMISSION_URL = self::BASE_URL . 'admin/permissions'; 
     const CREATE_PERMISSION_URL = self::BASE_URL . 'admin/permissions/create'; 
@@ -23,4 +23,6 @@ class Constanst {
     const CREATE_PRODUCT_URL = self::BASE_URL . 'admin/products/create'; 
     const NEW_CATEGORY_URL = self::BASE_URL . 'admin/categoryNews'; 
     const NEW_URL = self::BASE_URL . 'admin/news'; 
+    const ORDER_STATUS_URL = self::BASE_URL . 'admin/orderStatus'; 
+    const CREATE_ORDER_STATUS_URL = self::BASE_URL . 'admin/orderStatus/create'; 
 }

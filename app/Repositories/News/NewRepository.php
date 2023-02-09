@@ -47,12 +47,4 @@ class NewRepository extends BaseRepository implements NewRepositoryInterface {
         $new->getCateNew()->sync($req->cateNew);
     }
 
-    public function deleteNews($id)
-    {
-        $new = $this->model->findOrFail($id);
-        $datetime = new DateTime();
-        $new->deleted_at = $datetime->format('Y-m-d H:i:s');
-        $new->update();
-    }
-
 }
