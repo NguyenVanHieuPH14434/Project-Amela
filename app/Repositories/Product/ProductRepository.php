@@ -34,7 +34,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function getProduct($paginate = Constanst::LIMIT_PERPAG)
     {
-        $columns = ['product_name', 'id', 'created_at'];
+        $columns = ['product_name', 'id', 'created_at', 'product_price'];
         $data = $this->model->with(['categoryProduct', 'productGallery', 'attributeProduct'])
         ->where('is_active', Constanst::ACTIVE)
         ->where('deleted_at', null);
@@ -43,7 +43,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             scopeFilter($q, $columns);
         });
 
-        $result = $data->orderBY(sortBy($columns), sortOrder())->paginate($paginate);
+        $result = $data->orderBY(sortBy($columns), sortOrder())->paginate(request('per_page')?request('per_page'):$paginate);
         return $result;
     }
 

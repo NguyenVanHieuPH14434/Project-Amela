@@ -3,19 +3,29 @@
 namespace App\Http\Controllers\BackEnd;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\Order\OrderRepositoryInterface;
+use App\Repositories\OrderItem\OrderItemRepositoryInterface;
 use Illuminate\Http\Request;
 
-class AdminController extends Controller
+class OrderCOntroller extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+    protected $orderRepo;
+    protected $orderDetailRepo;
+    public function __construct(OrderRepositoryInterface $orderRepo, OrderItemRepositoryInterface $orderDetailRepo)
+    {
+        $this->orderRepo = $orderRepo;
+        $this->orderDetailRepo = $orderDetailRepo;
+    }
+
     public function index()
     {
-        // $
-        return view('admin.dashboard');
+        $listOrder = $this->orderRepo->getOrder();
+        return view('pages.order.list', compact('listOrder'));
     }
 
     /**
@@ -47,7 +57,8 @@ class AdminController extends Controller
      */
     public function show($id)
     {
-        //
+        $orderDetail = $this->orderDetailRepo->getOrderDetail($id);
+        return view('pages.order.show', compact('orderDetail'));
     }
 
     /**

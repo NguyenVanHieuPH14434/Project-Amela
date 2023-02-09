@@ -22,7 +22,7 @@ class NewController extends Controller
      }
     public function index(Request $request)
     {
-        $listNew = $this->newRepo->getNews(request('per_page'));
+        $listNew = $this->newRepo->getNews();
         return response()->json([
             "success"=>true,
             "message"=> "Danh sách tin tức",

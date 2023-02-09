@@ -22,7 +22,7 @@ class NewCategoryController extends Controller
 
     public function index(Request $request)
     {
-        $listCateNew = $this->newCateRepo->getNewCategory(request('per_page'));
+        $listCateNew = $this->newCateRepo->getNewCategory();
         return response()->json([
             "success"=>true,
             "message"=> "Danh sách danh mục tin tức",

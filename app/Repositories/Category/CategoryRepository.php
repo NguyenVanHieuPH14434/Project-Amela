@@ -27,7 +27,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
             scopeFilter($q, $columns);
         });
         
-        $result = $data->orderBY(sortBy($columns), sortOrder())->paginate($paginate);
+        $result = $data->orderBY(sortBy($columns), sortOrder())->paginate(request('per_page')?request('per_page'):$paginate);
         return $result;
     }
 

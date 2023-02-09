@@ -70,9 +70,35 @@
     </div>
     <!-- /.row -->
     <!-- Main row -->
+     <div class="row ml-1">
+      <form autocomplete="off" >
+        <div style="display: flex; gap: 10px">
+                    <input id="datepicker"
+                        type="text" style="width: 120px" class="form-control"
+                        placeholder="Ngày bắt đầu" />
+                    <span style="padding-top: 5px">to</span> 
+                    <input id="datepicker2"
+                        type="text" placeholder="Ngày kết thúc" style="width: 120px" class="form-control"/>
+               
+                    <select id="changeFillter" style="width: 120px" class="form-control">
+                        <option value="">Chọn ngày</option>
+                        <option value="today">Hôm nay</option>
+                        <option value="7">7 Ngày trước</option>
+                        <option value="14">14 Ngày trước</option>
+                        <option value="30">30 Ngày trước</option>
+                        <option value="60">60 Ngày trước</option>
+                        <option value="90">90 Ngày trước</option>
+                        <option value="365">365 Ngày trước</option>
+                    </select>
+                    <a href=""><button class="btn btn-primary _btn_send_data">Lọc</button></a>
+            </div>
+
+    </form>
+   
+    </div>
     <div class="row">
 
-        <div id="myfirstchart"></div>
+        <div id="myfirstchart" class="col-12"></div>
       <!-- Left col -->
 
       <!-- /.Left col -->

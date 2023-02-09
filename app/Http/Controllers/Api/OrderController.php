@@ -29,7 +29,7 @@ class OrderController extends Controller
 
     public function index()
     {
-        $listOrder = $this->orderRepo->getPaginateOrder(Auth::guard('api')->id(), request('per_page'));
+        $listOrder = $this->orderRepo->getPaginateOrder(Auth::guard('api')->id());
         $account = Auth::guard('api')->user();
         return response()->json([
             "success"=>true,
@@ -46,7 +46,6 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->data[0]['price']);
         DB::beginTransaction();
         try {
             $this->orderRepo->insertOrder($request);

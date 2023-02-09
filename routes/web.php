@@ -8,6 +8,7 @@ use App\Http\Controllers\BackEnd\AttributeController;
 use App\Http\Controllers\BackEnd\CategoryController;
 use App\Http\Controllers\BackEnd\CategoryNewController;
 use App\Http\Controllers\BackEnd\NewsController;
+use App\Http\Controllers\BackEnd\OrderCOntroller;
 use App\Http\Controllers\BackEnd\OrderStatus;
 use App\Http\Controllers\BackEnd\OrderStatusController;
 use App\Http\Controllers\BackEnd\PermissionController;
@@ -138,6 +139,14 @@ Route::middleware(['auth', 'checkRole'])->prefix('/admin')->group(function(){
         Route::put('/update/{id}', [OrderStatusController::class, 'update'])->name('update');
         Route::delete('/destroy/{id}', [OrderStatusController::class, 'destroy'])->name('destroy');
         Route::get('/search', [OrderStatusController::class, 'search'])->name('search');
+    });
+
+    // order 
+    Route::prefix('/orders')->name('orders.')->group(function(){
+        Route::get('/', [OrderCOntroller::class, 'index'])->name('index');
+        Route::get('/show/{id}', [OrderCOntroller::class, 'show'])->name('show');
+        Route::delete('/destroy/{id}', [OrderCOntroller::class, 'destroy'])->name('destroy');
+        Route::get('/search', [OrderCOntroller::class, 'search'])->name('search');
     });
 
     Route::get('/chart', [Controller::class, 'chart'])->name('chart');

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Constant\Constanst;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Repositories\Category\CategoryRepositoryInterface;
+use App\Repositories\Dashboard\DashboardRepositoryInterface;
 use App\Services\CategoryService;
 use Illuminate\Http\Request;
 
@@ -17,20 +19,28 @@ class CategoryController extends Controller
      */
     public $serviceCategory;
     public $cateRepo;
-    public function __construct(CategoryService $serviceCategory, CategoryRepositoryInterface $cateRepo)
+    public $dashRepo;
+    public function __construct(CategoryService $serviceCategory, CategoryRepositoryInterface $cateRepo, DashboardRepositoryInterface $dashRepo)
     {
         $this->serviceCategory = $serviceCategory;
         $this->cateRepo = $cateRepo;
+        $this->dashRepo = $dashRepo;
     }
 
     public function index(Request $req)
     {
-        $listCate = $this->cateRepo->getCategory(request('per_page'));
+        $listCate = $this->cateRepo->getCategory();
         return response()->json([
             "success"=>true,
             "message"=>"Danh sách danh mục sản phẩm!",
             "data"=>$listCate
         ]);
+    }
+
+    public function testCount () {
+        $data = $this->dashRepo->getDataChart();
+        // $data = getCountTable('users', '2023-02-03', '2023-02-08', ['is_active'], [Constanst::ACTIVE]);
+        return response()->json(['data'=>$data]);
     }
 
     /**

@@ -7,6 +7,7 @@ class Constanst {
     const ROLE_USER = 2;
     const PARENT = 0;
     const LIMIT_PERPAG = 10;
+    const LIMIT_SIMILAR_PRODUCT = 5;
     const UNCONFIMRER = 1;
     const BASE_URL = 'http://hieu.fresher.ameladev.click/';
     const DASHBOARD_URL = self::BASE_URL . 'admin/dashboard'; 
@@ -26,4 +27,5 @@ class Constanst {
     const NEW_URL = self::BASE_URL . 'admin/news'; 
     const ORDER_STATUS_URL = self::BASE_URL . 'admin/orderStatus'; 
     const CREATE_ORDER_STATUS_URL = self::BASE_URL . 'admin/orderStatus/create'; 
+    const ORDER_URL = self::BASE_URL . 'admin/orders'; 
 }

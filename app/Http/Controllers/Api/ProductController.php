@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Constant\Constanst;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
@@ -25,7 +26,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $listProduct = $this->productRepo->getProduct(request('per_page'));
+        $listProduct = $this->productRepo->getProduct();
         return response()->json([
             "success"=>true,
             "message"=>"Danh sách danh mục sản phẩm!",
@@ -57,7 +58,9 @@ class ProductController extends Controller
         ->with('attributeProduct')
         ->findOrFail($id);
 
-        $similar_product = Category::with('cate_product')
+        $similar_product = Category::with(['cate_product'=>function($q){
+            $q->take(Constanst::LIMIT_SIMILAR_PRODUCT);
+        }])
         ->findOrFail($product->categoryProduct[0]->id);
 
         return response()->json([

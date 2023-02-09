@@ -273,6 +273,19 @@
                 </li>
                 {{-- @endcan --}}
 
+                {{-- @can('list-product') --}}
+                <li class="nav-item ">
+                    <a href="{{ route('orders.index') }}" style="{{ in_array(Request::url(), [$constanst::ORDER_URL]) ?"active":"" }}?background-color: rgba(255,255,255,.1):'';" class="nav-link">
+                    {{-- <a href="{{ route('orders.index') }}" class="nav-link {{ in_array(Request::url(), [$constanst::ORDER_URL]) ?"active":"" }}"> --}}
+                        <i class="nav-icon fas fa-table"></i>
+                        <p>
+                            Đơn hàng
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                </li>
+                {{-- @endcan --}}
+
          
                 {{-- <li class="nav-header">EXAMPLES</li>
                 <li class="nav-item">

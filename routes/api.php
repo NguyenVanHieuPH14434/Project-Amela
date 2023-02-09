@@ -48,6 +48,7 @@ Route::get('/list-order', [OrderController::class, 'index']);
 Route::get('/list-order/{id}', [OrderController::class, 'show']);
 Route::post('/comment', [CommentController::class, 'store']);
 Route::post('/replies', [RepliesController::class, 'store']);
+Route::get('/testCount', [CategoryController::class, 'testCount']);
 
 Route::any('{url}', function(){
     return response()->json([

@@ -1,8 +1,12 @@
 <?php
 
 use App\Models\Order;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
+
+    // set default image 
     if(!function_exists('defaultImage')){
         function defaultImage() {
             return 'images/products/default-thumbnail.jpg';
@@ -10,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
     }
 
 
+    // save file
     if(!function_exists('fileUpload')){
         function fileUpload ($file, $prefixName = '', $folder){
             $fileName = $file->hashName();
@@ -21,6 +26,7 @@ use Illuminate\Support\Facades\Storage;
     }
 
 
+    // check exist image
     if(!function_exists('checkIssetImage')){
         function checkIssetImage ($req, $data=['image'=>'', 'prefixName'=>'', 'folder'=>'', 'imageOld'=>'']) {
             $dataImage = '';
@@ -39,6 +45,7 @@ use Illuminate\Support\Facades\Storage;
 
     }
 
+    // search by columns
     if(!function_exists('querySearchByColumns')){
         function querySearchByColumns($requestData = array(), $key){
           return function ($q) use ($requestData, $key) {
@@ -48,6 +55,17 @@ use Illuminate\Support\Facades\Storage;
         }
     }
 
+    // multiple where
+    if(!function_exists('queryByColumns')){
+        function queryByColumns($columns = array(), $value = array()){
+          return function ($q) use ($columns, $value) {
+                foreach ($columns as $index => $field)
+                   $q->where($field, $value[$index]);
+            };
+        }
+    }
+
+    // sort desc, asc
     if(!function_exists('sortOrder')){
         function sortOrder (){
             $sortOrder = 'desc';
@@ -58,6 +76,7 @@ use Illuminate\Support\Facades\Storage;
         }
     }
     
+    // sort by columns
     if(!function_exists('sortBy')){
         function sortBy ($sortByColumns = []){
             $sortBy = 'id';
@@ -68,6 +87,7 @@ use Illuminate\Support\Facades\Storage;
         }
     }
 
+    // unique code 
     if(!function_exists('generateUniqueCode')){
         function generateUniqueCode()
         {
@@ -79,6 +99,7 @@ use Illuminate\Support\Facades\Storage;
         }
     }
 
+    // filter
     if(!function_exists('scopeFilter')){
         function scopeFilter($q, $columns = [])
         {
@@ -89,10 +110,17 @@ use Illuminate\Support\Facades\Storage;
                 $q->wherebetween('product_price', [(int)request('price_from'), (int)request('price_to')]);
             }
 
+            if(request('category')){
+                $q->whereHas('categoryProduct', function($q){
+                    $q->where('cate_name', 'like', "%".request('category')."%");
+                });
+            }
+
             return $q;
         }
     }
 
+    // delete file in storage
     if(!function_exists('deleteFile')){
         function deleteFile ($dataImage) {
             if(Storage::exists($dataImage)){
@@ -100,3 +128,24 @@ use Illuminate\Support\Facades\Storage;
             }
         }
     }
+
+    // count all item of table
+    if(!function_exists('getCountTable')){
+        function getCountTable ($table, $date = array(), $columns = array(), $value = array()) {
+            $dateS = count($date) != 0?new Carbon($date[0]):Carbon::now()->format('Y-m-d');
+            $dateE = count($date) != 0?new Carbon($date[1]):Carbon::now()->format('Y-m-d');
+
+            $data = DB::table($table)
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(id) as total'))
+            ->whereBetween('created_at', [$dateS, $dateE->addDays(1)->format('Y-m-d')]);
+
+            if(count($columns) != 0){ 
+                $data->where(queryByColumns($columns, $value));
+            }
+
+            $result = $data->orderBy('date', 'asc')
+            ->groupBy('date')
+            ->get();
+            return $result;
+        }
+    };
