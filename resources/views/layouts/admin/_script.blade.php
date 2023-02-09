@@ -76,6 +76,45 @@
                 e.preventDefault();
                 stt++;
                 var outPut=`<div class="col-4">
+                    <div class="panel-body name_attr">
+                            <div class="mb-3">
+                                <label for="" class="form-label"><b>Tên biến thể</b></label>
+                                <input type="text" class="form-control" name="attr_name[]" value="{{old('attr_name')}}">
+                              
+                            </div>
+                        </div>
+                        <div class="panel-body value_attr">
+                            <div class="mb-3">
+                                <label for="" class="form-label"><b>Giá trị</b></label>
+                                <input type="color" name="attr_value[]" class="form-control" value="{{old('attr_value')}}">
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="mb-3">
+                                <label for="" class="form-label"><b>Ảnh</b></label> <br>
+                                <input type="file" name="attr_img[]" data-val="${stt}" style="display: none" class="file">
+                                <div class="input-group my-2">
+                                    <input type="text" class="form-control" disabled placeholder="Upload file..." name="" id="file${stt}">
+                                    <div class="input-group-append">
+                                        <button type="button" class="browse btn btn-primary">Browse..</button>
+                                    </div>
+                                </div>
+                                <img src="" id="previewImage${stt}" width="120px" style="max-height:100px alt="" class="mb-2">
+                            </div>
+                        </div>
+                    </div>`;
+                    $("#more_item").before(outPut);
+            })
+        });
+</script>
+{{-- <script>
+    var stt = $( "#getIndex" ).val();
+
+     $(document).ready(function () {
+            $(document).on('click', '#add_more_item', function (e) {
+                e.preventDefault();
+                stt++;
+                var outPut=`<div class="col-4">
                         <div class="panel-body">
                             <div class="mb-3">
                                 <label for="" class="form-label"><b>Tên thuộc tính</b></label>
@@ -110,7 +149,7 @@
                     $("#more_item").before(outPut);
             })
         });
-</script>
+</script> --}}
 
 <script>
 

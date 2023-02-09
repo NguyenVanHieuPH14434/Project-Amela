@@ -91,24 +91,15 @@
 
                                 <div class="row col-12 p-0 m-0">
                                     <div class="row col-12 p-0 m-0 mb-2">
-                                        <label for="" class="form-label"><b>Màu sắc</b></label>
+                                        <label for="" class="form-label"><b>Thuộc tính</b></label>
                                         <select class="js-example-basic-multiple form-control" data-placeholder="Chọn thuộc tính"
-                                            name="color_id[]" multiple>
-                                            @foreach ($attrs as $color)
-                                               @if ($color->attr_key == 'color')
-                                               <option value="{{$color->id}}">{{$color->attr_name}}</option>
-                                               @endif
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="row col-12 p-0 m-0 mb-2">
-                                        <label for="" class="form-label"><b>Size</b></label>
-                                        <select class="js-example-basic-multiple form-control" data-placeholder="Chọn thuộc tính"
-                                            name="size_id[]" multiple>
-                                            @foreach ($attrs as $size)
-                                               @if ($size->attr_key == 'size')
-                                               <option value="{{$size->id}}">{{$size->attr_name}}</option>
-                                               @endif
+                                            name="attr[]" multiple>
+                                            @foreach ($attrs as $attr)
+                                                <optgroup label="{{$attr->attr_name}}">
+                                                        @foreach ($attr->getSubAttribute as $sub)
+                                                            <option value="{{$sub->id}}" {{ (collect(old('attr'))->contains($sub->id)) ? 'selected':'' }}>{{$sub->attr_name}}</option>
+                                                        @endforeach
+                                                </optgroup>
                                             @endforeach
                                         </select>
                                     </div>
@@ -123,8 +114,7 @@
                                     </div>
                                     <div class="row col-12 p-0 m-0">
                                         <label for="" class="form-label"><b>Số lượng hàng</b></label>
-                                        <input type="text" class="form-control"  name="stock" placeholder="Số lượng nhập kho" value="">
-                                        {{-- <input type="text" class="form-control bg-cyan" id="tags-inp" name="stock" placeholder="Số lượng nhập kho" value="" data-role="tagsinput"> --}}
+                                        <input type="text" class="form-control bg-cyan" id="tags-inp" name="stock" placeholder="Số lượng nhập kho" value="" data-role="tagsinput">
                                         @error('stock')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>

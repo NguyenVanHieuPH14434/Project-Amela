@@ -35,7 +35,7 @@ class Product extends Model
     }
 
     public function attributeProduct () {
-        return $this->belongsToMany(Attribute::class, 'products_attributes', 'product_id', 'attr_id')
-        ->withPivot('product_id', 'attr_id', 'price', 'stock');
+        return $this->belongsToMany(Attribute::class, 'products_attributes', 'product_id', 'color_id')
+        ->withPivot('product_id', 'color_id', 'price', 'stock');
     }
 }

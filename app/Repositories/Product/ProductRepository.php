@@ -50,7 +50,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function insertProduct($req)
     {
         $prices = explode(',', $req->product_price);
-        $stock = explode(',', $req->stock);
+        // $stock = explode(',', $req->stock);
         $dataImage = checkIssetImage($req, [
             'image'=>'product_image',
             'prefixName'=>'product',
@@ -65,7 +65,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $product->save();
 
         foreach($prices as $key => $val){
-            $product->attributeProduct()->attach($req->attr[$key], array('price'=>$val, 'stock'=>$stock[$key]));
+            $product->attributeProduct()->attach($req->color_id[$key], array('price'=>$val, 'stock'=>$req->stock, 'size_id'=>$req->size_id[$key]));
         }
 
         $product->categoryProduct()->attach($req->category_id);

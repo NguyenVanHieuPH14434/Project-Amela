@@ -14,8 +14,8 @@ class Attribute extends Model
     protected $fillable = [
         'attr_name',
         'attr_img',
-        'attr_desc',
-        'parent_id'
+        'attr_key',
+        'attr_value'
     ];
 
     protected $hidden = [

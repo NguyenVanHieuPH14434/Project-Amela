@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BackEnd;
 use App\Http\Controllers\Controller;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Repositories\OrderItem\OrderItemRepositoryInterface;
+use App\Repositories\OrderStatus\OrderStatusRepositoryInterface;
 use Illuminate\Http\Request;
 
 class OrderCOntroller extends Controller
@@ -16,16 +17,19 @@ class OrderCOntroller extends Controller
      */
     protected $orderRepo;
     protected $orderDetailRepo;
-    public function __construct(OrderRepositoryInterface $orderRepo, OrderItemRepositoryInterface $orderDetailRepo)
+    protected $statusOrderRepo;
+    public function __construct(OrderRepositoryInterface $orderRepo, OrderItemRepositoryInterface $orderDetailRepo, OrderStatusRepositoryInterface $statusOrderRepo)
     {
         $this->orderRepo = $orderRepo;
         $this->orderDetailRepo = $orderDetailRepo;
+        $this->statusOrderRepo = $statusOrderRepo;
     }
 
     public function index()
     {
         $listOrder = $this->orderRepo->getOrder();
-        return view('pages.order.list', compact('listOrder'));
+        $listStatusOrder = $this->statusOrderRepo->getOrderStatus();
+        return view('pages.order.list', compact('listOrder', 'listStatusOrder'));
     }
 
     /**

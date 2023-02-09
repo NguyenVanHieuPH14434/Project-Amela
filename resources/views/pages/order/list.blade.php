@@ -37,6 +37,7 @@
                                     <th>Tên người nhận</th>
                                     <th>Địa chỉ nhận hàng</th>
                                     <th>Ngày đặt</th>
+                                    <th>Trạng thái</th>
                                    <th class="text-center">Hành động</th>
                                 </tr>
                             </thead>
@@ -53,6 +54,15 @@
                                     </td>
                                     <td scope="col"> {{$item->address}}</td>
                                     <td scope="col"> {{$item->created_at}}</td>
+                                    <td scope="col"> 
+                                        <select name="" class="form-control">
+                                            @foreach ($listStatusOrder as $statusOrder)
+                                                <option {{ $item->getStatuss->id == $statusOrder->id?"selected":"" }} value="{{ $statusOrder->id }}">
+                                                    {{ $statusOrder->status_name }}
+                                                </option>   
+                                            @endforeach
+                                        </select>
+                                    </td>
 
                                     <td scope="col" class="text-center d-flex justify-content-center ">
                                         <a href="{{ route('orders.show', $item->id) }}" class="btn btn-primary"><i class="fa-solid fa-eye"></i></a>

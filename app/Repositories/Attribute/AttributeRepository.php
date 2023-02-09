@@ -15,15 +15,13 @@ class AttributeRepository extends BaseRepository implements AttributeRepositoryI
 
     public function getAllAttribute()
     {
-        return $this->model->with(['getSubAttribute'])
-        ->where('parent_id', Constanst::PARENT)->get();
+        return $this->model->get();
     }
 
     public function getAttribute($paginate = Constanst::LIMIT_PERPAG)
     {
         $columns = ['attr_name', 'id', 'created_at'];
-        $data = $this->model->with(['getSubAttribute'])
-        ->where('parent_id', Constanst::PARENT)->where(function($q) use($columns){
+        $data = $this->model->where(function($q) use($columns){
             scopeFilter($q, $columns);
         });
 
@@ -33,11 +31,15 @@ class AttributeRepository extends BaseRepository implements AttributeRepositoryI
 
     public function insertAttribute($req)
     {
-        $attribute = new $this->model();
-        $attribute->attr_name = $req->parent_attr_name;
-        $attribute->save();
+        foreach($req->attr_name as $key => $attr_name){
+            $attribute = new $this->model();
+            $attribute->attr_name = $attr_name;
+            $attribute->attr_key = $req->attr_key;
+            $attribute->attr_value = $req->attr_key == 'size'?null:$req->attr_value[$key];
+            $attribute->save();
 
-        $this->insertSubAttribute(array('name'=>$req->attr_name, 'img'=>$req->attr_img, 'desc'=>$req->attr_desc), $attribute->id);
+        }
+        // $this->insertSubAttribute(array('name'=>$req->attr_name, 'img'=>$req->attr_img, 'desc'=>$req->attr_desc), $attribute->id);
     }
 
     
@@ -73,7 +75,7 @@ class AttributeRepository extends BaseRepository implements AttributeRepositoryI
         }
 
         if($req->attr_name && $req->attr_name != null){
-            $this->insertSubAttribute(array('name'=>$req->attr_name, 'img'=>$req->attr_img, 'desc'=>$req->attr_desc), $id);
+            // $this->insertSubAttribute(array('name'=>$req->attr_name, 'img'=>$req->attr_img, 'desc'=>$req->attr_desc), $id);
         }
     }
 

@@ -46,6 +46,7 @@ class AttributeController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         try {
             $this->attrRepo->insertAttribute($request);
             $this->message = ['success' => 'Thêm thuộc tính thành công!'];

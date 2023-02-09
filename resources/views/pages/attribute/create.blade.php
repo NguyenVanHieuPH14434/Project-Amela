@@ -16,24 +16,36 @@
                     @csrf
                     <div class="panel-body">
                         <div class="mb-3">
-                            <label for="" class="form-label"><b>{{ __('Tên thuộc tính') }}</b></label>
-                            <input type="text" class="form-control" name="parent_attr_name" value="{{old('parent_attr_name')}}">
-                            @error('parent_attr_name')
+                            <label for="" class="form-label"><b>{{ __('Thuộc tính') }}</b></label>
+                            {{-- <input type="text" class="form-control" name="attr_key" value="{{old('attr_key')}}"> --}}
+                            <select name="attr_key" id="attr_key" class="form-control">
+                                <option value="">Chọn thuộc tính</option>
+                                @foreach (Config::get('attributes.attributes') as $key => $value)
+                                    <option value="{{ $key }}">{{ $value }}</option>
+                                @endforeach
+                            </select>
+                            @error('attr_key')
                             <span class="text-danger" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                             @enderror
                         </div>
                     </div>
-                    <button type="button" class="btn btn-success" id="add_more_item">Thêm loại</button>
+                    <button type="button" class="btn btn-success" id="add_more_item">Thêm biến thể</button>
                     <div class="row " id="fooBar">
                     <input type="hidden" id="getIndex" value="1">
                     <div class="col-4">
-                        <div class="panel-body">
+                        <div class="panel-body name_attr">
                             <div class="mb-3">
-                                <label for="" class="form-label"><b>Loại</b></label>
+                                <label for="" class="form-label"><b>Tên biến thể</b></label>
                                 <input type="text" class="form-control" name="attr_name[]" value="{{old('attr_name')}}">
                               
+                            </div>
+                        </div>
+                        <div class="panel-body value_attr">
+                            <div class="mb-3">
+                                <label for="" class="form-label"><b>Giá trị</b></label>
+                                <input type="color" name="attr_value[]" class="form-control" value="{{old('attr_value')}}">
                             </div>
                         </div>
                         <div class="panel-body">
@@ -47,12 +59,6 @@
                                     </div>
                                 </div>
                                 <img src="" id="previewImage1" width="120px" alt="" class="mb-2">
-                            </div>
-                        </div>
-                        <div class="panel-body">
-                            <div class="mb-3">
-                                <label for="" class="form-label"><b>Mô tả</b></label>
-                                <textarea name="attr_desc[]" class="form-control" cols="30" rows="10">{{old('attr_desc')?old('attr_desc'):''}}</textarea>
                             </div>
                         </div>
                     </div>
@@ -70,5 +76,19 @@
             </div>
         </div>
     </div>
+@endsection
+@section('page-js')
+    <script>
+        $('#attr_key').change(function (e) { 
+           var _key = $(this).val();
+           if(_key == 'size'){
+            $('.value_attr').hide();
+            $('.name_attr').show();
+           }else{
+            $('.value_attr').show();
+            $('.name_attr').show();
+           }
+        });
+    </script>
 @endsection
 

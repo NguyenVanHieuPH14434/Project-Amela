@@ -10,7 +10,8 @@ class ProductAttribute extends Model
     use HasFactory;
     protected $table = 'products_attributes';
     protected $fillable = [
-        'attr_id',
+        'size_id',
+        'color_id',
         'product_id',
         'stock',
         'price'
