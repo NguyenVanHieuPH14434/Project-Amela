@@ -7,7 +7,8 @@ class Constanst {
     const ROLE_USER = 2;
     const PARENT = 0;
     const LIMIT_PERPAG = 10;
-    const BASE_URL = 'http://localhost:8000/';
+    const UNCONFIMRER = 1;
+    const BASE_URL = 'http://localhost:8000/' || 'http://hieu.fresher.ameladev.click/';
     const DASHBOARD_URL = self::BASE_URL . 'admin/dashboard'; 
     const PERMISSION_URL = self::BASE_URL . 'admin/permissions'; 
     const CREATE_PERMISSION_URL = self::BASE_URL . 'admin/permissions/create'; 

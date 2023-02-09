@@ -8,6 +8,7 @@ use App\Repositories\BaseRepository;
 use App\Repositories\OrderItem\OrderItemRepositoryInterface;
 use App\Services\OrderItemService;
 use Illuminate\Support\Facades\Auth;
+use Mockery\Matcher\Contains;
 
 class OrderRepository extends BaseRepository implements OrderRepositoryInterface {
 
@@ -52,7 +53,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
             $order->payment_id = $req->customer['payment_id'];
             $order->total_price = $req->customer['total_price'];
             $order->code_order = generateUniqueCode();
-            $order->status_order = 1;
+            $order->status_order = Constanst::UNCONFIMRER;
             $order->save();
 
             $this->orderItemRepo->insertOrderItem($req, $order->id);
