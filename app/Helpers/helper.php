@@ -150,13 +150,14 @@ use Illuminate\Support\Facades\Storage;
         }
     };
 
-    if(!function_exists('responData')){
-        function responData ($keys=[], $value=[]) {
-            $data = [];
-            // foreach($keys as $index => $key){
-            //     $dt = $key .'=>' .$value[$index] .',';
-            //     array_push($data, $key .'=>' .$value[$index] .',');
-            // }
-            return response()->json($keys);
-        }
+    if(!function_exists('mailData')){
+         function mailData($title, $fullname, $content)
+    {
+        return [
+            'title'=> $title,
+            'fullname'=>$fullname,
+            'content'=> $content
+        ];
+    }
+
     }

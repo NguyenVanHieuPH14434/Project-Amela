@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
+use App\Jobs\JobMail;
 use App\Models\Profile;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
@@ -75,6 +76,12 @@ class RegisterController extends Controller
     {
         try {
             $this->serviceUser->insertUser($req);
+
+            $content = 'Chúng tôi đã tạo cho bạn tài khoản trên website với tài khoản là : ' . $req->username . ' , mật khẩu: ' . $req->password . 
+            ' . Vui lòng không tiết lộ thông tin này cho bất kì ai.';
+
+            dispatch(new JobMail($req->email, mailData("Thông báo đăng ký tài khoản thành công!", $req->full_name, $content)));
+            
             $this->message = ['success' => 'Đăng ký người dùng thành công!'];
         } catch (\Exception $err) {
                 report($err->getMessage());

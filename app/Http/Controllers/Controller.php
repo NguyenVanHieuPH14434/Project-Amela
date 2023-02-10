@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
+use App\Mail\SendMail;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Profile;
@@ -15,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Notifications\Notification;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Notification as FacadesNotification;
+use Mail;
 
 class Controller extends BaseController
 {
@@ -54,5 +56,14 @@ class Controller extends BaseController
 
 
         dd($dataCate, $dataProduct);
+    }
+
+    public function testemail (){
+        $testMailData = [
+            'title' => 'Test Email From AllPHPTricks.com',
+            'body' => 'This is the body of test email.'
+        ];
+        Mail::to('nguyenvanhieugl2001@gmail.com')->send(new SendMail($testMailData));
+        dd('done!!!!!!');
     }
 }

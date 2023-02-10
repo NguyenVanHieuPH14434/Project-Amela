@@ -3,6 +3,7 @@
 namespace App\Repositories\User;
 
 use App\Constant\Constanst;
+use App\Jobs\JobMail;
 use App\Models\Profile;
 use App\Models\User;
 use App\Repositories\BaseRepository;
@@ -61,9 +62,11 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface {
             "account"=>$create_account,
             "profile"=>$create_profile
         ];
+
         return $data;
     }
 
+    
     public function updateUser($req, $id)
     {
         $user = $this->model->findOrFail($id);

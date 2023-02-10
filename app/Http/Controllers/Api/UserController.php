@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserApiRequest;
 use App\Http\Requests\UserRequest;
+use App\Jobs\JobMail;
 use App\Services\RoleService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
@@ -42,6 +43,12 @@ class UserController extends Controller
 
         try {
            $data = $this->serviceUser->insertUser($request);
+
+           $content = 'Chúng tôi đã tạo cho bạn tài khoản trên website với tài khoản là : ' . $request->username . ' , mật khẩu: ' . $request->password . 
+            ' . Vui lòng không tiết lộ thông tin này cho bất kì ai.';
+
+            dispatch(new JobMail($request->email, mailData("Thông báo đăng ký tài khoản thành công!", $request->full_name, $content)));
+            
             return response()->json([
                 'success'=> true,
                 'message'=> 'Đăng ký người dùng thành công!',

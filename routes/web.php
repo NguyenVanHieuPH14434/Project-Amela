@@ -167,6 +167,9 @@ Route::middleware('guest')->prefix('/')->group(function(){
     Route::get('/login', [LoginController::class, 'index'])->name('login');
     Route::post('/checklogin', [LoginController::class, 'checklogin'])->name('checklogin');
 });
+Route::get('/testemail', function(){
+    dispatch(new App\Jobs\JobMail('nguyenvanhieugl2001@gmail.com', 'Chúng tôi đã tạo cho bạn tài khoản trên website với tài khoản là. Vui lòng không tiết lộ thông tin này cho bất kì ai.'));
+});
 
 Route::any('{url}', function(){
     return view('errors.404');

@@ -25,7 +25,7 @@ class ProductRequest extends FormRequest
      */
     public function rules(Request $req)
     {
-        $validateImage = ['required', 'image', 'mimes:jpg,png,jpeg', 'max:5120'];
+        $validateImage = ['required', 'image', 'mimes:png,jpeg', 'max:5120'];
         $uniqueProductName = Rule::unique('products', 'product_name');
         if($req->method() == 'PUT'){
             $uniqueProductName = Rule::unique('products', 'product_name')->ignore($req->id);
@@ -35,8 +35,7 @@ class ProductRequest extends FormRequest
             'product_name'=>['required', $uniqueProductName],
             'product_image'=>$validateImage,
             'image.*'=>['image', 'mimes:jpg,png,jpeg', 'max:5120'],
-            // 'product_price'=>['required', 'numeric'],
-            // 'stock'=>['required', 'numeric'],
+          
             'product_short_desc'=>['required'],
             'product_desc'=>['required'],
             'category_id'=>['required']
@@ -55,10 +54,7 @@ class ProductRequest extends FormRequest
             'image.*.image'=> 'File không phải ảnh',
             'image.*.mimes'=> 'Hình ảnh sản phẩm phải là dạng .png, .jpg, .jpeg.',
             'image.*.max'=> 'Hình ảnh sản phẩm tối đa là 5MB.',
-            // 'product_price.required'=> 'Vui lòng nhập giá sản phẩm',
-            // 'product_price.numeric'=> 'Giá sản phẩm phải là số',
-            // 'stock.required'=> 'Vui lòng nhập số lương hàng kho',
-            // 'stock.numeric'=> 'Số lương hàng kho phải là số',
+          
             'product_short_desc.required'=> 'Vui lòng nhập mô tả ngắn sản phẩm',
             'product_desc.required'=> 'Vui lòng nhập mô tả sản phẩm',
             'category_id.required'=> 'Vui lòng danh mục sản phẩm',
