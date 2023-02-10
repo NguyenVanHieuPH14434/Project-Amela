@@ -14,7 +14,8 @@ class OrderItem extends Model
     protected $fillable = [
         'order_id',
         'product_id',
-        'attr_id',
+        'size_id',
+        'color_id',
         'quantity',
         'deleted_at',
         'price',
@@ -30,8 +31,12 @@ class OrderItem extends Model
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
-    public function getAttr () {
-        return $this->belongsTo(Attribute::class, 'attr_id', 'id');
+    public function getAttrColor () {
+        return $this->belongsTo(Attribute::class, 'color_id', 'id');
+    }
+
+    public function getAttrSize () {
+        return $this->belongsTo(Attribute::class, 'size_id', 'id');
     }
 
     public function getOrder () {

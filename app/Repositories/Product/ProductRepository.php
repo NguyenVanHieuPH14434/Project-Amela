@@ -35,7 +35,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function getProduct($paginate = Constanst::LIMIT_PERPAG)
     {
         $columns = ['product_name', 'id', 'created_at', 'product_price'];
-        $data = $this->model->with(['categoryProduct', 'productGallery', 'attributeProduct'])
+        $data = $this->model->with(['categoryProduct', 'productGallery', 'attributeProduct', 'sizeProduct'])
         ->where('is_active', Constanst::ACTIVE)
         ->where('deleted_at', null);
 
@@ -50,7 +50,6 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function insertProduct($req)
     {
         $prices = explode(',', $req->product_price);
-        // $stock = explode(',', $req->stock);
         $dataImage = checkIssetImage($req, [
             'image'=>'product_image',
             'prefixName'=>'product',
@@ -64,8 +63,10 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $product->product_price = min($prices);
         $product->save();
 
-        foreach($prices as $key => $val){
-            $product->attributeProduct()->attach($req->color_id[$key], array('price'=>$val, 'stock'=>$req->stock, 'size_id'=>$req->size_id[$key]));
+        foreach($req->color_id as $val){
+            foreach($req->size_id as $key => $value){
+                $product->attributeProduct()->attach($val, array('price'=>$prices[$key], 'stock'=>$req->stock, 'size_id'=>$value));
+            }
         }
 
         $product->categoryProduct()->attach($req->category_id);

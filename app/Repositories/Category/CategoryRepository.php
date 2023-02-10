@@ -22,7 +22,9 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     public function getCategory($paginate = Constanst::LIMIT_PERPAG)
     {
         $columns = ['cate_name', 'cate_desc', 'created_at', 'id'];
-        $data = $this->model->with(['getChildrenCateogory', 'cate_product'])
+        $data = $this->model->with(['getChildrenCateogory', 'cate_product'=>function($q){
+            $q->with(['sizeProduct', 'attributeProduct']);
+        }])
         ->where('deleted_at', null)->where(function($q) use($columns) {
             scopeFilter($q, $columns);
         });

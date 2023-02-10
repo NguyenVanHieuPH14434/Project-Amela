@@ -13,8 +13,6 @@ interface AttributeRepositoryInterface extends RepositoryInterface {
 
     public function insertAttribute ($req);
     
-    public function insertSubAttribute ($data = array('name'=>array(), 'img'=>array(), 'desc'=>array()), $parentId);
-
     public function updateAttribute ($req, $id);
 
     public function deleteAttribute ($id);

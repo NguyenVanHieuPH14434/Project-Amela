@@ -78,7 +78,7 @@
     </div>
 @endsection
 @section('page-js')
-    <script>
+    {{-- <script>
         $('#attr_key').change(function (e) { 
            var _key = $(this).val();
            if(_key == 'size'){
@@ -89,6 +89,6 @@
             $('.name_attr').show();
            }
         });
-    </script>
+    </script> --}}
 @endsection
 

@@ -18,9 +18,11 @@ class DashboardRepository extends BaseRepository implements DashboardRepositoryI
     {
         $countCate = getCountTable('categories', ['2023-02-03', '2023-02-08'], ['deleted_at'], [null]);
         $countProduct = getCountTable('products', ['2023-02-03', '2023-02-08'], ['deleted_at'], [null]);
-        return response()->json([
-            'category'=>$countCate,
-            'product'=>$countProduct,
-        ]);
+        // return response()->json([
+        //     'category'=>$countCate,
+        //     'product'=>$countProduct,
+        // ]);
+        return ['category'=>$countCate,
+        'product'=>$countProduct,];
     }
 }

@@ -49,3 +49,4 @@ $(function() {
 $(function() {
     $('#inputTaggs').tagsinput();
 });
+

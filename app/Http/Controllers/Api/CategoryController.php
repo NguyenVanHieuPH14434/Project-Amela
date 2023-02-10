@@ -39,8 +39,12 @@ class CategoryController extends Controller
 
     public function testCount () {
         $data = $this->dashRepo->getDataChart();
+        $listCate = $this->cateRepo->getCategory();
         // $data = getCountTable('users', '2023-02-03', '2023-02-08', ['is_active'], [Constanst::ACTIVE]);
-        return response()->json(['data'=>$data]);
+        // return response()->json(['data'=>$data]);
+        // return response()->json(['data'=>$data]);
+       return responData(['cate']);
+    //    return responData(['data'=>'cate'], ['12', '123']);
     }
 
     /**

@@ -37,22 +37,6 @@ class AttributeRepository extends BaseRepository implements AttributeRepositoryI
             $attribute->attr_key = $req->attr_key;
             $attribute->attr_value = $req->attr_key == 'size'?null:$req->attr_value[$key];
             $attribute->save();
-
-        }
-        // $this->insertSubAttribute(array('name'=>$req->attr_name, 'img'=>$req->attr_img, 'desc'=>$req->attr_desc), $attribute->id);
-    }
-
-    
-    public function insertSubAttribute ($data = array('name'=>array(), 'img'=>array(), 'desc'=>array()), $parentId) {
-        foreach($data['name'] as $key => $val){
-            $subAttribute = new $this->model();
-            $subAttribute->attr_name = $val;
-            $subAttribute->attr_img = isset($data['img'][$key])
-            ?fileUpload($data['img'][$key], 'attribute', 'uploads/attributes')
-            :null;
-            $subAttribute->attr_desc = $data['desc'][$key];
-            $subAttribute->parent_id = $parentId;
-            $subAttribute->save();
         }
     }
 
@@ -60,23 +44,7 @@ class AttributeRepository extends BaseRepository implements AttributeRepositoryI
     {
         $attr = $this->model->findOrFail($id);
         $attr->fill($req->all());
-        $attr->attr_name = $req->parent_attr_name;
         $attr->update();
-
-        foreach($req->subId as $key => $val){
-            $attr = $this->model->findOrFail($val);
-            $attr->fill($req->all());
-            $attr->attr_name = $req->sub_name[$key];
-            $attr->attr_img = isset($req->sub_img[$key])
-            ?fileUpload($req->sub_img[$key], 'attribute', 'uploads/attributes')
-            :$attr->attr_img;
-            $attr->attr_desc = $req->sub_desc[$key];
-            $attr->update();
-        }
-
-        if($req->attr_name && $req->attr_name != null){
-            // $this->insertSubAttribute(array('name'=>$req->attr_name, 'img'=>$req->attr_img, 'desc'=>$req->attr_desc), $id);
-        }
     }
 
     public function deleteAttribute($id)
@@ -89,10 +57,9 @@ class AttributeRepository extends BaseRepository implements AttributeRepositoryI
 
     public function searchAttribute($key, $columns = [])
     {
-        $data = $this->model->where('parent_id', Constanst::PARENT);
-
+        
         if($key != ''){
-            $data->where(querySearchByColumns($columns, trim($key)));
+            $data = $this->model->where(querySearchByColumns($columns, trim($key)));
         }
 
         $result = $data->paginate(Constanst::LIMIT_PERPAG);

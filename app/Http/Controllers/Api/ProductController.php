@@ -56,6 +56,7 @@ class ProductController extends Controller
         $product = Product::with('categoryProduct')
         ->with('productGallery')
         ->with('attributeProduct')
+        ->with('sizeProduct')
         ->findOrFail($id);
 
         $similar_product = Category::with(['cate_product'=>function($q){

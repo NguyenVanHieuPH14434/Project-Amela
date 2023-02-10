@@ -90,7 +90,7 @@ class AttributeController extends Controller
      */
     public function update(Request $request, $id)
     {
-
+        // dd($request->all());
         try {
             $this->attrRepo->updateAttribute($request, $id);
             $this->message = ['success' => 'Cập nhật thuộc tính thành công!'];

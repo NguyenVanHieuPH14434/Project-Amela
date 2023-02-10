@@ -66,7 +66,18 @@
             })
         });
 </script> --}}
-
+<script>
+    $('#attr_key').change(function (e) { 
+       var _key = $(this).val();
+       if(_key == 'size'){
+        $('.value_attr').hide();
+        $('.name_attr').show();
+       }else{
+        $('.value_attr').show();
+        $('.name_attr').show();
+       }
+    });
+</script>
 
 <script>
     var stt = $( "#getIndex" ).val();

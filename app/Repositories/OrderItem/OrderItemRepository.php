@@ -17,11 +17,10 @@ class OrderItemRepository extends BaseRepository implements OrderItemRepositoryI
     }
 
     public function getOrderDetail ($id) {
-        $data = $this->model->with(['getProduct', 'getAttr'])->where('order_id', $id)->where('deleted_at',null)->get();
-        $orderData = Order::where('id', $id)->where('deleted_at',null)->first();
+        $data = $this->model->with(['getProduct', 'getAttrColor', 'getAttrSize'])->where('order_id', $id)->where('deleted_at',null)->get();
+        $orderData = Order::with('getStatuss')->where('id', $id)->where('deleted_at',null)->first();
         $result = [
             'customer'=> $orderData,
-            'statusOrder'=> $orderData->getStatuss,
             'data'=> $data,
         ];
         return $result;
@@ -32,15 +31,23 @@ class OrderItemRepository extends BaseRepository implements OrderItemRepositoryI
         foreach($req->data as $item){
             $orderItem = new $this->model();
             $orderItem->order_id = $order_id;
-            $orderItem->attr_id = $item['attr_id'];
+            $orderItem->size_id = $item['size_id'];
+            $orderItem->color_id = $item['color_id'];
             $orderItem->product_id = $item['product_id'];
             $orderItem->quantity = $item['quantity'];
             $orderItem->price = $item['price'];
             $orderItem->save();
 
-            $updateStock = DB::table('products_attributes')->where('attr_id', $item['attr_id'])->where('product_id', $item['product_id'])->first();
+            $columns = ['size_id', 'color_id', 'product_id'];
+            $value = [$item['size_id'], $item['color_id'], $item['product_id']];
+
+            $updateStock = DB::table('products_attributes')
+            ->where(queryByColumns($columns, $value))
+            ->first();
             $newStock = (int)$updateStock->stock - (int)$item['quantity'];
-            DB::table('products_attributes')->where('attr_id', $item['attr_id'])->where('product_id', $item['product_id'])->update(['stock'=>$newStock]);
+            DB::table('products_attributes')
+            ->where(queryByColumns($columns, $value))
+            ->update(['stock'=>$newStock]);
         }
 
     }
