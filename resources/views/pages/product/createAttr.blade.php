@@ -45,7 +45,7 @@
                                     </div>
                                     <div class="row col-12 p-0 m-0">
                                         <label for="" class="form-label"><b>Giá sản phẩm</b></label>
-                                        <input type="text" readonly class="form-control" name="priceOld[]" value="{{$it->pivot->price?$it->pivot->price:old('price')}}">
+                                        <input type="text" readonly class="form-control" name="priceOld[]" value="{{$it->pivot->price?$it->pivot->price:0}}">
                                         @error('price')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -71,7 +71,7 @@
                         <div id="more_item_attr"></div>
                     </div>
 
-                    <button class="btn btn-primary">Thêm mới</button>
+                    <button class="btn btn-primary"  id="add_attr_btn">Thêm mới</button>
                     <button class="btn btn-danger" type="reset">Nhập lại</button>
                     <a href="{{ route('products.index') }}" class="btn btn-info">Quay lại</a>
 
@@ -87,6 +87,7 @@
 <script>
     var indx = $( "#getIndexAttr" ).val();
      $(document).ready(function () {
+        $('#add_attr_btn').attr("disabled", "disabled");
             $(document).on('click', '#add_more_item_attr', function (e) {
                 e.preventDefault();
                 var out=
@@ -146,12 +147,19 @@
                     $("._wrapParent").append(out);
                 }
 
+                if(indx >= 2){
+                     $('#add_attr_btn').removeAttr("disabled");
+                }
+
             });
 
             $('._wrapParent').on('click', '.remove_item_attr', function (e) {  
                 e.preventDefault();
                 $(this).parent('div').remove();
                 indx--;
+                if(indx < 2){
+                    $('#add_attr_btn').attr("disabled", "disabled");
+                }
             });
 
         });

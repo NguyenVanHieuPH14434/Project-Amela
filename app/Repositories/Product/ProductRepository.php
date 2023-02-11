@@ -99,15 +99,13 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function insertAttrProduct($req, $id)
     {
         $product = $this->model->find($id);
-        $prices = array_merge($req->priceOld, $req->price?$req->price:$req->priceOld);
+        $prices = array_merge($req->priceOld?$req->priceOld:[0], $req->price?$req->price:[0]);
         $product->product_price = min($prices);
         $product->update();
 
-        if($req->color != null){
             foreach($req->color_id as $key => $val){
                 $product->attributeProduct()->attach($val, array('price'=>$req->price[$key], 'stock'=>$req->stock[$key], 'size_id'=>$req->size_id[$key]));
             }
-        }
     }
 
     public function updateAttrProduct($req, $id)
