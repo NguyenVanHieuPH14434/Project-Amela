@@ -151,12 +151,13 @@ use Illuminate\Support\Facades\Storage;
     };
 
     if(!function_exists('mailData')){
-         function mailData($title, $fullname, $content)
+         function mailData($title, $viewMail, $fullname, $content)
     {
         return [
             'title'=> $title,
             'fullname'=>$fullname,
-            'content'=> $content
+            'content'=> $content,
+            'viewMail'=> $viewMail
         ];
     }
 

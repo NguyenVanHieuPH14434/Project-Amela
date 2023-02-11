@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BackEnd;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UserRequest;
+use App\Jobs\JobMail;
 use App\Models\Profile;
 use App\Models\User;
 use App\Repositories\Role\RoleRepositoryInterface;
@@ -65,6 +66,11 @@ class UserController extends Controller
         DB::beginTransaction();
         try {
             $this->userRepo->insertUser($req);
+
+            $content = 'Chúng tôi đã tạo cho bạn tài khoản trên website với tài khoản là : ' . $req->username . ' , mật khẩu: ' . $req->password . 
+            ' . Vui lòng không tiết lộ thông tin này cho bất kì ai.';
+
+            dispatch(new JobMail($req->email, mailData("Thông báo đăng ký tài khoản thành công!", 'emails.mailOrder', $req->full_name, $content)));
             $this->message = ['success' => 'Thêm người dùng thành công!'];
             DB::commit();
         } catch (\Exception $err) {

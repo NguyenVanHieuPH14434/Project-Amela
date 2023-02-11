@@ -1,3 +1,4 @@
+@inject('constanst', 'App\Constant\Constanst')
 <div style="width: 900px; margin: 0 auto">
 
     <h2>Xin chào {{$mailData['customer']}}</h2>
@@ -36,7 +37,7 @@
     
             <tr id="dataCart">
                 <td>{{ $item['getProduct']['product_name'] }}</td>
-                <td><img src="{{ 'http://hieu.fresher.ameladev.click/'.$item['getProduct']['product_image'] }}" alt=""></td>
+                <td><img src="{{ $constanst::BASE_URL.'/'.$item['getProduct']['product_image'] }}" alt=""></td>
                 <td>{{ $item['getAttrColor']['attr_name'] }}</td>
                 <td>{{ $item['getAttrSize']['attr_name'] }}</td>
                 <td>{{ $item['quantity'] }}</td>
