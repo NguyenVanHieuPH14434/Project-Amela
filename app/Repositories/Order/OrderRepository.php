@@ -4,6 +4,7 @@ namespace App\Repositories\Order;
 
 use App\Constant\Constanst;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Repositories\BaseRepository;
 use App\Repositories\OrderItem\OrderItemRepositoryInterface;
 use App\Services\OrderItemService;
@@ -65,8 +66,9 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
             $order->status_order = Constanst::UNCONFIMRER;
             $order->save();
 
-            $this->orderItemRepo->insertOrderItem($req, $order->id);
+           $this->orderItemRepo->insertOrderItem($req, $order->id);
 
+        return OrderItem::with(['getProduct', 'getAttrColor', 'getAttrSize', 'getOrder'])->where('order_id', $order->id)->get();
     }
 
 }

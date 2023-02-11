@@ -35,6 +35,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Tên thuộc tính</th>
+                                    <th>Loại thuộc tính</th>
                                    <th class="text-center">Hành động</th>
                                 </tr>
                             </thead>
@@ -46,6 +47,11 @@
                                 <tr>
                                     <td><a href="#" class="btn-link">#{{$item->id}}</a></td>
                                     <td>{{$item->attr_name}}</td>
+                                    <td>
+                                        @foreach (Config::get('attributes.attributes') as $key => $value)
+                                         {{$item->attr_key == $key?$value:''}}
+                                        @endforeach
+                                    </td>
 
                                     <td class="text-center justify-content-center d-flex">
                                         <a href="{{ route('attributes.edit', $item->id) }}" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>

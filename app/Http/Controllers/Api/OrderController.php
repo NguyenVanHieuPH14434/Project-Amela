@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\JobMail;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Repositories\OrderItem\OrderItemRepositoryInterface;
 use App\Services\OrderItemService;
@@ -48,11 +49,24 @@ class OrderController extends Controller
     {
         DB::beginTransaction();
         try {
-            $this->orderRepo->insertOrder($request);
+            $data = $this->orderRepo->insertOrder($request);
             DB::commit();
+            $mailData = [
+                'title'=>'Thông báo đặt hàng thành công!',
+                'customer'=>$data[0]['getOrder']->customer,
+                'email'=>$data[0]['getOrder']->email,
+                'code_order'=>$data[0]['getOrder']->code_order,
+                'total_price'=>$data[0]['getOrder']->total_price,
+                'phone'=>$data[0]['getOrder']->phone,
+                'address'=>$data[0]['getOrder']->address,
+                'viewMail'=>'emails.mailOrder',
+                'items'=>$data
+            ];
+            dispatch(new JobMail($data[0]['getOrder']->email, $mailData));
             return response()->json([
                 "success"=>true,
                 "message"=>"Đặt hàng thành công!",
+                "data"=>$data
             ], 201);
         } catch (\Throwable $err) {
             DB::rollBack();

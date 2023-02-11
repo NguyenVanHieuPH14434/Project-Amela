@@ -49,9 +49,7 @@ class AttributeRepository extends BaseRepository implements AttributeRepositoryI
 
     public function deleteAttribute($id)
     {
-        $attr = $this->model->findOrFail($id);
-        $attr->getSubAttribute()->delete();
-        $attr->delete();
+        $this->model->findOrFail($id)->delete();
     }
 
 
