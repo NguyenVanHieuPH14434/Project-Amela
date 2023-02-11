@@ -37,7 +37,7 @@
     
             <tr id="dataCart">
                 <td>{{ $item['getProduct']['product_name'] }}</td>
-                <td><img src="{{ $constanst::BASE_URL.'/'.$item['getProduct']['product_image'] }}" alt=""></td>
+                <td><img src="{{ $constanst::BASE_URL.'/'.$item['getProduct']['product_image'] }}" width="100px" alt=""></td>
                 <td>{{ $item['getAttrColor']['attr_name'] }}</td>
                 <td>{{ $item['getAttrSize']['attr_name'] }}</td>
                 <td>{{ $item['quantity'] }}</td>
