@@ -103,6 +103,11 @@ Route::middleware(['auth', 'checkRole'])->prefix('/admin')->group(function(){
         Route::middleware(['can:add-product'])->post('/store', [ProductController::class, 'store'])->name('store');
         Route::middleware(['can:edit-product'])->get('/edit/{id}', [ProductController::class, 'edit'])->name('edit');
         Route::middleware(['can:edit-product'])->put('/update/{id}', [ProductController::class, 'update'])->name('update');
+        Route::middleware(['can:add-product'])->get('/create-attr/{id}', [ProductController::class, 'createAttr'])->name('createAttr');
+        Route::middleware(['can:add-product'])->post('/store-attr/{id}', [ProductController::class, 'storeAttr'])->name('storeAttr');
+        Route::middleware(['can:edit-product'])->get('/edit-attr/{id}', [ProductController::class, 'editAttr'])->name('editAttr');
+        Route::middleware(['can:edit-product'])->put('/update-attr/{id}', [ProductController::class, 'updateAttr'])->name('updateAttr');
+        Route::middleware(['can:delete-product'])->post('/delete-attr/{id}', [ProductController::class, 'deleteAttr'])->name('deleteAttr');
         Route::middleware(['can:delete-product'])->delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('destroy');
         Route::get('/search', [ProductController::class, 'search'])->name('search');
 
@@ -167,6 +172,7 @@ Route::middleware('guest')->prefix('/')->group(function(){
     Route::get('/login', [LoginController::class, 'index'])->name('login');
     Route::post('/checklogin', [LoginController::class, 'checklogin'])->name('checklogin');
 });
+
 Route::get('/testemail', function(){
     dispatch(new App\Jobs\JobMail('nguyenvanhieugl2001@gmail.com', 'Chúng tôi đã tạo cho bạn tài khoản trên website với tài khoản là. Vui lòng không tiết lộ thông tin này cho bất kì ai.'));
 });

@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Repositories\BaseRepository;
 use App\Repositories\ProductGallery\ProductGalleryRepositoryInterface;
 use DateTime;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface {
@@ -60,14 +61,8 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $product->fill($req->all());
         $product->is_active = Constanst::ACTIVE;
         $product->product_image = $dataImage;
-        $product->product_price = min($prices);
+        $product->product_price = Constanst::ACTIVE;
         $product->save();
-
-        foreach($req->color_id as $val){
-            foreach($req->size_id as $key => $value){
-                $product->attributeProduct()->attach($val, array('price'=>$prices[$key], 'stock'=>$req->stock, 'size_id'=>$value));
-            }
-        }
 
         $product->categoryProduct()->attach($req->category_id);
 
@@ -78,9 +73,6 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function updateProduct($req, $id)
     {
-        $prices = explode(',', $req->product_price);
-        $stock = explode(',', $req->stock);
-
         $product = $this->model->findOrFail($id);
         $dataImage = checkIssetImage($req, [
             'image'=>'product_image',
@@ -91,21 +83,43 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $product->fill($req->all());
         $product->is_active = Constanst::ACTIVE;
         $product->product_image = $dataImage;
-        $product->product_price = min($prices);
         $product->update();
 
         $product->categoryProduct()->sync($req->category_id);
-        $product->attributeProduct()->detach();
-        foreach($prices as $key => $val){
-            $product->attributeProduct()->attach($req->attr[$key], array('price'=>$val, 'stock'=>$stock[$key]));
-        }
-
+       
         if($req->image){
             foreach( $product->productGallery as $it){
                 deleteFile($it->path_image);
             }
             $product->productGallery()->delete();
             $this->productGallery->insertProductGallery($product->id, $req);
+        }
+    }
+
+    public function insertAttrProduct($req, $id)
+    {
+        $product = $this->model->find($id);
+        $prices = array_merge($req->priceOld, $req->price?$req->price:$req->priceOld);
+        $product->product_price = min($prices);
+        $product->update();
+
+        if($req->color != null){
+            foreach($req->color_id as $key => $val){
+                $product->attributeProduct()->attach($val, array('price'=>$req->price[$key], 'stock'=>$req->stock[$key], 'size_id'=>$req->size_id[$key]));
+            }
+        }
+    }
+
+    public function updateAttrProduct($req, $id)
+    {
+        foreach($req->color_id as $key => $it){
+            DB::table('products_attributes')->where('id', $req->productAttrId[$key])
+            ->update([
+                'color_id'=>$it,
+                'size_id'=>$req->size_id[$key],
+                'price'=>$req->price[$key],
+                'stock'=>$req->stock[$key],
+            ]);
         }
     }
 

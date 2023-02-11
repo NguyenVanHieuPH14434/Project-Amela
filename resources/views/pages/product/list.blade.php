@@ -57,6 +57,8 @@
 
                                     <td scope="col" class="text-center justify-content-center d-flex">
                                         <a href="{{ route('products.edit', $item->id) }}" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
+                                        <a href="{{ route('products.createAttr', $item->id) }}" class="btn btn-primary">Thêm biến thể</a>
+                                        <a href="{{ route('products.editAttr', $item->id) }}" class="btn btn-primary">Sửa biến thể</a>
                                         <form id="deleteForm{{ $item->id }}" action="{{ route('products.destroy', $item->id) }}" method="post">
                                         @csrf
                                         @method('DELETE')

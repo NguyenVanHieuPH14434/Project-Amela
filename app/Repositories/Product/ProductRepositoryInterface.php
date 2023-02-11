@@ -13,7 +13,11 @@ interface ProductRepositoryInterface extends RepositoryInterface {
 
     public function insertProduct ($req);
 
+    public function insertAttrProduct ($req, $id);
+
     public function updateProduct ($req, $id);
+
+    public function updateAttrProduct ($req, $id);
 
     public function searchProduct ($textSearch);
     

@@ -94,14 +94,8 @@ class ProductController extends Controller
     {
         $product = Product::with('categoryProduct')->with('productGallery')->findOrFail($id);
         $categories =  $this->cateRepo->all();
-        $attrs =  $this->attrRepo->getAllAttribute();
-        $price = array();
-        $stock = array();
-        foreach($product->attributeProduct as $i){
-            array_push($price, $i->pivot->price);
-            array_push($stock, $i->pivot->stock);
-        }
-        return view('pages.product.edit', compact('product', 'categories', 'attrs', 'price', 'stock'));
+      
+        return view('pages.product.edit', compact('product', 'categories'));
     }
 
     /**
@@ -155,4 +149,47 @@ class ProductController extends Controller
         }
         return redirect()->back()->with($this->message);
     }
+
+
+    public function editAttr($id)
+    {
+        $categories =  $this->cateRepo->all();
+        $attrs =  $this->attrRepo->getAllAttribute();
+        $product = Product::with(['attributeProduct', 'sizeProduct'])->findOrFail($id);
+        return view('pages.product.editAttr', compact('categories', 'attrs', 'product'));
+    }
+
+    public function updateAttr(Request $req, $id)
+    {
+        try {
+            $this->productRepo->updateAttrProduct($req, $id);
+            $this->message = ['success' => 'Cập nhật biến thể sản phẩm thành công!'];
+        } catch (\Exception $err) {
+            report($err->getMessage());
+            $this->message = ['error' => 'Error: ' . $err->getMessage()];
+        }
+        return redirect()->back()->with($this->message);
+    }
+
+
+    public function createAttr($id)
+    {
+        $categories =  $this->cateRepo->all();
+        $attrs =  $this->attrRepo->getAllAttribute();
+        $product = Product::with(['attributeProduct', 'sizeProduct'])->findOrFail($id);
+        return view('pages.product.createAttr', compact('categories', 'attrs', 'product'));
+    }
+
+    public function storeAttr(Request $req, $id)
+    {
+        try {
+            $this->productRepo->insertAttrProduct($req, $id);
+            $this->message = ['success' => 'Cập nhật biến thể sản phẩm thành công!'];
+        } catch (\Exception $err) {
+            report($err->getMessage());
+            $this->message = ['error' => 'Error: ' . $err->getMessage()];
+        }
+        return redirect()->back()->with($this->message);
+    }
+
 }

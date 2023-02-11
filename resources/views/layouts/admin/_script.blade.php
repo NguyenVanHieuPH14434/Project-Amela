@@ -48,24 +48,8 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 
-{{-- <script>
-    var stt = 1;
-     $(document).ready(function () {
-            $(document).on('click', '#add_more_item', function (e) {
-                e.preventDefault();
-                stt++;
-                var outPut=`<div class="col-4">
-                        <div class="panel-body">
-                            <div class="mb-3">
-                                <label for="" class="form-label"><b>Loại</b></label>
-                                <input type="text" class="form-control" name="attr_name[]" value="{{old('attr_name')}}">
-                            </div>
-                        </div>
-                    </div>`;
-                    $("#more_item").before(outPut);
-            })
-        });
-</script> --}}
+
+
 <script>
     $('#attr_key').change(function (e) { 
        var _key = $(this).val();

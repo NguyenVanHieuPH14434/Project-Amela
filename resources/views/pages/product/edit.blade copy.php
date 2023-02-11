@@ -99,7 +99,7 @@
                         </div>
                         <div class="mb-3 col-6">
 
-                            {{-- <div class="row col-12 p-0 m-0">
+                            <div class="row col-12 p-0 m-0">
                                 <div class="row col-12 p-0 m-0 mb-2">
                                     <label for="" class="form-label"><b>Thuộc tính</b></label>
                                     <select class="js-example-basic-multiple form-control"  id="id_of_select" data-placeholder="Chọn thuộc tính"
@@ -133,7 +133,7 @@
                                 </div>
                                 <div id="more_item1"></div>
 
-                            </div> --}}
+                            </div>
                         </div>
 
                     </div>

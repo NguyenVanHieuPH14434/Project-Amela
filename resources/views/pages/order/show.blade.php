@@ -31,7 +31,8 @@
                                     <th>#</th>
                                     <th>Tên sản phẩm</th>
                                     <th>Ảnh</th>
-                                    <th>Loại</th>
+                                    <th>Màu sắc</th>
+                                    <th>Size</th>
                                     <th>Số lượng</th>
                                     <th>Giá</th>
                                     <th>Thành tiền</th>
@@ -47,7 +48,10 @@
                                     <td scope="col">{{$item->getProduct->product_name}}</td>
                                     <td scope="col"><img src="{{ asset($item->getProduct->product_image) }}" width="100px" alt=""></td>
                                     <td scope="col">
-                                        {{$item->getAttr->attr_name}}
+                                        {{$item->getAttrColor->attr_name}}
+                                    </td>
+                                    <td scope="col">
+                                        {{$item->getAttrSize->attr_name}}
                                     </td>
                                     <td scope="col"> {{$item->quantity}}</td>
                                     <td scope="col"> {{number_format($item->price)}}</td>
@@ -58,7 +62,7 @@
                                 @endforeach
                             </tbody>
                             <tfoot>
-                                <th colspan="5" style="text-align: center; padding-top: 5px">Tổng tiền</th>
+                                <th colspan="6" style="text-align: center; padding-top: 5px">Tổng tiền</th>
                                 <th colspan="2" style="text-align: center; padding-top: 5px">{{ number_format($orderDetail['customer']->total_price) }} vnđ</th>
                             </tfoot>
                             @else
