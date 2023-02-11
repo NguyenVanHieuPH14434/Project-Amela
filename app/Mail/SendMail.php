@@ -39,6 +39,6 @@ class SendMail extends Mailable
     {
         return $this->subject($this->mailData['title'])
                     ->view($this->mailData['viewMail']);
-                    // ->view('emails.mailOrder');
+                    // ->view('emails.sendMail');
     }
 }

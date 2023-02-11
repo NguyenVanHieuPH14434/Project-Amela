@@ -80,7 +80,7 @@ class RegisterController extends Controller
             $content = 'Chúng tôi đã tạo cho bạn tài khoản trên website với tài khoản là : ' . $req->username . ' , mật khẩu: ' . $req->password . 
             ' . Vui lòng không tiết lộ thông tin này cho bất kì ai.';
 
-            dispatch(new JobMail($req->email, mailData("Thông báo đăng ký tài khoản thành công!", 'emails.mailOrder', $req->full_name, $content)));
+            dispatch(new JobMail($req->email, mailData("Thông báo đăng ký tài khoản thành công!", 'emails.sendMail', $req->full_name, $content)));
             
             $this->message = ['success' => 'Đăng ký người dùng thành công!'];
         } catch (\Exception $err) {
