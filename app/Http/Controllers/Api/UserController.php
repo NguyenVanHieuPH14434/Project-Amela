@@ -47,7 +47,7 @@ class UserController extends Controller
            $content = 'Chúng tôi đã tạo cho bạn tài khoản trên website với tài khoản là : ' . $request->username . ' , mật khẩu: ' . $request->password . 
             ' . Vui lòng không tiết lộ thông tin này cho bất kì ai.';
 
-            dispatch(new JobMail($request->email, mailData("Thông báo đăng ký tài khoản thành công!", $request->full_name, $content)));
+            dispatch(new JobMail($request->email, mailData("Thông báo đăng ký tài khoản thành công!", 'emails.mailOrder', $request->full_name, $content)));
             
             return response()->json([
                 'success'=> true,
