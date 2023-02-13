@@ -27,4 +27,5 @@ class Attribute extends Model
     public function getSubAttribute () {
         return $this->hasMany(Attribute::class, 'parent_id', 'id');
     }
+
 }

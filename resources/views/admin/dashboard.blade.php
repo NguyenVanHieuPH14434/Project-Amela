@@ -177,9 +177,9 @@
       hiddeHover:'auto',
       parseTime: false,
       xkey: 'date',
-      ykeys: ['total'],
+      ykeys: ['total', 'total_price'],
       behaveLikeLine:true,
-      labels: ['Số đơn hàng']
+      labels: ['Số đơn hàng', 'Số tiền']
       });
      
       function defaultStatistic() {
@@ -198,7 +198,7 @@
                   $("#total_category").html(data.category.total);
                   $("#total_order").html(data.order.total);
                   $("#total_user").html(data.user.total);
-                  console.log(data.user);
+                  console.log(data.orderFilter);
                 
               }
           });

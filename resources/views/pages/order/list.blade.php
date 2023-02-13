@@ -64,8 +64,9 @@
                                         </select>
                                     </td>
 
-                                    <td scope="col" class="text-center d-flex justify-content-center ">
-                                        <a href="{{ route('orders.show', $item->id) }}" class="btn btn-primary"><i class="fa-solid fa-eye"></i></a>
+                                    <td scope="col" class="text-center d-flex justify-content-center " style="gap: 5px">
+                                        <a href="{{ route('orders.show', $item->id) }}" class="btn btn-success"><i class="fa-solid fa-eye"></i></a> 
+                                        <a href="{{ route('orders.edit', $item->id) }}" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
 
                                         {{-- <form id="deleteForm{{ $item->id }}" action="{{ route('orders.destroy', $item->id) }}" method="post">
                                         @csrf

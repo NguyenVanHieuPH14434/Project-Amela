@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\BackEnd;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\JobMail;
+use App\Models\Order;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Repositories\OrderItem\OrderItemRepositoryInterface;
 use App\Repositories\OrderStatus\OrderStatusRepositoryInterface;
 use Illuminate\Http\Request;
+use Str;
 
 class OrderCOntroller extends Controller
 {
@@ -18,6 +21,7 @@ class OrderCOntroller extends Controller
     protected $orderRepo;
     protected $orderDetailRepo;
     protected $statusOrderRepo;
+    public $message = [];
     public function __construct(OrderRepositoryInterface $orderRepo, OrderItemRepositoryInterface $orderDetailRepo, OrderStatusRepositoryInterface $statusOrderRepo)
     {
         $this->orderRepo = $orderRepo;
@@ -73,7 +77,9 @@ class OrderCOntroller extends Controller
      */
     public function edit($id)
     {
-        //
+        $order = $this->orderRepo->find($id);
+        $listStatusOrder = $this->statusOrderRepo->getOrderStatus();
+        return view('pages.order.edit', compact('order', 'listStatusOrder'));
     }
 
     /**
@@ -85,7 +91,28 @@ class OrderCOntroller extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+           $data =  $this->orderRepo->updateOrder($request, $id);
+           $mailData = [
+            'title'=>'Thông báo đơn hàng #'. $data[0]['getOrder']->code_order . ' ' . Str::lower($data[0]['getOrder']['getStatuss']->status_name),
+            'customer'=>$data[0]['getOrder']->customer,
+            'email'=>$data[0]['getOrder']->email,
+            'code_order'=>$data[0]['getOrder']->code_order,
+            'total_price'=>$data[0]['getOrder']->total_price,
+            'phone'=>$data[0]['getOrder']->phone,
+            'address'=>$data[0]['getOrder']->address,
+            'viewMail'=>'emails.mailOrder',
+            'items'=>$data
+        ];
+
+        dispatch(new JobMail($data[0]['getOrder']->email, $mailData));
+        
+            $this->message = ['success' => 'Cập nhật trạng thái đơn hàng thành công!'];
+        } catch (\Exception $err) {
+            report($err->getMessage());
+            $this->message = ['error' => 'Error: ' . $err->getMessage()];
+        }
+        return redirect()->back()->with($this->message);
     }
 
     /**

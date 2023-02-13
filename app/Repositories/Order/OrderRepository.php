@@ -71,4 +71,15 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         return OrderItem::with(['getProduct', 'getAttrColor', 'getAttrSize', 'getOrder'])->where('order_id', $order->id)->get();
     }
 
+    public function updateOrder($req, $id)
+    {
+        $order = $this->model->find($id);
+        $order->status_order = $req->status_order;
+        $order->update();
+
+        return OrderItem::with(['getProduct', 'getAttrColor', 'getAttrSize', 'getOrder'=>function($q){
+            $q->with('getStatuss');
+        }])->where('order_id', $order->id)->get();
+    }
+
 }

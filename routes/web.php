@@ -151,8 +151,10 @@ Route::middleware(['auth', 'checkRole'])->prefix('/admin')->group(function(){
     Route::prefix('/orders')->name('orders.')->group(function(){
         Route::get('/', [OrderCOntroller::class, 'index'])->name('index');
         Route::get('/show/{id}', [OrderCOntroller::class, 'show'])->name('show');
+        Route::patch('/update/{id}', [OrderCOntroller::class, 'update'])->name('update');
         Route::delete('/destroy/{id}', [OrderCOntroller::class, 'destroy'])->name('destroy');
         Route::get('/search', [OrderCOntroller::class, 'search'])->name('search');
+        Route::get('/edit/{id}', [OrderCOntroller::class, 'edit'])->name('edit');
     });
 
     Route::get('/chart', [AdminController::class, 'dataChart'])->name('chart');

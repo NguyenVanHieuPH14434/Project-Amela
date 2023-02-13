@@ -15,4 +15,6 @@ interface OrderRepositoryInterface extends RepositoryInterface {
     public function getPaginateOrder ($user_id, $paginate = Constanst::LIMIT_PERPAG);
 
     public function insertOrder ($req);
+
+    public function updateOrder ($req, $id);
 }

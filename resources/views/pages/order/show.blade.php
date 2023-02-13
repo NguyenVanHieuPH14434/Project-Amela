@@ -40,7 +40,6 @@
                             </thead>
                             <tbody>
                                 @if (count($orderDetail['data']) != 0)
-                                {{-- @dd($orderDetail['data'][0]); --}}
                                 @foreach ($orderDetail['data'] as $item)
 
                                 <tr>

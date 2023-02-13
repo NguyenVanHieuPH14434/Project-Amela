@@ -136,7 +136,7 @@ use Illuminate\Support\Facades\Storage;
             $dateE = count($date) != 0?new Carbon($date[1]):Carbon::now()->format('Y-m-d');
 
             $data = DB::table($table)
-            ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(id) as total'))
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(id) as total'), DB::raw('sum(total_price) as total_price'))
             ->whereBetween('created_at', [$dateS, $dateE->addDays(1)->format('Y-m-d')]);
 
             if(count($columns) != 0){ 
@@ -152,7 +152,7 @@ use Illuminate\Support\Facades\Storage;
 
     // count all with condition
     if(!function_exists('getCountAllTable')){
-        function getCountAllTable ($table, $columns = array(), $value = array(), $relationConditionVal = array()) {
+        function getCountAllTable ($table, $columns = array(), $value = array()) {
 
             $data = DB::table($table)
             ->select(DB::raw('count(id) as total'));
@@ -160,12 +160,6 @@ use Illuminate\Support\Facades\Storage;
             if(count($columns) != 0){ 
                 $data->where(queryByColumns($columns, $value));
             }
-
-            // if(count($relationConditionVal) != 0){
-            //     $data->whereHas($relationConditionVal[0], function($q) use($relationConditionVal){
-            //         $q->where($relationConditionVal[1], $relationConditionVal[2]);
-            //     });
-            // }
 
             $result = $data->first();
             return $result;
