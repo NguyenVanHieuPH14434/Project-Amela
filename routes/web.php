@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ProductController as ApiProductController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AuthController;
@@ -154,10 +155,7 @@ Route::middleware(['auth', 'checkRole'])->prefix('/admin')->group(function(){
         Route::get('/search', [OrderCOntroller::class, 'search'])->name('search');
     });
 
-    Route::get('/chart', [Controller::class, 'chart'])->name('chart');
-    Route::get('/test123', function(){
-        return view('pages.product.addAttr');
-    });
+    Route::get('/chart', [AdminController::class, 'dataChart'])->name('chart');
 
 });
 
@@ -171,10 +169,6 @@ Route::middleware('guest')->prefix('/')->group(function(){
     Route::post('/register', [RegisterController::class, 'create'])->name('register');
     Route::get('/login', [LoginController::class, 'index'])->name('login');
     Route::post('/checklogin', [LoginController::class, 'checklogin'])->name('checklogin');
-});
-
-Route::get('/testemail', function(){
-    dispatch(new App\Jobs\JobMail('nguyenvanhieugl2001@gmail.com', 'Chúng tôi đã tạo cho bạn tài khoản trên website với tài khoản là. Vui lòng không tiết lộ thông tin này cho bất kì ai.'));
 });
 
 Route::any('{url}', function(){

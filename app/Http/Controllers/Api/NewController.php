@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\News\NewRepositoryInterface;
 use App\Services\NewService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class NewController extends Controller
 {
@@ -27,7 +28,7 @@ class NewController extends Controller
             "success"=>true,
             "message"=> "Danh sách tin tức",
             "data"=>$listNew
-        ]);
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -49,12 +50,12 @@ class NewController extends Controller
      */
     public function show($id)
     {
-        $newDetail = $this->serviceNew->getNewDetail($id);
+        $newDetail = $this->newRepo->getNewDetail($id);
         return response()->json([
             "success"=>true,
             "message"=> "Danh sách tin tức",
             "data"=>$newDetail
-        ]);
+        ], Response::HTTP_OK);
     }
 
     /**

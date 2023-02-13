@@ -55,15 +55,19 @@
                                     </td>
                                     <td scope="col"><img src="{{asset($item->product_image)}}" width="100px" alt=""></td>
 
-                                    <td scope="col" class="text-center justify-content-center d-flex">
-                                        <a href="{{ route('products.edit', $item->id) }}" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
-                                        <a href="{{ route('products.createAttr', $item->id) }}" class="btn btn-primary">Thêm biến thể</a>
-                                        <a href="{{ route('products.editAttr', $item->id) }}" class="btn btn-primary">Sửa biến thể</a>
+                                    <td scope="col" >
+                                        <div class="text-center justify-content-center d-flex mb-2" style="gap: 5px">
+                                            <a href="{{ route('products.edit', $item->id) }}" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
                                         <form id="deleteForm{{ $item->id }}" action="{{ route('products.destroy', $item->id) }}" method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    <button data-form="deleteForm{{$item->id}}"  class="btn btn-danger btn-delete" style="border: none" ><i class="fa-regular fa-trash-can"></i></button> <br>
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                        <button data-form="deleteForm{{$item->id}}"  class="btn btn-danger btn-delete" style="border: none" ><i class="fa-regular fa-trash-can"></i></button> <br>
+                                        </div>
+                                        <div class="text-center justify-content-center mb-2">
+                                            <a href="{{ route('products.createAttr', $item->id) }}" class="btn btn-primary mb-2">Thêm biến thể</a> <br>
+                                        <a href="{{ route('products.editAttr', $item->id) }}" class="btn btn-primary">Sửa biến thể</a>
+                                        </div>
 
                                 </td>
 

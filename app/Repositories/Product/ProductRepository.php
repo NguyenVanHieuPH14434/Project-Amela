@@ -50,7 +50,6 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function insertProduct($req)
     {
-        $prices = explode(',', $req->product_price);
         $dataImage = checkIssetImage($req, [
             'image'=>'product_image',
             'prefixName'=>'product',
@@ -99,7 +98,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function insertAttrProduct($req, $id)
     {
         $product = $this->model->find($id);
-        $prices = array_merge($req->priceOld?$req->priceOld:[0], $req->price?$req->price:[0]);
+        $prices = array_merge($req->priceOld?$req->priceOld:[Constanst::PARENT], $req->price?$req->price:[Constanst::PARENT]);
         $product->product_price = min($prices);
         $product->update();
 

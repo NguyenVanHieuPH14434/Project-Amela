@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\BackEnd;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -14,8 +16,29 @@ class AdminController extends Controller
      */
     public function index()
     {
-        // $
         return view('admin.dashboard');
+    }
+
+    public function dataChart (Request $req) {
+        $date_from = $req->date_from;
+        $date_to = $req->date_to;
+   
+        $orderFilter = getCountTable('products', [$date_from, $date_to]);
+        $category = getCountAllTable('categories', ['deleted_at'], [null]);
+        $product = getCountAllTable('products', ['deleted_at'], [null]);
+        $order = getCountAllTable('orders', ['deleted_at'], [null]);
+        $user = User::select(DB::raw('count(id) as total'))->where('deleted_at', null)->whereHas('user_role',function($q){
+            $q->where('role_key', 'user');
+        })->first();
+
+        return response()->json([
+            "orderFilter" => $orderFilter,
+            "category" => $category,
+            "product" => $product,
+            "order" => $order,
+            "user" => $user,
+          
+        ]);
     }
 
     /**

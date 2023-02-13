@@ -32,11 +32,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [UserController::class, 'store']);
-// Route::get('/refresh', [AuthController::class, 'refresh']);
 Route::get('/logout', [AuthController::class, 'logout']);
 Route::get('/profile', [AuthController::class, 'profile']);
 Route::middleware('auth:api')->post('/edit-profile/{id}', [UserController::class, 'update']);
-// Route::post('/sendMail', [Controller::class, 'sendMailtest']);
 Route::get('/list-categories', [CategoryController::class, 'index']);
 Route::get('/list-product', [ProductController::class, 'index']);
 Route::get('/product-detail/{id}', [ProductController::class, 'show']);

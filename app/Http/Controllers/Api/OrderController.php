@@ -9,6 +9,7 @@ use App\Repositories\OrderItem\OrderItemRepositoryInterface;
 use App\Services\OrderItemService;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -36,7 +37,7 @@ class OrderController extends Controller
             "success"=>true,
             "message"=>"Danh sách đơn hàng người dùng ". $account->getProfile->full_name,
             "data"=>$listOrder
-        ], 200);
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -67,7 +68,7 @@ class OrderController extends Controller
                 "success"=>true,
                 "message"=>"Đặt hàng thành công!",
                 "data"=>$data
-            ], 201);
+            ], Response::HTTP_CREATED);
         } catch (\Throwable $err) {
             DB::rollBack();
             report($err->getMessage());
@@ -75,7 +76,7 @@ class OrderController extends Controller
                 "success"=>false,
                 "message"=>"Đã xảy ra lỗi!",
                 "data"=>$err->getMessage()
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
        
     }
@@ -93,7 +94,7 @@ class OrderController extends Controller
             "success"=>true,
             "message"=>"Dữ liệu đơn hàng",
             "data"=>$listOrderDetail
-        ], 200);
+        ], Response::HTTP_OK);
     }
 
     /**

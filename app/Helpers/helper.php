@@ -150,6 +150,35 @@ use Illuminate\Support\Facades\Storage;
         }
     };
 
+    // count all with condition
+    if(!function_exists('getCountAllTable')){
+        function getCountAllTable ($table, $columns = array(), $value = array(), $relationConditionVal = array()) {
+
+            $data = DB::table($table)
+            ->select(DB::raw('count(id) as total'));
+
+            if(count($columns) != 0){ 
+                $data->where(queryByColumns($columns, $value));
+            }
+
+            // if(count($relationConditionVal) != 0){
+            //     $data->whereHas($relationConditionVal[0], function($q) use($relationConditionVal){
+            //         $q->where($relationConditionVal[1], $relationConditionVal[2]);
+            //     });
+            // }
+
+            $result = $data->first();
+            return $result;
+        }
+    };
+
+    if(!function_exists('getDataWhereIn')){
+        function getDataWhereIn ($table, $columns, $value = array()) {
+            $result = DB::table($table)->whereIn($columns, $value)->get();
+            return $result;
+        }
+    };
+
     if(!function_exists('mailData')){
          function mailData($title, $viewMail, $fullname, $content)
     {

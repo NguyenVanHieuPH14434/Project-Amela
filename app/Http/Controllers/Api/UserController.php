@@ -11,6 +11,7 @@ use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
@@ -53,13 +54,13 @@ class UserController extends Controller
                 'success'=> true,
                 'message'=> 'Đăng ký người dùng thành công!',
                 'data'=> $data,
-            ], 200);
+            ], Response::HTTP_CREATED);
         } catch (\Exception $err) {
             report($err->getMessage());
             return response()->json([
                 'success'=> false,
                 'error'=> 'Đã xảy ra lỗi!'. $err->getMessage(),
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -89,13 +90,13 @@ class UserController extends Controller
                 'success'=> true,
                 'message'=> 'Cập nhật thông tin thành công!',
                 'data'=> $data,
-            ], 200);
+            ], Response::HTTP_ACCEPTED);
         } catch (\Exception $err) {
             report($err->getMessage());
             return response()->json([
                 'success'=> false,
                 'error'=> 'Đã xảy ra lỗi!'. $err->getMessage(),
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

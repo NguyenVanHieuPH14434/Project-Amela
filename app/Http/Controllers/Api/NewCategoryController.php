@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\NewCategory\NewCategoryRepositoryinterface;
 use App\Services\CategoryNewService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class NewCategoryController extends Controller
 {
@@ -27,7 +28,7 @@ class NewCategoryController extends Controller
             "success"=>true,
             "message"=> "Danh sách danh mục tin tức",
             "data"=>$listCateNew
-        ]);
+        ], Response::HTTP_OK);
     }
 
     /**

@@ -9,6 +9,7 @@ use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Dashboard\DashboardRepositoryInterface;
 use App\Services\CategoryService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CategoryController extends Controller
 {
@@ -34,14 +35,7 @@ class CategoryController extends Controller
             "success"=>true,
             "message"=>"Danh sách danh mục sản phẩm!",
             "data"=>$listCate
-        ]);
-    }
-
-    public function testCount () {
-        $data = $this->dashRepo->getDataChart();
-        $listCate = $this->cateRepo->getCategory();
-        // $data = getCountTable('users', '2023-02-03', '2023-02-08', ['is_active'], [Constanst::ACTIVE]);
-        return response()->json(['data'=>$data]);
+        ], Response::HTTP_OK);
     }
 
     /**

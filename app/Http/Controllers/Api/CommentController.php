@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Comment\CommentRepositoryInterface;
 use App\Services\CommentService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CommentController extends Controller
 {
@@ -38,13 +39,13 @@ class CommentController extends Controller
             $this->commnetRepo->insertComment($request);
             return response()->json([
                 "success"=>true,
-            ]);
+            ], Response::HTTP_CREATED);
         } catch (\Throwable $err) {
            report($err->getMessage());
            return response()->json([
             "success"=>false,
             "message"=>"Đã xảy ra lỗi!" .$err->getMessage()
-        ]);
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

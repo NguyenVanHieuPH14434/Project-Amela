@@ -8,7 +8,10 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Services\ProductService;
+use Attribute;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -31,7 +34,7 @@ class ProductController extends Controller
             "success"=>true,
             "message"=>"Danh sách danh mục sản phẩm!",
             "data"=>$listProduct
-        ]);
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -51,13 +54,23 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function show($id)
     {
         $product = Product::with('categoryProduct')
         ->with('productGallery')
-        ->with('attributeProduct')
-        ->with('sizeProduct')
         ->findOrFail($id);
+        
+        $colors = array();
+        $size = array();
+
+        foreach($product->attributeProduct as $key => $it){
+            array_push($colors, $it->pivot->color_id);
+            array_push($size, $product->sizeProduct[$key]->pivot->size_id);
+        }
+
+        $colorsData = getDataWhereIn('attributes', 'id', $colors);
+        $sizeData = getDataWhereIn('attributes', 'id', $size);
 
         $similar_product = Category::with(['cate_product'=>function($q){
             $q->take(Constanst::LIMIT_SIMILAR_PRODUCT);
@@ -68,8 +81,10 @@ class ProductController extends Controller
             'success'=>true,
             'message'=> 'Dữ liệu sản phẩm '. $product->product_name,
             'data'=> $product,
+            'colors'=> $colorsData,
+            'size'=> $sizeData,
             'similar_product'=> $similar_product->cate_product,
-        ]);
+        ], Response::HTTP_OK);
     }
 
     /**

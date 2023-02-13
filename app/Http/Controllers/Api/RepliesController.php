@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Replies\RepliesRepositoryInterface;
 use App\Services\RepliesService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class RepliesController extends Controller
 {
@@ -39,13 +40,13 @@ class RepliesController extends Controller
             $this->replieRepo->insertReplies($request);
             return response()->json([
                 "success"=>true,
-            ]);
+            ], Response::HTTP_CREATED);
         } catch (\Throwable $err) {
            report($err->getMessage());
            return response()->json([
             "success"=>false,
             "message"=>"Đã xảy ra lỗi!"
-            ]);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

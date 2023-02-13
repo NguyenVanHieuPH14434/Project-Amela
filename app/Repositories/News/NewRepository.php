@@ -31,6 +31,10 @@ class NewRepository extends BaseRepository implements NewRepositoryInterface {
         return $result;
     }
 
+    public function getNewDetail ($id) {
+        return $this->model::with('getCateNew')->where('id', $id)->where('deleted_at', null)->first();
+    }
+
     public function insertNews($req)
     {
         $new = new $this->model();

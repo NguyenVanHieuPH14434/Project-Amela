@@ -11,6 +11,8 @@ interface NewRepositoryInterface extends RepositoryInterface {
 
     public function getNews ($paginate = Constanst::LIMIT_PERPAG);
 
+    public function getNewDetail ($id);
+
     public function insertNews ($req);
 
     public function updateNews ($req, $id);

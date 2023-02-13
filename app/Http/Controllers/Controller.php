@@ -15,6 +15,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notification;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification as FacadesNotification;
 use Mail;
 
@@ -65,5 +66,60 @@ class Controller extends BaseController
         ];
         Mail::to('nguyenvanhieugl2001@gmail.com')->send(new SendMail($testMailData));
         dd('done!!!!!!');
+    }
+
+    public function dataChart (Request $req) {
+        $date_from = $req->date_from;
+        $date_to = $req->date_to;
+   
+        $products = getCountTable('products', [$date_from, $date_to]);
+        $category = getCountAllTable('categories', ['deleted_at'], [null]);
+        $product = getCountAllTable('products', ['deleted_at'], [null]);
+        $order = getCountAllTable('orders', ['deleted_at'], [null]);
+        $user = User::select(DB::raw('count(id) as total'))->where('deleted_at', null)->whereHas('user_role',function($q){
+            $q->where('role_key', 'user');
+        })->first();
+
+        // $patientList = DB::table('patients')
+        //     ->select(DB::raw('count(id) as patient_count, date'))
+        //     ->whereBetween('date', [$date_from, $date_to])
+        //     ->orderBy('date', 'asc')
+        //     ->groupBy('date')
+        //     ->get();
+
+        // $totalPriceOrder = DB::table('orders')
+        //     ->select(DB::raw('sum(total) as sum, date'))
+        //     ->whereBetween('date', [$date_from, $date_to])
+        //     ->orderBy('date', 'asc')
+        //     ->groupBy('date')
+        //     ->get();
+
+        // $serviceTotal = DB::table('schedule_services')
+        //     ->select(DB::raw('count(service_id) as totalService, date, services.service_name as serviceName, day(date) as day, month(date) as month, year(date) as year'))
+        //     ->join('services', 'services.id', '=', 'schedule_services.service_id')
+        //     ->whereBetween('date', [$date_from, $date_to])
+        //     ->orderBy('date', 'asc')
+        //     ->groupBy('serviceName', 'date', 'day', 'month', 'year')
+        //     ->get();
+
+        // $totalService = Service::select(DB::raw('count(id) as totalSer'))->get();
+
+        // $maxService = getMaxTable('schedule_services', 'services', array('service_id', 'service_name'));
+
+        // $totalEquipment = Equipment::select(DB::raw('count(id) as countEquipment'))->get();
+        // $totalProduct = Product::select(DB::raw('count(id) as countProduct'))->get();
+        // $totalStaff = Admin::select(DB::raw('count(id) as countStaff'))->get();
+        // $totalNew = News::select(DB::raw('count(id) as countNew'))->get();
+
+
+        // return json_decode($list1);
+        return response()->json([
+            "products" => $products,
+            "category" => $category,
+            "product" => $product,
+            "order" => $order,
+            "user" => $user,
+          
+        ]);
     }
 }

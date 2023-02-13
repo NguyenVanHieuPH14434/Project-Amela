@@ -11,9 +11,9 @@
         <!-- small box -->
         <div class="small-box bg-info">
           <div class="inner">
-            <h3>150</h3>
+            <h3 id="total_order">150</h3>
 
-            <p>New Orders</p>
+            <p>Đơn hàng</p>
           </div>
           <div class="icon">
             <i class="ion ion-bag"></i>
@@ -26,9 +26,9 @@
         <!-- small box -->
         <div class="small-box bg-success">
           <div class="inner">
-            <h3>53<sup style="font-size: 20px">%</sup></h3>
+            <h3 id="total_product"><sup style="font-size: 20px"></sup></sup></h3>
 
-            <p>Bounce Rate</p>
+            <p>Sản phẩm</p>
           </div>
           <div class="icon">
             <i class="ion ion-stats-bars"></i>
@@ -41,9 +41,9 @@
         <!-- small box -->
         <div class="small-box bg-warning">
           <div class="inner">
-            <h3>44</h3>
+            <h3 id="total_user"></h3>
 
-            <p>User Registrations</p>
+            <p>Người dùng</p>
           </div>
           <div class="icon">
             <i class="ion ion-person-add"></i>
@@ -56,9 +56,9 @@
         <!-- small box -->
         <div class="small-box bg-danger">
           <div class="inner">
-            <h3>65</h3>
+            <h3 id="total_category"></h3>
 
-            <p>Unique Visitors</p>
+            <p>Danh mục</p>
           </div>
           <div class="icon">
             <i class="ion ion-pie-graph"></i>
@@ -98,7 +98,9 @@
     </div>
     <div class="row">
 
-        <div id="myfirstchart" class="col-12"></div>
+        {{-- <div id="myfirstchart" class="col-12"></div> --}}
+        <div id="myfirstchart" class="col-12" style="height: 278px; padding: 0px;
+        position: relative;"></div>
       <!-- Left col -->
 
       <!-- /.Left col -->
@@ -110,26 +112,107 @@
   {{-- </div> --}}
 @endsection
 @section('page-js')
-<script>
-    new Morris.Line({
-  // ID of the element in which to draw the chart.
-  element: 'myfirstchart',
-  // Chart data records -- each entry in this array corresponds to a point on
-  // the chart.
-  data: [
-    { year: '2008', value: 20 },
-    { year: '2009', value: 10 },
-    { year: '2010', value: 5 },
-    { year: '2011', value: 5 },
-    { year: '2012', value: 20 }
-  ],
-  // The name of the data record attribute that contains x-values.
-  xkey: 'year',
-  // A list of names of data record attributes that contain y-values.
-  ykeys: ['value'],
-  // Labels for the ykeys -- will be displayed when you hover over the
-  // chart.
-  labels: ['Value']
-});
-</script>
+
+<script >
+  $(document).ready(function () {
+      $('#changeFillter').on('change', function (e) {
+          e.preventDefault();
+          var dateChange = $(this).val();
+          var now = new Date();
+          var to = new Date().toJSON().slice(0, 10);
+          if(dateChange == 'today'){
+              from = to
+          }else{
+              var from = new Date(now.setDate(now.getDate() - dateChange)).toJSON().slice(0, 10);
+          }
+          $.ajax({
+            url: "{{route('chart')}}",
+              type: "get",
+              headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  },
+              dataType: "JSON",
+              data: {date_from:from, date_to:to},
+              success: function (data) {
+                  chart.setData(data.orderFilter)
+              }
+          });
+       });
+       $('._btn_send_data').on('click', function (e) {
+          e.preventDefault();
+          var now = new Date().toJSON().slice(0, 10);
+          var _token = $('input[name="_token"]').val();
+          var date_from = $('#datepicker').val()
+          var date_to = $('#datepicker2').val()
+          var from = now;
+          var to = now;
+          if(date_from && date_to){
+              from = date_from;
+              to = date_to;
+          }
+          else if(date_from && !date_to){
+              from = date_from
+              to = date_from
+          }
+          $.ajax({
+            url: "{{route('chart')}}",
+              type: "get",
+              headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  },
+              dataType: "JSON",
+              data: {date_from:from, date_to:to},
+              success: function (data) {
+                  chart.setData(data.orderFilter)
+              }
+          });
+      });
+      defaultStatistic();
+      var chart =  new Morris.Area({
+      element: 'myfirstchart',
+      lineColors:['#819C79', '#fc8710', '#FF6541', '#A4ADD3', '#766B56'],
+      pointFillColors: ['#ffffff'],
+      pointStrokeColors:['black'],
+      fillOpacity:0.6,
+      hiddeHover:'auto',
+      parseTime: false,
+      xkey: 'date',
+      ykeys: ['total'],
+      behaveLikeLine:true,
+      labels: ['Số đơn hàng']
+      });
+     
+      function defaultStatistic() {
+          var now = new Date();
+          var from = new Date(now.setDate(now.getDate() - 365)).toJSON().slice(0, 10);
+          var to = new Date().toJSON().slice(0, 10);
+        
+          $.ajax({
+              url: "{{route('chart')}}",
+              type: "get",
+              dataType: "JSON",
+              data: {date_from:from, date_to:to},
+              success: function (data) {
+                  chart.setData(data.orderFilter)
+                  $("#total_product").html(data.product.total);
+                  $("#total_category").html(data.category.total);
+                  $("#total_order").html(data.order.total);
+                  $("#total_user").html(data.user.total);
+                  console.log(data.user);
+                
+              }
+          });
+      };
+  });
+  </script>
+  <script>
+      var option = {
+          prevText:"Tháng trước",
+          nextText:"Tháng sau",
+          dayNamesMin:['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật'],
+          dateFormat:"yy-mm-dd"
+      }
+      $('#datepicker').datepicker(option);
+      $('#datepicker2').datepicker(option);
+  </script>
 @endsection
