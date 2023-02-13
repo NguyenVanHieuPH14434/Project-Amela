@@ -23,7 +23,7 @@ class AdminController extends Controller
         $date_from = $req->date_from;
         $date_to = $req->date_to;
    
-        $orderFilter = getCountTable('products', [$date_from, $date_to]);
+        $orderFilter = getCountTable('orders', [$date_from, $date_to]);
         $category = getCountAllTable('categories', ['deleted_at'], [null]);
         $product = getCountAllTable('products', ['deleted_at'], [null]);
         $order = getCountAllTable('orders', ['deleted_at'], [null]);
